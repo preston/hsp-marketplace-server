@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  pool: <%= (ENV['MARKETPLACE_SERVER_THREADS'].to_i + 2) || 6 %>
+
+development:
+  <<: *default
+  database: marketplace_development
+  username: marketplace
+  password: password
+
+test:
+  <<: *default
+  url:  <%= ENV["MARKETPLACE_DATABASE_URL_TEST"] %>
+
+production:
+  <<: *default
+  url:  <%= ENV["MARKETPLACE_DATABASE_URL"] %>
+
+# benchmark:
+#   <<: *default
+#   url:  <%= ENV["MARKETPLACE_DATABASE_URL"] %>

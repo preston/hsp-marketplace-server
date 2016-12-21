@@ -1,0 +1,31 @@
+.landing {
+
+	background: image-url('backgrounds/photo-1456428199391-a3b1cb5e93ab.jpeg') no-repeat center center fixed;
+	background-size: cover;
+
+	.login-panel {
+		margin: 20% 10px auto 10px;
+		padding: 40px;
+		background: rgba(255,255,255, .7);
+		border: 1px solid #aaa;
+		border-top-right-radius:	20px;
+		border-bottom-left-radius:	20px;
+
+		.banner {
+			// margin: 0 auto;
+			text-align: center;
+			width: 100%;
+		}
+		.logo {
+			// margin: 0 auto;
+			width: 50px;
+			display: inline-block;
+		}
+	}
+
+	h1, h2, h3, h4 {
+		margin: 2px 0;
+		color: #333;
+		text-shadow: 0 2px 2px rgba(0,0,0,.5);
+	}
+}

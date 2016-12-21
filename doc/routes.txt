@@ -1,0 +1,74 @@
+                Prefix Verb    URI Pattern                                     Controller#Action
+                       OPTIONS /*all(.:format)                                 application#cors_preflight_check
+       user_identities GET     /users/:user_id/identities(.:format)            identities#index
+                       POST    /users/:user_id/identities(.:format)            identities#create
+     new_user_identity GET     /users/:user_id/identities/new(.:format)        identities#new
+    edit_user_identity GET     /users/:user_id/identities/:id/edit(.:format)   identities#edit
+         user_identity GET     /users/:user_id/identities/:id(.:format)        identities#show
+                       PATCH   /users/:user_id/identities/:id(.:format)        identities#update
+                       PUT     /users/:user_id/identities/:id(.:format)        identities#update
+                       DELETE  /users/:user_id/identities/:id(.:format)        identities#destroy
+                 users GET     /users(.:format)                                users#index
+                       POST    /users(.:format)                                users#create
+              new_user GET     /users/new(.:format)                            users#new
+             edit_user GET     /users/:id/edit(.:format)                       users#edit
+                  user GET     /users/:id(.:format)                            users#show
+                       PATCH   /users/:id(.:format)                            users#update
+                       PUT     /users/:id(.:format)                            users#update
+                       DELETE  /users/:id(.:format)                            users#destroy
+         group_members GET     /groups/:group_id/members(.:format)             members#index
+                       POST    /groups/:group_id/members(.:format)             members#create
+      new_group_member GET     /groups/:group_id/members/new(.:format)         members#new
+     edit_group_member GET     /groups/:group_id/members/:id/edit(.:format)    members#edit
+          group_member GET     /groups/:group_id/members/:id(.:format)         members#show
+                       PATCH   /groups/:group_id/members/:id(.:format)         members#update
+                       PUT     /groups/:group_id/members/:id(.:format)         members#update
+                       DELETE  /groups/:group_id/members/:id(.:format)         members#destroy
+                groups GET     /groups(.:format)                               groups#index
+                       POST    /groups(.:format)                               groups#create
+             new_group GET     /groups/new(.:format)                           groups#new
+            edit_group GET     /groups/:id/edit(.:format)                      groups#edit
+                 group GET     /groups/:id(.:format)                           groups#show
+                       PATCH   /groups/:id(.:format)                           groups#update
+                       PUT     /groups/:id(.:format)                           groups#update
+                       DELETE  /groups/:id(.:format)                           groups#destroy
+     role_appointments GET     /roles/:role_id/appointments(.:format)          appointments#index
+                       POST    /roles/:role_id/appointments(.:format)          appointments#create
+  new_role_appointment GET     /roles/:role_id/appointments/new(.:format)      appointments#new
+ edit_role_appointment GET     /roles/:role_id/appointments/:id/edit(.:format) appointments#edit
+      role_appointment GET     /roles/:role_id/appointments/:id(.:format)      appointments#show
+                       PATCH   /roles/:role_id/appointments/:id(.:format)      appointments#update
+                       PUT     /roles/:role_id/appointments/:id(.:format)      appointments#update
+                       DELETE  /roles/:role_id/appointments/:id(.:format)      appointments#destroy
+                 roles GET     /roles(.:format)                                roles#index
+                       POST    /roles(.:format)                                roles#create
+              new_role GET     /roles/new(.:format)                            roles#new
+             edit_role GET     /roles/:id/edit(.:format)                       roles#edit
+                  role GET     /roles/:id(.:format)                            roles#show
+                       PATCH   /roles/:id(.:format)                            roles#update
+                       PUT     /roles/:id(.:format)                            roles#update
+                       DELETE  /roles/:id(.:format)                            roles#destroy
+         launch_client GET     /clients/:id/launch(.:format)                   clients#launch
+               clients GET     /clients(.:format)                              clients#index
+                       POST    /clients(.:format)                              clients#create
+            new_client GET     /clients/new(.:format)                          clients#new
+           edit_client GET     /clients/:id/edit(.:format)                     clients#edit
+                client GET     /clients/:id(.:format)                          clients#show
+                       PATCH   /clients/:id(.:format)                          clients#update
+                       PUT     /clients/:id(.:format)                          clients#update
+                       DELETE  /clients/:id(.:format)                          clients#destroy
+    identity_providers GET     /identity_providers(.:format)                   identity_providers#index
+                       POST    /identity_providers(.:format)                   identity_providers#create
+ new_identity_provider GET     /identity_providers/new(.:format)               identity_providers#new
+edit_identity_provider GET     /identity_providers/:id/edit(.:format)          identity_providers#edit
+     identity_provider GET     /identity_providers/:id(.:format)               identity_providers#show
+                       PATCH   /identity_providers/:id(.:format)               identity_providers#update
+                       PUT     /identity_providers/:id(.:format)               identity_providers#update
+                       DELETE  /identity_providers/:id(.:format)               identity_providers#destroy
+              callback GET     /sessions(.:format)                             sessions#callback
+                 login POST    /sessions(.:format)                             sessions#authenticate
+                logout DELETE  /sessions(.:format)                             sessions#destroy
+             dashboard GET     /dashboard(.:format)                            welcome#dashboard
+                status GET     /status(.:format)                               welcome#status
+          smart_launch GET     /smart/launch(.:format)                         smart/launch#launch
+                  root GET     /                                               welcome#landing

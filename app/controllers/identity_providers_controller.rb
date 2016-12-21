@@ -1,0 +1,2 @@
+class IdentityProvidersController < ApplicationController
+end
