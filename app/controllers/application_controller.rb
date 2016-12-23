@@ -55,8 +55,8 @@ class ApplicationController < ActionController::Base
     def authenticate_identity!
         identity_id = nil
         if authorization = request.headers['Authorization']
-            json = System::JsonWebToken.decode_authorization(authorization)
-            jwt = System::JsonWebToken.find(json['id'])
+            json = JsonWebToken.decode_authorization(authorization)
+            jwt = JsonWebToken.find(json['id'])
             identity_id = jwt[:identity_id]
         else
             identity_id = session['identity_id']
@@ -64,12 +64,12 @@ class ApplicationController < ActionController::Base
         puts "authenticate_identity!: identity_id: #{identity_id}"
         if identity_id.nil?
             respond_to do |format|
-                format.json { render json: { message: 'Invalid or expired JWT. Please (re)authenticate and sign your request properly!', login_url: sessions_url }, status: :unauthorized }
+                format.json { render json: { message: 'Invalid or expired JWT. Please (re)authenticate and sign your request properly!' }, status: :unauthorized }
                 format.html { redirect_to landing_path, notice: 'Unable to authenticate your identity. Please log in again.' }
             end
         else
             begin
-                @current_identity = System::Identity.find(identity_id)
+                @current_identity = Identity.find(identity_id)
                 @current_user = @current_identity.user
 		    rescue Exception => e
 				Rails.logger.warn 'Claimed identity not found. User may be have been deleted? Removing identity from session!'

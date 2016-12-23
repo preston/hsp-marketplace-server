@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
     has_many	:roles,	class_name: 'Role',	through: :individual_appointments,	source: :role
 
     has_many	:identities, dependent: :destroy
+    has_many	:platforms, dependent: :destroy
+	has_many	:services,	dependent: :destroy
 
     validates_presence_of :name
 end

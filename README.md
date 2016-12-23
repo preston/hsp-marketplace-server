@@ -44,17 +44,18 @@ Then,
 
 The HSP Marketplace Server application is designed in [12factor](http://12factor.net) style. Thus, the following environment variables are required to be set to support cookie-based CDN authorization grants. Set these in your ~/.bash_profile (or similar) and reload your terminal.
 
- * export HSP_MARKETPLACE\_SECRET\_KEY\_BASE="some_unique_string" # Used for cryptographic signing.
- * export HSP_MARKETPLACE\_DATABASE\_URL="postgres://hsp_marketplace:password@db.example.com:5432/hsp_marketplace_production
+ * export MARKETPLACE\_PASSWORD\_SALT="some\_unique\_string" # Used for database password salting.
+ * export MARKETPLACE\_SECRET\_KEY\_BASE="some\_unique\_string" # Used for cryptographic signing of user sessions.
+ * export MARKETPLACE\_DATABASE\_URL="postgres://marketplace:password@db.example.com:5432/marketplace_production
 " # Only used in "production" mode!
- * export HSP_MARKETPLACE\_DATABASE\_URL\_TEST="postgres://hsp_marketplace:password@db.example.com:5432/hsp_marketplace_test
+ * export MARKETPLACE\_DATABASE\_URL\_TEST="postgres://marketplace:password@db.example.com:5432/marketplace\_test
 " # Only used in "test" mode!
 
 
 The following additional environment variables are optional, but potentially useful in a production context. Note that the database connection pool is adjusted automatically based on these values. If in doubt, do NOT set these.
 
- * export HSP_MARKETPLACE\_SERVER\_PROCESSES=8 # To override the number of pre-forked workers.
- * export HSP_MARKETPLACE\_SERVER\_THREAD=8 # To override the number of threads per process.
+ * export MARKETPLACE\_SERVER\_PROCESSES=8 # To override the number of pre-forked workers.
+ * export MARKETPLACE\_SERVER\_THREAD=8 # To override the number of threads per process.
 
 Now,
 
@@ -86,29 +87,33 @@ To build your current version:
 When running the container, **all environment variables defined in the above section must be set using `-e FOO="bar"` options** to docker. The foreground form of the command is:
 
 	docker run -it --rm -m="512MB" \
-		-e "HSP_MARKETPLACE_SECRET_KEY_BASE=development_only" \
-		-e "HSP_MARKETPLACE_DEVELOPMENT_URL=postgresql://marketplace:password@192.168.1.103:5432/marketplace_development" \
-		-e "HSP_MARKETPLACE_DEVELOPMENT_URL_TEST=postgresql://marketplace:password@192.168.1.103:5432/marketplace_test" \
-		healtcreek-server:latest
+		-e "MARKETPLACE_TITLE=My Marketplace" \
+		-e "MARKETPLACE_PASSWORD_SALT=development_only" \
+		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
+		-e "MARKETPLACE_DEVELOPMENT_URL=postgresql://marketplace:password@192.168.1.103:5432/marketplace_development" \
+		-e "MARKETPLACE_DEVELOPMENT_URL_TEST=postgresql://marketplace:password@192.168.1.103:5432/marketplace_test" \
+		hsp-marketplace-server:latest
 
 ...or to run in the background:
 
 	docker run -d --rm -p 3000:3000 -m="512MB" \
-		-e "HSP_MARKETPLACE_SECRET_KEY_BASE=development_only" \
-		-e "HSP_MARKETPLACE_DEVELOPMENT_URL=postgresql://marketplace:password@192.168.1.103:5432/marketplace_development" \
-		-e "HSP_MARKETPLACE_DEVELOPMENT_URL_TST=postgresql://marketplace:password@192.168.1.103:5432/marketplace_test" \
-		healtcreek-server:latest
+		-e "MARKETPLACE_TITLE=My Marketplace" \
+		-e "MARKETPLACE_PASSWORD_SALT=development_only" \
+		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
+		-e "MARKETPLACE_DEVELOPMENT_URL=postgresql://marketplace:password@192.168.1.103:5432/marketplace_development" \
+		-e "MARKETPLACE_DEVELOPMENT_URL_TST=postgresql://marketplace:password@192.168.1.103:5432/marketplace_test" \
+		hsp-marketplace-server:latest
 
 ## Regression Testing a Container
 
 The container includes a regression test suite to ensure proper operation. Running in test mode is slightly different, as to not inadvertently affect your production database(s). The application server process must also be told to run in 'test' mode.
 
-docker run -it -m="512MB" \
-	-e "RAILS_ENV=test" \
-	-e "HSP_MARKETPLACE_DEVELOPMENT_URL_TEST=postgresql://hsp_marketplace:password@192.168.1.103:5432/marketplace_test" \
-	... \
-	healtcreek-server:latest \
-	rake test
+	docker run -it -m="512MB" \
+		-e "RAILS_ENV=test" \
+		-e "MARKETPLACE_DEVELOPMENT_URL_TEST=postgresql://hsp_marketplace:password@192.168.1.103:5432/marketplace_test" \
+		... \
+		hsp-marketplace-server:latest \
+		rake test
 
 
 # License

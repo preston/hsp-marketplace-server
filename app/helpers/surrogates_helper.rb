@@ -1,0 +1,2 @@
+module SurrogatesHelper
+end

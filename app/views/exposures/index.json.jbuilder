@@ -1,0 +1,1 @@
+json.array! @exposures, partial: 'exposures/exposure', as: :exposure

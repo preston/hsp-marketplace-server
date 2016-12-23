@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 
+  service_version: MyString
+  version: MyString
+  container_respository_url: MyString
+  container_tag: 
+  validated_at: 2016-12-21 12:41:14
+  published_at: 2016-12-21 12:41:14
+  permissions: 
+  release_notes: MyText
+
+two:
+  id: 
+  service_version: MyString
+  version: MyString
+  container_respository_url: MyString
+  container_tag: 
+  validated_at: 2016-12-21 12:41:14
+  published_at: 2016-12-21 12:41:14
+  permissions: 
+  release_notes: MyText

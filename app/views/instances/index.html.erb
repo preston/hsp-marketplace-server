@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Instances</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Platform</th>
+      <th>Build</th>
+      <th>Launch bindings</th>
+      <th>Deployed at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @instances.each do |instance| %>
+      <tr>
+        <td><%= instance.platform_id %></td>
+        <td><%= instance.build_id %></td>
+        <td><%= instance.launch_bindings %></td>
+        <td><%= instance.deployed_at %></td>
+        <td><%= link_to 'Show', instance %></td>
+        <td><%= link_to 'Edit', edit_instance_path(instance) %></td>
+        <td><%= link_to 'Destroy', instance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Instance', new_instance_path %>

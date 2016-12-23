@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  build_id: 
+  caption: MyString
+  mime_type: MyString
+  data: 
+
+two:
+  build_id: 
+  caption: MyString
+  mime_type: MyString
+  data: 

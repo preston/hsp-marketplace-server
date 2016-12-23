@@ -13,14 +13,6 @@ class GroupsController < ApplicationController
   def show
   end
 
-  # GET /groups/new
-  def new
-    @group = Group.new
-  end
-
-  # GET /groups/1/edit
-  def edit
-  end
 
   # POST /groups
   # POST /groups.json

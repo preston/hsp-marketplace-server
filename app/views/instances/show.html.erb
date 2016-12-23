@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Platform:</strong>
+  <%= @instance.platform_id %>
+</p>
+
+<p>
+  <strong>Build:</strong>
+  <%= @instance.build_id %>
+</p>
+
+<p>
+  <strong>Launch bindings:</strong>
+  <%= @instance.launch_bindings %>
+</p>
+
+<p>
+  <strong>Deployed at:</strong>
+  <%= @instance.deployed_at %>
+</p>
+
+<%= link_to 'Edit', edit_instance_path(@instance) %> |
+<%= link_to 'Back', instances_path %>

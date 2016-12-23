@@ -10,7 +10,7 @@
 
 		#launchers.col-md-12
 			/ h1 App Launchers
-			- System::Client.all.each do |c|
+			- Client.all.each do |c|
 				/ a.launcher href="#{launch_client_path(c)}"
 				a.launcher href="#{c.launch_url}?jwt=#{current_jwt.encode}"
 					/ span.fa.fa-cog.fa-3x

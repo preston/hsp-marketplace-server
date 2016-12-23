@@ -99,6 +99,7 @@ class Collapse < ActiveRecord::Migration
             t.string   'name',        null: false
             t.string   'code',        null: false
             t.text     'description'
+            t.boolean   'default',        null: false, default: false
             t.datetime 'created_at',  null: false
             t.datetime 'updated_at',  null: false
         end

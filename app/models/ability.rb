@@ -1,28 +1,37 @@
 class Ability
-	include CanCan::Ability
+    include CanCan::Ability
 
-	def initialize(user)
-		user ||= User.new # Unauthenticated
+    def initialize(user)
+        user ||= User.new # Unauthenticated
 
-		if user.id.nil? # Unauthenticated guest.
-			# Nada!
-		else # Normal authenticated user.
+        can :read, Service do |s| s.visible_at <= Time.now end
+        can :read, Interface do |i| i.published_at <= Time.now end
+        can :read, Build
+        can :read, Exposure
+        # can :read, P
+        # can :read, Service
+        # can :read, Service
+        # can :read, Service
 
-			# We're going to disable detailed authorization controls for now!
-			can :manage, :all
-			
-			# can :manage, System::User
-			#
-			# # Identity and Access Management (IAM)
-			# can :read,	System::Identity, user_id: user.id
-			# can :delete,	System::Identity, user_id: user.id
-			# can :read, System::User, id: user.id
-			#
-			# can :edit, System::User, id: user.id
-			#
-			# can :read, System::Client
-			# can :launch, System::Client
+        if user.id.nil? # Unauthenticated guest.
+        	# Nada!
+        else # Normal authenticated user.
 
-		end
-	end
+          # We're going to disable detailed authorization controls for now!
+          can :manage, :all
+
+          # can :manage, User
+          #
+          # # Identity and Access Management (IAM)
+          can :read,	Identity, user_id: user.id
+          can :delete, Identity, user_id: user.id
+          can :read, User, id: user.id
+
+          can :edit, User, id: user.id
+            #
+            # can :read, Client
+            # can :launch, Client
+
+        end
+    end
 end

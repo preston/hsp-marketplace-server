@@ -8,8 +8,8 @@
 				/ br
 				h3.brand-name
 					/ img.logo src="http://placehold.it/50x50"
-					|  Marketplace
-				h1 at ASU
+					= ENV['MARKETPLACE_TITLE'] || 'Marketplace'
+				/ h1 at ASU
 				hr
 			/ p for happy clinical encounters
 			- if user_signed_in?
@@ -25,7 +25,7 @@
 			- else
 				h4 Log in via..
 				br
-			- System::IdentityProvider.all.each do |p|
+			- IdentityProvider.all.each do |p|
 				= form_tag login_path do |f|
 					input type="hidden" name="provider_id" value="#{p.id}"
 					input.btn.btn-lg.btn-success.btn-block type="submit" value="#{p.name}"

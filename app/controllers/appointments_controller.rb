@@ -13,15 +13,6 @@ class AppointmentsController < ApplicationController
   def show
   end
 
-  # GET /appointments/new
-  def new
-    @appointment = Appointment.new
-  end
-
-  # GET /appointments/1/edit
-  def edit
-  end
-
   # POST /appointments
   # POST /appointments.json
   def create

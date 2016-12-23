@@ -1,5 +1,5 @@
 class IdentitiesController < ApplicationController
-	
+
 
 	# load_and_authorize_resource
 	load_resource
@@ -14,8 +14,5 @@ class IdentitiesController < ApplicationController
 		end
 	end
 
-	# def set_identity
-	# 	@identity = Identity.find(params[:id])
-	# end
 
 end

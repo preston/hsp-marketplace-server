@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  configuration_id: 
+  name: MyString
+  minimum: 1
+  maximum: 1
+  memory: 1
+
+two:
+  configuration_id: 
+  name: MyString
+  minimum: 1
+  maximum: 1
+  memory: 1
