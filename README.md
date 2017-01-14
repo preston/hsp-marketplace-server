@@ -86,7 +86,7 @@ To build your current version:
 
 When running the container, **all environment variables defined in the above section must be set using `-e FOO="bar"` options** to docker. The foreground form of the command is:
 
-	docker run -it --rm -p 3000:3000 \
+	docker run -it --rm -p 3000:3000 --name hsp-marketplace-server \
 		-e "MARKETPLACE_TITLE=My Marketplace" \
 		-e "MARKETPLACE_PASSWORD_SALT=development_only" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
@@ -95,7 +95,7 @@ When running the container, **all environment variables defined in the above sec
 
 ...or to run in the background:
 
-	docker run -d --rm -p 3000:3000 -m="512MB" \
+	docker run -d -p 3000:3000 --name hsp-marketplace-server \
 		-e "MARKETPLACE_TITLE=My Marketplace" \
 		-e "MARKETPLACE_PASSWORD_SALT=development_only" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \

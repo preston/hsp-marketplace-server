@@ -1,4 +1,4 @@
-json.extract! user, :id, :external_id, :name, :first_name, :middle_name, :last_name
+json.extract! user, :id, :external_id, :name, :first_name, :middle_name, :last_name, :created_at, :updated_at
 json.url user_url(user)
 json.path user_path(user)
 # json.memberships do

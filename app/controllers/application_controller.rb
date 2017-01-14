@@ -52,32 +52,33 @@ class ApplicationController < ActionController::Base
         redirect_to root_url
     end
 
+	# We'll completely disable authentication for now!
     def authenticate_identity!
-        identity_id = nil
-        if authorization = request.headers['Authorization']
-            json = JsonWebToken.decode_authorization(authorization)
-            jwt = JsonWebToken.find(json['id'])
-            identity_id = jwt[:identity_id]
-        else
-            identity_id = session['identity_id']
-        end
-        puts "authenticate_identity!: identity_id: #{identity_id}"
-        if identity_id.nil?
-            respond_to do |format|
-                format.json { render json: { message: 'Invalid or expired JWT. Please (re)authenticate and sign your request properly!' }, status: :unauthorized }
-                format.html { redirect_to landing_path, notice: 'Unable to authenticate your identity. Please log in again.' }
-            end
-        else
-            begin
-                @current_identity = Identity.find(identity_id)
-                @current_user = @current_identity.user
-		    rescue Exception => e
-				Rails.logger.warn 'Claimed identity not found. User may be have been deleted? Removing identity from session!'
-				Rails.logger.warn e
-                session[:identity_id] = nil
-            end
-        end
-        @current_user
+        # identity_id = nil
+        # if authorization = request.headers['Authorization']
+        #     json = JsonWebToken.decode_authorization(authorization)
+        #     jwt = JsonWebToken.find(json['id'])
+        #     identity_id = jwt[:identity_id]
+        # else
+        #     identity_id = session['identity_id']
+        # end
+        # puts "authenticate_identity!: identity_id: #{identity_id}"
+        # if identity_id.nil?
+        #     respond_to do |format|
+        #         format.json { render json: { message: 'Invalid or expired JWT. Please (re)authenticate and sign your request properly!' }, status: :unauthorized }
+        #         format.html { redirect_to landing_path, notice: 'Unable to authenticate your identity. Please log in again.' }
+        #     end
+        # else
+        #     begin
+        #         @current_identity = Identity.find(identity_id)
+        #         @current_user = @current_identity.user
+		#     rescue Exception => e
+		# 		Rails.logger.warn 'Claimed identity not found. User may be have been deleted? Removing identity from session!'
+		# 		Rails.logger.warn e
+        #         session[:identity_id] = nil
+        #     end
+        # end
+        # @current_user
     end
 
     def unauthenticate!
