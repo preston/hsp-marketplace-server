@@ -86,13 +86,12 @@ To build your current version:
 
 When running the container, **all environment variables defined in the above section must be set using `-e FOO="bar"` options** to docker. The foreground form of the command is:
 
-	docker run -it --rm -m="512MB" \
+	docker run -it --rm \
 		-e "MARKETPLACE_TITLE=My Marketplace" \
 		-e "MARKETPLACE_PASSWORD_SALT=development_only" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
-		-e "MARKETPLACE_DEVELOPMENT_URL=postgresql://marketplace:password@192.168.1.103:5432/marketplace_development" \
-		-e "MARKETPLACE_DEVELOPMENT_URL_TEST=postgresql://marketplace:password@192.168.1.103:5432/marketplace_test" \
-		hsp-marketplace-server:latest
+		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.115:5432/marketplace_development" \
+		p3000/hsp-marketplace-server:latest
 
 ...or to run in the background:
 
@@ -100,9 +99,9 @@ When running the container, **all environment variables defined in the above sec
 		-e "MARKETPLACE_TITLE=My Marketplace" \
 		-e "MARKETPLACE_PASSWORD_SALT=development_only" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
-		-e "MARKETPLACE_DEVELOPMENT_URL=postgresql://marketplace:password@192.168.1.103:5432/marketplace_development" \
-		-e "MARKETPLACE_DEVELOPMENT_URL_TST=postgresql://marketplace:password@192.168.1.103:5432/marketplace_test" \
-		hsp-marketplace-server:latest
+		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.103:5432/marketplace_development" \
+		-e "MARKETPLACE_DATABASE_URL_TEST=postgresql://marketplace:password@192.168.1.103:5432/marketplace_test" \
+		p3000/hsp-marketplace-server:latest
 
 ## Regression Testing a Container
 
@@ -110,9 +109,9 @@ The container includes a regression test suite to ensure proper operation. Runni
 
 	docker run -it -m="512MB" \
 		-e "RAILS_ENV=test" \
-		-e "MARKETPLACE_DEVELOPMENT_URL_TEST=postgresql://hsp_marketplace:password@192.168.1.103:5432/marketplace_test" \
+		-e "MARKETPLACE_DATABASE_URL_TEST=postgresql://hsp_marketplace:password@192.168.1.103:5432/marketplace_test" \
 		... \
-		hsp-marketplace-server:latest \
+		p3000/hsp-marketplace-server:latest \
 		rake test
 
 
