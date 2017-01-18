@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     # Assure that CanCanCan authorization checks run.
     # check_authorization
 
-    before_action :authenticate_identity!
+    before_action :set_identity_from_session!
 
     def set_options_from(request)
         @options = {}
@@ -22,10 +22,13 @@ class ApplicationController < ActionController::Base
         end
     end
 
+	MARKETPLACE_UI_URL = ENV['MARKETPLACE_UI_URL']
+
     # Return the CORS access control headers.
     def cors_set_access_control_headers
-        headers['Access-Control-Allow-Origin'] = '*'
-        headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+        headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
+		headers['Access-Control-Allow-Credentials'] = true
+        headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
         headers['Access-Control-Allow-Headers'] = 'Authorization'
         headers['Access-Control-Max-Age'] = '1728000'
     end
@@ -36,8 +39,9 @@ class ApplicationController < ActionController::Base
     def cors_preflight_check
         # byebug
         if request.method.to_sym.downcase == :options
-            headers['Access-Control-Allow-Origin'] = '*'
-            headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+            headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
+			headers['Access-Control-Allow-Credentials'] = true
+            headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
             headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
             headers['Access-Control-Max-Age'] = '1728000'
             render plain: '', content_type: 'text/plain'
@@ -52,33 +56,35 @@ class ApplicationController < ActionController::Base
         redirect_to root_url
     end
 
-	# We'll completely disable authentication for now!
-    def authenticate_identity!
+    # We'll completely disable authentication for now!
+    def set_identity_from_session!
         # identity_id = nil
         # if authorization = request.headers['Authorization']
         #     json = JsonWebToken.decode_authorization(authorization)
         #     jwt = JsonWebToken.find(json['id'])
         #     identity_id = jwt[:identity_id]
         # else
-        #     identity_id = session['identity_id']
+            identity_id = session['identity_id']
+			puts "IDENTITY_ID: #{identity_id}"
         # end
-        # puts "authenticate_identity!: identity_id: #{identity_id}"
-        # if identity_id.nil?
+        # puts "set_identity_from_session!: identity_id: #{identity_id}"
+        if identity_id.nil?
         #     respond_to do |format|
         #         format.json { render json: { message: 'Invalid or expired JWT. Please (re)authenticate and sign your request properly!' }, status: :unauthorized }
         #         format.html { redirect_to landing_path, notice: 'Unable to authenticate your identity. Please log in again.' }
         #     end
-        # else
-        #     begin
-        #         @current_identity = Identity.find(identity_id)
-        #         @current_user = @current_identity.user
-		#     rescue Exception => e
-		# 		Rails.logger.warn 'Claimed identity not found. User may be have been deleted? Removing identity from session!'
-		# 		Rails.logger.warn e
-        #         session[:identity_id] = nil
-        #     end
-        # end
+        else
+            begin
+                @current_identity = Identity.find(identity_id)
+                @current_user = @current_identity.user
+            rescue Exception => e
+        		Rails.logger.warn 'Claimed identity not found. User may be have been deleted? Removing identity from session!'
+        		Rails.logger.warn e
+                session[:identity_id] = nil
+            end
+        end
         # @current_user
+		@current_identity
     end
 
     def unauthenticate!
@@ -87,16 +93,11 @@ class ApplicationController < ActionController::Base
         @current_identity = nil
     end
 
+    attr_reader :current_user
+    # 'current_user' needs to be defined for cancancan
+    # alias current_user current_user
 
-    def current_user
-		@current_user
-	end
-	# 'current_user' needs to be defined for cancancan
-	alias_method :current_user, :current_user
-
-    def current_identity
-		@current_identity
-	end
+    # attr_reader :current_identity
 
     def new_nonce
         session[:nonce] = SecureRandom.hex(16)
@@ -104,6 +105,26 @@ class ApplicationController < ActionController::Base
 
     def stored_nonce
         session.delete(:nonce)
+    end
+
+    def redirect_to_identity_provider(provider)
+        session['provider_id'] = provider.id
+		# session['referer_url'] = request.referer
+        uri = URI(provider.configuration['authorization_endpoint'])
+        query = {
+            redirect_uri:	callback_url,
+            state: 			new_nonce,
+            response_type: 	:code,
+            # access_type: 	:offline,
+            # aud: provider.client_id,
+            client_id: 		provider.client_id,
+            scope: provider.scopes
+            # scope: 			'openid email profile'
+            # scope: 			'launch/encounter user/*.read launch openid patient/*.read profile'
+            # scope: 			'phone email address launch/encounter user/*.read launch openid patient/*.read profile'
+        }
+        uri.query = URI.encode_www_form(query)
+        redirect_to uri.to_s
     end
 
     def build_oauth_request(tool, uri, options)

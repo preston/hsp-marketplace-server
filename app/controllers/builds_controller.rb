@@ -1,5 +1,4 @@
 class BuildsController < ApplicationController
-    skip_before_action	:authenticate_identity!, only: [:index, :show]
 
     load_and_authorize_resource	:service
     load_and_authorize_resource

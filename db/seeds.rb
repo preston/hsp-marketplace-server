@@ -1,7 +1,9 @@
+# This is a general-purpose IDP for development purposes only.
+# Please relpace this with your own, and NEVER use it for production!
 google = IdentityProvider.create_with(
     name: 'Google',
-    client_id: 'change_me_for_your_account',
-    client_secret: 'change_me_for_your_account',
+    client_id: '418783041492-sfsdepjvultlju47mvtcrm2ug3gjumo0.apps.googleusercontent.com',
+    client_secret: 'tlaAwAx-1MH3YAm1fkFbFCvY',
     scopes: 'openid email profile'
 ).find_or_create_by(issuer: 'https://accounts.google.com')
 google.reconfigure

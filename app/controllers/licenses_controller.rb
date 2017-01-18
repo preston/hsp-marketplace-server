@@ -4,6 +4,7 @@ class LicensesController < ApplicationController
     # GET /licenses
     # GET /licenses.json
     def index
+# debugger
         @licenses = License.paginate(page: params[:page], per_page: params[:per_page])
         sort = %w(name url).include?(params[:sort]) ? params[:sort] : :name
         order = 'desc' == params[:order] ? :desc : :asc

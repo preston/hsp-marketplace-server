@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-    skip_before_action	:authenticate_identity!,	except: :destroy
+    # skip_before_action	:set_identity_from_session!,	except: :destroy
     skip_authorization_check
 
     before_action :cleanse_session, except: :callback
@@ -52,14 +52,15 @@ class SessionsController < ApplicationController
             redirect_to	:login, message: "#{msg} (Couldn't decrypt token with known public keys.)"
         elsif jwt[0]['aud'] != provider.client_id && jwt[0]['aud'] != provider.alternate_client_id
             flash[:error] = "#{msg} (Provider mismatch.)"
-            redirect_to :login
+            # redirect_to :login
+			render json: {message: 'Error processingn login response. Sorry!'} # FIXME Report error to the user!
         # elsif authorization['state'] != session[:session_id]
         # 	flash[:error] = "#{msg} (Session ID mismatch.)"
         # 	render 	:sorry
         else
             # Looks good!
-            logger.debug jwt
-            session[:expires_at] = DateTime.strptime(jwt[0]['exp'].to_s, '%s')
+            # logger.debug jwt
+            session['expires_at'] = DateTime.strptime(jwt[0]['exp'].to_s, '%s')
             subject = jwt[0]['sub']
             # byebug
             identity = Identity.where(sub: subject, identity_provider: provider).first
@@ -88,7 +89,7 @@ class SessionsController < ApplicationController
             session['identity_id'] = identity.id
             jwt = JsonWebToken.new(identity_id: identity.id, expires_at: 24.hours.from_now)
             jwt.save!
-            redirect_to :dashboard
+            redirect_to ENV['MARKETPLACE_UI_URL']
         end
     end
 
@@ -109,27 +110,12 @@ class SessionsController < ApplicationController
     end
 
     def authenticate
-        provider = IdentityProvider.find(params['provider_id'])
-        session['provider_id'] = provider.id
-        uri = URI(provider.configuration['authorization_endpoint'])
-        query = {
-            redirect_uri:	callback_url,
-            # state: 			new_nonce,
-            response_type: 	:code,
-            access_type: 	:offline,
-            # aud: provider.client_id,
-            client_id: 		provider.client_id,
-            scope: provider.scopes
-            # scope: 			'openid email profile'
-            # scope: 			'launch/encounter user/*.read launch openid patient/*.read profile'
-            # scope: 			'phone email address launch/encounter user/*.read launch openid patient/*.read profile'
-        }
-        uri.query = URI.encode_www_form(query)
-        redirect_to uri.to_s
+        idp = IdentityProvider.find(params['provider_id'])
+		redirect_to_identity_provider(idp)
     end
 
     def destroy
         unauthenticate!
-        redirect_to root_url
+        render json: {message: 'Logged out.'}, status: :ok
     end
 end

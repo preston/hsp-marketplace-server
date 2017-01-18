@@ -10,6 +10,8 @@ class IdentityProvider < ActiveRecord::Base
 
 	@@CLIENT_CACHE = ThreadSafe::Cache.new
 
+	before_update	:reconfigure #update_handler
+
 	def client_auth_method
 		supported = self.configuration[:token_endpoint_auth_methods_supported]
 		if supported.present? && !supported.include?('client_secret_basic')
@@ -27,7 +29,11 @@ class IdentityProvider < ActiveRecord::Base
 		self
 	end
 
-	# Not supported by Google at the moment.
+	# def update_handler
+	# 	self.reconfigure
+	# end
+
+	# Isssues with Google at the moment.
 	# class << self
 	# 	def discover!(host)
 	# 		issuer = OpenIDConnect::Discovery::Provider.discover!(host).issuer

@@ -31,7 +31,7 @@
 <text text-anchor="start" x="-93.5176" y="23.2" font-family="Times,serif" font-size="14.00">new_nonce</text>
 <text text-anchor="start" x="-93.5176" y="37.2" font-family="Times,serif" font-size="14.00">set_options_from</text>
 <text text-anchor="start" x="-93.5176" y="51.2" font-family="Times,serif" font-size="14.00">stored_nonce</text>
-<text text-anchor="start" x="-93.5176" y="65.2" font-family="Times,serif" font-size="14.00">authenticate_identity!</text>
+<text text-anchor="start" x="-93.5176" y="65.2" font-family="Times,serif" font-size="14.00">set_identity_from_session!</text>
 <polyline fill="none" stroke="black" points="-101.518,72 99.5176,72 "/>
 <polyline fill="none" stroke="black" points="-101.518,96 99.5176,96 "/>
 <text text-anchor="start" x="-93.5176" y="111.2" font-family="Times,serif" font-size="14.00">_layout</text>

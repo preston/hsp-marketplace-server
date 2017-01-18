@@ -6,9 +6,9 @@ Rails.application.routes.draw do
     resources :licenses
 
     resources :services do
-		collection do
-			post :search, as: :search_services
-		end
+        collection do
+            post :search, as: :search_services
+        end
         resources :builds do
             resources :screenshots
             resources :dependencies
@@ -48,7 +48,11 @@ Rails.application.routes.draw do
             get 'launch'
         end
     end
-    resources :identity_providers
+    resources :identity_providers do
+        member do
+            get 'redirect'
+        end
+    end
 
     get		'sessions' => 'sessions#callback',	as: :callback
     post	'sessions' => 'sessions#authenticate',	as: :login
