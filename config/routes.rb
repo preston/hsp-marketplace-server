@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     resources :licenses
 
     resources :services do
+		collection do
+			post :search, as: :search_services
+		end
         resources :builds do
             resources :screenshots
             resources :dependencies

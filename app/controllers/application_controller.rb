@@ -38,9 +38,9 @@ class ApplicationController < ActionController::Base
         if request.method.to_sym.downcase == :options
             headers['Access-Control-Allow-Origin'] = '*'
             headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
-            headers['Access-Control-Allow-Headers'] = 'Authorization'
+            headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
             headers['Access-Control-Max-Age'] = '1728000'
-            render text: '', content_type: 'text/plain'
+            render plain: '', content_type: 'text/plain'
         end
     end
 

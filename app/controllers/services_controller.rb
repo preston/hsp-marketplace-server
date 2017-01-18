@@ -10,6 +10,13 @@ class ServicesController < ApplicationController
         @services = Service.all
     end
 
+	def search
+		@services = []
+		@services = Service.search_by_name_or_description(params['text']) if params['text']
+		puts "LENGTH: #{@services.length}"
+		render :index
+	end
+
     # GET /services/1
     # GET /services/1.json
     def show; end

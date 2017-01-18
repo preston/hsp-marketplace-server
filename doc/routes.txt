@@ -8,6 +8,7 @@
                                       PATCH   /licenses/:id(.:format)                                                                          licenses#update
                                       PUT     /licenses/:id(.:format)                                                                          licenses#update
                                       DELETE  /licenses/:id(.:format)                                                                          licenses#destroy
+             search_services_services POST    /services/search(.:format)                                                                       services#search
             service_build_screenshots GET     /services/:service_id/builds/:build_id/screenshots(.:format)                                     screenshots#index
                                       POST    /services/:service_id/builds/:build_id/screenshots(.:format)                                     screenshots#create
          new_service_build_screenshot GET     /services/:service_id/builds/:build_id/screenshots/new(.:format)                                 screenshots#new

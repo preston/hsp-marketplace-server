@@ -1,7 +1,8 @@
 class BuildsController < ApplicationController
     skip_before_action	:authenticate_identity!, only: [:index, :show]
+
     load_and_authorize_resource	:service
-    load_and_authorize_resource	:build
+    load_and_authorize_resource
 
     # GET /builds
     # GET /builds.json
@@ -20,10 +21,8 @@ class BuildsController < ApplicationController
 
         respond_to do |format|
             if @build.save
-                format.html { redirect_to @build, notice: 'Build was successfully created.' }
-                format.json { render :show, status: :created, location: @build }
+                format.json { render :show, status: :created, location: service_build_url(@service, @build) }
             else
-                format.html { render :new }
                 format.json { render json: @build.errors, status: :unprocessable_entity }
             end
         end
@@ -34,10 +33,8 @@ class BuildsController < ApplicationController
     def update
         respond_to do |format|
             if @build.update(build_params)
-                format.html { redirect_to @build, notice: 'Build was successfully updated.' }
-                format.json { render :show, status: :ok, location: @build }
+                format.json { render :show, status: :ok, location: service_build_url(@service, @build) }
             else
-                format.html { render :edit }
                 format.json { render json: @build.errors, status: :unprocessable_entity }
             end
         end
@@ -48,8 +45,7 @@ class BuildsController < ApplicationController
     def destroy
         @build.destroy
         respond_to do |format|
-            format.html { redirect_to builds_url, notice: 'Build was successfully destroyed.' }
-            format.json { head :no_content }
+            format.json { render :show }
         end
     end
 
@@ -62,6 +58,6 @@ class BuildsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def build_params
-        params.require(:build).permit(:id, :service_version, :version, :container_respository_url, :container_tag, :validated_at, :published_at, :permissions, :release_notes)
+        params.require(:build).permit(:id, :service_id, :service_version, :version, :container_respository_url, :container_tag, :validated_at, :published_at, :permissions, :release_notes)
     end
 end
