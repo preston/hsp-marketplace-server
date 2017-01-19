@@ -35,9 +35,6 @@ COPY . .
 # We'll run in production mode by default.
 ENV RAILS_ENV=production
 
-# Precompile all JS/CSS.
-RUN bundle exec rake assets:precompile --trace
-
 # Showtime!
 EXPOSE 3000
 CMD bundle exec rake db:migrate && bundle exec puma -C config/puma.rb
