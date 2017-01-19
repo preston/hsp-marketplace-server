@@ -6,9 +6,11 @@ class Service < ApplicationRecord
     }
 
     # Paperclip
-    has_attached_file :logo, styles: { large: '400x400>', medium: '200x200>', small: '100x100>' }, default_url: '/images/:style/missing.png'
+    has_attached_file :logo,
+                      styles: { large: '400x400>', medium: '200x200>', small: '100x100>' }, default_url: '/images/:style/missing.png',
+                      storage: :database,
+					  cascade_deletion: true # The database will handle it.
     validates_attachment :logo, presence: true,
-                                storage: :database,
                                 content_type: { content_type: /\Aimage\/.*\z/ },
                                 size: { in: 0..8.megabytes }
 

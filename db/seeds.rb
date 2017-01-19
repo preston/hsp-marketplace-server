@@ -24,16 +24,23 @@ administrator = User.create!(name: 'Administrator')
 
 now = Time.now
 
+logo = File.new(File.join(Rails.root, 'public', 'headshot.jpg'))
+
 knartwork = Service.create!(
     name: 'Knartwork',
     description: 'KNARTwork is a multi-purpose web application for authoring, viewing, and transforming knowledge artifacts across popular specifications, with a strong slant towards healthcare-specific formats. By default, this application provides a purely standalone experience that does not use any standard-specific APIs (such as FHIR) or databases (such as RDBMS or NoSQL) systems, and may be used as-is by end users wanting to manage source documents as an out-of-band process using git/subversion, Dropbox, email etc.',
     license: apache20,
     user: administrator,
+	logo: logo,
     uri: 'https://marketplace.hspconsortium.org/services/knartwork',
     support_url: 'https://github.com/cqframework/knartwork',
     approved_at: now,
     visible_at: now
 )
+
+Screenshot.create!(service: knartwork, caption: 'Create new and update HL7 knowledge documents.', image: logo)
+Screenshot.create!(service: knartwork, caption: 'Manage metadata.', image: logo)
+Screenshot.create!(service: knartwork, caption: 'Create complex flows mapped to stardard terminologies.', image: logo)
 
 knartwork_build = Build.create!(
     service: knartwork,
@@ -51,11 +58,14 @@ cql_translation_service = Service.create!(
     description: 'A microservice wrapper for the CQL to ELM conversion library.',
     license: apache20,
     user: administrator,
+	logo: logo,
     uri: 'https://marketplace.hspconsortium.org/services/cql-translation-service',
     support_url: 'https://github.com/mitre/cql-translation-service',
     approved_at: now,
     visible_at: now
 )
+
+Screenshot.create!(service: cql_translation_service, caption: 'An API for CQL-to-ELM conversion.', image: logo)
 
 cql_translation_service_build = Build.create!(
     service: cql_translation_service,

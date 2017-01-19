@@ -1,5 +1,4 @@
 class ServicesController < ApplicationController
-
     load_and_authorize_resource
 
     # GET /services
@@ -8,12 +7,28 @@ class ServicesController < ApplicationController
         @services = Service.all
     end
 
-	def search
-		@services = []
-		@services = Service.search_by_name_or_description(params['text']) if params['text']
-		puts "LENGTH: #{@services.length}"
-		render :index
+    def small
+        send_image_data(:small)
+  	end
+
+    def medium
+        send_image_data(:medium)
 	end
+
+    def large
+        send_image_data(:large)
+    end
+
+    def send_image_data(size)
+        send_data @service.logo.file_for(size).file_contents, type: @service.logo.content_type, disposition: 'inline'
+    end
+
+    def search
+        @services = []
+        @services = Service.search_by_name_or_description(params['text']) if params['text']
+        puts "LENGTH: #{@services.length}"
+        render :index
+    end
 
     # GET /services/1
     # GET /services/1.json

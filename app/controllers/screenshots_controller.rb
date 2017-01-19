@@ -1,5 +1,4 @@
 class ScreenshotsController < ApplicationController
-
     load_and_authorize_resource	:service
     load_and_authorize_resource	:screenshot
 
@@ -9,9 +8,25 @@ class ScreenshotsController < ApplicationController
 
     def show; end
 
+	def small
+		send_image_data(:small)
+	end
+
+	def medium
+		send_image_data(:medium)
+	end
+
+	def large
+		send_image_data(:large)
+	end
+
+	def send_image_data(size)
+		send_data @screenshot.image.file_for(size).file_contents, type: @screenshot.image.content_type, disposition: 'inline'
+	end
+
     def create
         @screenshot = Screenshot.new(screenshot_params)
-		# debugger
+        # debugger
         respond_to do |format|
             if @screenshot.save
                 format.json { render :show, status: :created, location: service_screenshot_url(@service, @screenshot) }

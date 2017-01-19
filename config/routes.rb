@@ -6,7 +6,18 @@ Rails.application.routes.draw do
     resources :licenses
 
     resources :services do
-        resources :screenshots
+        member do
+            get 'logo/large' => 'services#large', as: :large_logo
+            get 'logo/medium' => 'services#medium', as: :medium_logo
+            get 'logo/small' => 'services#small', as: :small_logo
+        end
+        resources :screenshots do
+            member do
+                get :large
+                get :medium
+                get :small
+            end
+        end
         collection do
             post :search, as: :search_services
         end

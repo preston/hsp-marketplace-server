@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119180337) do
+ActiveRecord::Schema.define(version: 20170119211552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,15 @@ ActiveRecord::Schema.define(version: 20170119180337) do
     t.index ["name"], name: "index_identity_providers_on_name", using: :btree
   end
 
+  create_table "images", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "screenshot_id", null: false
+    t.string   "style"
+    t.binary   "file_contents"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["screenshot_id"], name: "index_images_on_screenshot_id", using: :btree
+  end
+
   create_table "instances", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "platform_id",                  null: false
     t.uuid     "build_id",                     null: false
@@ -150,6 +159,15 @@ ActiveRecord::Schema.define(version: 20170119180337) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_licenses_on_name", unique: true, using: :btree
+  end
+
+  create_table "logos", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "service_id",    null: false
+    t.string   "style"
+    t.binary   "file_contents"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["service_id"], name: "index_logos_on_service_id", using: :btree
   end
 
   create_table "members", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -267,9 +285,11 @@ ActiveRecord::Schema.define(version: 20170119180337) do
   add_foreign_key "exposures", "interfaces"
   add_foreign_key "identities", "identity_providers"
   add_foreign_key "identities", "users"
+  add_foreign_key "images", "screenshots", on_delete: :cascade
   add_foreign_key "instances", "builds"
   add_foreign_key "instances", "platforms"
   add_foreign_key "json_web_tokens", "identities"
+  add_foreign_key "logos", "services", on_delete: :cascade
   add_foreign_key "members", "groups"
   add_foreign_key "members", "users"
   add_foreign_key "parameters", "exposures"

@@ -2,15 +2,13 @@ source 'https://rubygems.org'
 ruby '2.3.3'
 
 gem 'rails', '5.0.1'	# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'sass-rails'	# Use SCSS for stylesheets
-gem 'uglifier'			# Use Uglifier as compressor for JavaScript assets
 
 gem 'jbuilder'			# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'sdoc', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
 
 gem 'will_paginate' # Better query pagination support.
 
-gem 'therubyracer'	# Required at deploy time for asset precompilation.
+# gem 'therubyracer'	# Required at deploy time for asset precompilation.
 
 gem 'openid_connect'
 
@@ -26,17 +24,7 @@ gem 'pg_search' # Full-text search. RAD!!!
 gem 'httparty'  # Simple REST client.
 gem 'faker'	# For generating synthetic data.
 gem 'paperclip'	# Dealing with images.
-gem 'paperclip_database' # For database storage
-
-# PURELY CLIENT-SIDE STUFF
-gem 'gravatar_image_tag'
-# General jQuery.
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
-# gem 'chosen-rails'
-gem 'bootstrap-sass'
-gem 'autoprefixer-rails'
-gem 'font-awesome-rails' # Better icons for Bootstrap
+gem 'paperclip_database', git: 'https://github.com/pwnall/paperclip_database.git', branch: 'rails5' # For database storage. Using a fork for Rails 5 support, unfortunately. :(
 
 group :development, :test do
     gem 'byebug' # Call 'byebug' anywhere in the code to stop execution and get a debugger console
