@@ -6,11 +6,11 @@ Rails.application.routes.draw do
     resources :licenses
 
     resources :services do
+        resources :screenshots
         collection do
             post :search, as: :search_services
         end
         resources :builds do
-            resources :screenshots
             resources :dependencies
             resources :exposures do
                 resources :parameters

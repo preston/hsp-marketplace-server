@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161221224103) do
+ActiveRecord::Schema.define(version: 20170119180337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -191,17 +191,19 @@ ActiveRecord::Schema.define(version: 20161221224103) do
   end
 
   create_table "screenshots", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid     "build_id",   null: false
-    t.string   "caption",    null: false
-    t.string   "mime_type",  null: false
-    t.binary   "data",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["build_id"], name: "index_screenshots_on_build_id", using: :btree
+    t.string   "caption",            null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.uuid     "service_id",         null: false
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.index ["service_id"], name: "index_screenshots_on_service_id", using: :btree
   end
 
   create_table "services", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string   "name",        null: false
+    t.string   "name",              null: false
     t.text     "description"
     t.uuid     "user_id"
     t.string   "uri"
@@ -209,8 +211,12 @@ ActiveRecord::Schema.define(version: 20161221224103) do
     t.uuid     "license_id"
     t.datetime "approved_at"
     t.datetime "visible_at"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
     t.index ["name"], name: "index_services_on_name", unique: true, using: :btree
   end
 
@@ -268,7 +274,7 @@ ActiveRecord::Schema.define(version: 20161221224103) do
   add_foreign_key "members", "users"
   add_foreign_key "parameters", "exposures"
   add_foreign_key "platforms", "users"
-  add_foreign_key "screenshots", "builds"
+  add_foreign_key "screenshots", "services"
   add_foreign_key "services", "users"
   add_foreign_key "surrogates", "interfaces"
   add_foreign_key "surrogates", "interfaces", column: "substitute_id"

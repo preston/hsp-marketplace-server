@@ -45,7 +45,7 @@ GEM
     attr_required (1.0.1)
     autoprefixer-rails (6.6.1)
       execjs
-    bindata (2.3.4)
+    bindata (2.3.5)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -124,7 +124,7 @@ GEM
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
-    openid_connect (1.0.2)
+    openid_connect (1.0.3)
       activemodel
       attr_required (>= 1.0.0)
       json (>= 1.4.3)
@@ -141,6 +141,8 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (~> 0.3.0)
+    paperclip_database (2.3.1)
+      paperclip (>= 2.3.0)
     parser (2.3.3.1)
       ast (~> 2.2)
     pg (0.19.0)
@@ -281,6 +283,7 @@ DEPENDENCIES
   jwt
   openid_connect
   paperclip
+  paperclip_database
   pg
   pg_search
   puma

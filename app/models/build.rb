@@ -5,7 +5,6 @@ class Build < ApplicationRecord
     has_many	:exposures,			dependent: :destroy
     has_many	:dependencies,		dependent: :destroy
     has_many	:configurations,	dependent: :destroy
-    has_many	:screenshots,		dependent: :destroy
 
     validates_presence_of	:version
     validates_presence_of	:service_version

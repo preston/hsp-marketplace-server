@@ -26,6 +26,7 @@ gem 'pg_search' # Full-text search. RAD!!!
 gem 'httparty'  # Simple REST client.
 gem 'faker'	# For generating synthetic data.
 gem 'paperclip'	# Dealing with images.
+gem 'paperclip_database' # For database storage
 
 # PURELY CLIENT-SIDE STUFF
 gem 'gravatar_image_tag'
