@@ -15,12 +15,7 @@ bsd2 = License.create!(name: 'BSD 2-Clause', url: 'https://opensource.org/licens
 bsd3 = License.create!(name: 'BSD 3-Clause', url: 'https://opensource.org/licenses/BSD-3-Clause')
 
 administrator = User.create!(name: 'Administrator')
-# Client.create!(
-#     name: "Preston's Client",
-#     launch_url: 'https://marketplace.healthcreek.org/index.html',
-#     icon_url: 'http://marketplace.healthcreek.org/app/images/textures/tileable_wood_texture.png',
-#     available: true
-# )
+
 
 now = Time.now
 
