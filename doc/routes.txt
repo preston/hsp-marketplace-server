@@ -8,15 +8,21 @@
                                       PATCH   /licenses/:id(.:format)                                                                          licenses#update
                                       PUT     /licenses/:id(.:format)                                                                          licenses#update
                                       DELETE  /licenses/:id(.:format)                                                                          licenses#destroy
+                   large_logo_service GET     /services/:id/logo/large(.:format)                                                               services#large
+                  medium_logo_service GET     /services/:id/logo/medium(.:format)                                                              services#medium
+                   small_logo_service GET     /services/:id/logo/small(.:format)                                                               services#small
+             large_service_screenshot GET     /services/:service_id/screenshots/:id/large(.:format)                                            screenshots#large
+            medium_service_screenshot GET     /services/:service_id/screenshots/:id/medium(.:format)                                           screenshots#medium
+             small_service_screenshot GET     /services/:service_id/screenshots/:id/small(.:format)                                            screenshots#small
+                  service_screenshots GET     /services/:service_id/screenshots(.:format)                                                      screenshots#index
+                                      POST    /services/:service_id/screenshots(.:format)                                                      screenshots#create
+               new_service_screenshot GET     /services/:service_id/screenshots/new(.:format)                                                  screenshots#new
+              edit_service_screenshot GET     /services/:service_id/screenshots/:id/edit(.:format)                                             screenshots#edit
+                   service_screenshot GET     /services/:service_id/screenshots/:id(.:format)                                                  screenshots#show
+                                      PATCH   /services/:service_id/screenshots/:id(.:format)                                                  screenshots#update
+                                      PUT     /services/:service_id/screenshots/:id(.:format)                                                  screenshots#update
+                                      DELETE  /services/:service_id/screenshots/:id(.:format)                                                  screenshots#destroy
              search_services_services POST    /services/search(.:format)                                                                       services#search
-            service_build_screenshots GET     /services/:service_id/builds/:build_id/screenshots(.:format)                                     screenshots#index
-                                      POST    /services/:service_id/builds/:build_id/screenshots(.:format)                                     screenshots#create
-         new_service_build_screenshot GET     /services/:service_id/builds/:build_id/screenshots/new(.:format)                                 screenshots#new
-        edit_service_build_screenshot GET     /services/:service_id/builds/:build_id/screenshots/:id/edit(.:format)                            screenshots#edit
-             service_build_screenshot GET     /services/:service_id/builds/:build_id/screenshots/:id(.:format)                                 screenshots#show
-                                      PATCH   /services/:service_id/builds/:build_id/screenshots/:id(.:format)                                 screenshots#update
-                                      PUT     /services/:service_id/builds/:build_id/screenshots/:id(.:format)                                 screenshots#update
-                                      DELETE  /services/:service_id/builds/:build_id/screenshots/:id(.:format)                                 screenshots#destroy
            service_build_dependencies GET     /services/:service_id/builds/:build_id/dependencies(.:format)                                    dependencies#index
                                       POST    /services/:service_id/builds/:build_id/dependencies(.:format)                                    dependencies#create
          new_service_build_dependency GET     /services/:service_id/builds/:build_id/dependencies/new(.:format)                                dependencies#new
@@ -73,22 +79,6 @@ edit_service_build_configuration_task GET     /services/:service_id/builds/:buil
                                       PATCH   /services/:id(.:format)                                                                          services#update
                                       PUT     /services/:id(.:format)                                                                          services#update
                                       DELETE  /services/:id(.:format)                                                                          services#destroy
-                   platform_instances GET     /platforms/:platform_id/instances(.:format)                                                      instances#index
-                                      POST    /platforms/:platform_id/instances(.:format)                                                      instances#create
-                new_platform_instance GET     /platforms/:platform_id/instances/new(.:format)                                                  instances#new
-               edit_platform_instance GET     /platforms/:platform_id/instances/:id/edit(.:format)                                             instances#edit
-                    platform_instance GET     /platforms/:platform_id/instances/:id(.:format)                                                  instances#show
-                                      PATCH   /platforms/:platform_id/instances/:id(.:format)                                                  instances#update
-                                      PUT     /platforms/:platform_id/instances/:id(.:format)                                                  instances#update
-                                      DELETE  /platforms/:platform_id/instances/:id(.:format)                                                  instances#destroy
-                            platforms GET     /platforms(.:format)                                                                             platforms#index
-                                      POST    /platforms(.:format)                                                                             platforms#create
-                         new_platform GET     /platforms/new(.:format)                                                                         platforms#new
-                        edit_platform GET     /platforms/:id/edit(.:format)                                                                    platforms#edit
-                             platform GET     /platforms/:id(.:format)                                                                         platforms#show
-                                      PATCH   /platforms/:id(.:format)                                                                         platforms#update
-                                      PUT     /platforms/:id(.:format)                                                                         platforms#update
-                                      DELETE  /platforms/:id(.:format)                                                                         platforms#destroy
                  interface_surrogates GET     /interfaces/:interface_id/surrogates(.:format)                                                   surrogates#index
                                       POST    /interfaces/:interface_id/surrogates(.:format)                                                   surrogates#create
               new_interface_surrogate GET     /interfaces/:interface_id/surrogates/new(.:format)                                               surrogates#new
@@ -113,6 +103,22 @@ edit_service_build_configuration_task GET     /services/:service_id/builds/:buil
                                       PATCH   /users/:user_id/identities/:id(.:format)                                                         identities#update
                                       PUT     /users/:user_id/identities/:id(.:format)                                                         identities#update
                                       DELETE  /users/:user_id/identities/:id(.:format)                                                         identities#destroy
+              user_platform_instances GET     /users/:user_id/platforms/:platform_id/instances(.:format)                                       instances#index
+                                      POST    /users/:user_id/platforms/:platform_id/instances(.:format)                                       instances#create
+           new_user_platform_instance GET     /users/:user_id/platforms/:platform_id/instances/new(.:format)                                   instances#new
+          edit_user_platform_instance GET     /users/:user_id/platforms/:platform_id/instances/:id/edit(.:format)                              instances#edit
+               user_platform_instance GET     /users/:user_id/platforms/:platform_id/instances/:id(.:format)                                   instances#show
+                                      PATCH   /users/:user_id/platforms/:platform_id/instances/:id(.:format)                                   instances#update
+                                      PUT     /users/:user_id/platforms/:platform_id/instances/:id(.:format)                                   instances#update
+                                      DELETE  /users/:user_id/platforms/:platform_id/instances/:id(.:format)                                   instances#destroy
+                       user_platforms GET     /users/:user_id/platforms(.:format)                                                              platforms#index
+                                      POST    /users/:user_id/platforms(.:format)                                                              platforms#create
+                    new_user_platform GET     /users/:user_id/platforms/new(.:format)                                                          platforms#new
+                   edit_user_platform GET     /users/:user_id/platforms/:id/edit(.:format)                                                     platforms#edit
+                        user_platform GET     /users/:user_id/platforms/:id(.:format)                                                          platforms#show
+                                      PATCH   /users/:user_id/platforms/:id(.:format)                                                          platforms#update
+                                      PUT     /users/:user_id/platforms/:id(.:format)                                                          platforms#update
+                                      DELETE  /users/:user_id/platforms/:id(.:format)                                                          platforms#destroy
                                 users GET     /users(.:format)                                                                                 users#index
                                       POST    /users(.:format)                                                                                 users#create
                              new_user GET     /users/new(.:format)                                                                             users#new
@@ -162,6 +168,7 @@ edit_service_build_configuration_task GET     /services/:service_id/builds/:buil
                                       PATCH   /clients/:id(.:format)                                                                           clients#update
                                       PUT     /clients/:id(.:format)                                                                           clients#update
                                       DELETE  /clients/:id(.:format)                                                                           clients#destroy
+           redirect_identity_provider GET     /identity_providers/:id/redirect(.:format)                                                       identity_providers#redirect
                    identity_providers GET     /identity_providers(.:format)                                                                    identity_providers#index
                                       POST    /identity_providers(.:format)                                                                    identity_providers#create
                 new_identity_provider GET     /identity_providers/new(.:format)                                                                identity_providers#new

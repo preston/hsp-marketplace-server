@@ -32,10 +32,6 @@ Rails.application.routes.draw do
         end
     end
 
-    resources :platforms do
-        resources :instances
-    end
-
     resources :interfaces do
         resources :surrogates
     end
@@ -44,6 +40,9 @@ Rails.application.routes.draw do
 
     resources :users do
         resources :identities
+        resources :platforms do
+            resources :instances
+        end
     end
 
     resources :groups do
