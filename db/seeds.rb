@@ -31,7 +31,7 @@ knartwork = Service.create!(
     description: 'KNARTwork is a multi-purpose web application for authoring, viewing, and transforming knowledge artifacts across popular specifications, with a strong slant towards healthcare-specific formats. By default, this application provides a purely standalone experience that does not use any standard-specific APIs (such as FHIR) or databases (such as RDBMS or NoSQL) systems, and may be used as-is by end users wanting to manage source documents as an out-of-band process using git/subversion, Dropbox, email etc.',
     license: apache20,
     user: administrator,
-	logo: logo,
+    logo: logo,
     uri: 'https://marketplace.hspconsortium.org/services/knartwork',
     support_url: 'https://github.com/cqframework/knartwork',
     approved_at: now,
@@ -58,7 +58,7 @@ cql_translation_service = Service.create!(
     description: 'A microservice wrapper for the CQL to ELM conversion library.',
     license: apache20,
     user: administrator,
-	logo: logo,
+    logo: logo,
     uri: 'https://marketplace.hspconsortium.org/services/cql-translation-service',
     support_url: 'https://github.com/mitre/cql-translation-service',
     approved_at: now,
@@ -78,21 +78,23 @@ cql_translation_service_build = Build.create!(
     permissions: {}
 )
 
-administrator_role = Role.create!(
-    name: 'Administrator',
-    code: 'administrator',
-    default: false
-)
+administrator_role = Role.create!(name: 'Administrator',
+                                  description: 'Masters of the known universe, granted completed access to the system.',
+                                  default: false,
+                                  permissions: Role.merge_other_permissions_into_template(
+                                      { 'everything' => { 'manage' => true } }, Role.permissions_template
+                                  ))
+standard_role = Role.create!(name: 'Standard User',
+    description: 'No-frills role assigned to all new users.',
+    default: true,
+    permissions: Role.merge_other_permissions_into_template({
+	       'services' => {'read' => true}
+	 }, Role.permissions_template))
+
 Appointment.create!(entity: administrator, role: administrator_role)
 
-default_role = Role.create!(
-    name: 'Default',
-    code: 'default',
-    default: true
-)
-
 users = []
-(0..100).each do |_n|
+(0..42).each do |_n|
     users << u = User.create!(
         salutation: Faker::Name.prefix,
         name: Faker::Name.name,
@@ -100,7 +102,4 @@ users = []
         middle_name: Faker::Name.first_name,
         last_name: Faker::Name.last_name
     )
-    Role.where(default: true).all.each do |r|
-        Appointment.create!(entity: u, role: r)
-    end
 end

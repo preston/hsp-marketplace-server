@@ -85,6 +85,12 @@ class SessionsController < ApplicationController
                     email: email,
                     jwt: jwt[0]
                 )
+            else
+                identity.user.update(
+                    name: jwt[0]['name'],
+                    first_name: jwt[0]['given_name'],
+                    last_name: jwt[0]['family_name']
+                )
             end
             session['identity_id'] = identity.id
             jwt = JsonWebToken.new(identity_id: identity.id, expires_at: 24.hours.from_now)

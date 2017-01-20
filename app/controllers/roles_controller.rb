@@ -1,60 +1,79 @@
 class RolesController < ApplicationController
     load_and_authorize_resource
 
-    # GET /roles
-    # GET /roles.json
     def index
-        @roles = Role.all
+        @roles = Role.paginate(page: params[:page], per_page: params[:per_page])
+        @roles = @roles.includes(:appointments)
+        sort = %w(name default).include?(params[:sort]) ? params[:sort] : :name
+        order = 'desc' == params[:order] ? :desc : :asc
+        @roles = @roles.order(sort => order)
+        if params[:default]
+            @roles = @roles.where(default: (params[:default] == 'true'))
+        end
+        @roles = @roles.search_by_name(params[:filter]) if params[:filter]
     end
 
-    # GET /roles/1
-    # GET /roles/1.json
     def show; end
 
-    # POST /roles
-    # POST /roles.json
     def create
         @role = Role.new(role_params)
-
+        # FIXME: Why doesn't role_params "permit" work for JSON parameters???
+        # byebug
+        @role.permissions = Role.permissions_template
+        # puts permissions_from_params
+        @role.merge_permissions_of permissions_from_params
         respond_to do |format|
             if @role.save
-                format.html { redirect_to @role, notice: 'Role was successfully created.' }
                 format.json { render :show, status: :created, location: @role }
             else
-                format.html { render :new }
-                format.json { render json: @role.errors, status: :unprocessable_entity }
+                format.json { render json: @role.errors.full_messages, status: :unprocessable_entity }
             end
         end
     end
 
-    # PATCH/PUT /roles/1
-    # PATCH/PUT /roles/1.json
     def update
+        # puts params[:role][:permissions].to_json
+        # FIXME Why doesn't role_params "permit" work for JSON parameters???
+        # byebug
+        @role.merge_permissions_of permissions_from_params
         respond_to do |format|
             if @role.update(role_params)
-                format.html { redirect_to @role, notice: 'Role was successfully updated.' }
                 format.json { render :show, status: :ok, location: @role }
             else
-                format.html { render :edit }
-                format.json { render json: @role.errors, status: :unprocessable_entity }
+                format.json { render json: @role.errors.full_messages, status: :unprocessable_entity }
             end
         end
     end
 
-    # DELETE /roles/1
-    # DELETE /roles/1.json
     def destroy
         @role.destroy
         respond_to do |format|
-            format.html { redirect_to roles_url, notice: 'Role was successfully destroyed.' }
-            format.json { head :no_content }
+            format.json { render :show }
         end
     end
 
     private
 
+    def permissions_from_params
+        perms = {}
+        tmp = params[:role][:permissions]
+        if tmp && tmp.respond_to?(:to_unsafe_hash)
+            perms = tmp.to_unsafe_hash
+            if perms.is_a?(Hash)
+                perms.each do |resource, verbs|
+                    next unless verbs.is_a?(Hash)
+                    # puts verb #perms[resource][verb]
+                    verbs.each do |verb, value|
+                        perms[resource][verb] = (value.to_s == 'true')
+                    end
+                end
+            end
+        end
+        perms
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def role_params
-        params.require(:role).permit(:name, :code, :description, :default)
+        params.require(:role).permit(:name, :description, :default)
     end
 end
