@@ -1,53 +1,37 @@
 class PlatformsController < ApplicationController
     load_and_authorize_resource
 
-    # GET /platforms
-    # GET /platforms.json
     def index
         @platforms = Platform.all
     end
 
-    # GET /platforms/1
-    # GET /platforms/1.json
     def show; end
 
-    # POST /platforms
-    # POST /platforms.json
     def create
         @platform = Platform.new(platform_params)
-
         respond_to do |format|
             if @platform.save
-                format.html { redirect_to @platform, notice: 'Platform was successfully created.' }
-                format.json { render :show, status: :created, location: @platform }
+                format.json { render :show, status: :created, location: user_platform_url(@platform.user, @platform) }
             else
-                format.html { render :new }
                 format.json { render json: @platform.errors, status: :unprocessable_entity }
             end
         end
     end
 
-    # PATCH/PUT /platforms/1
-    # PATCH/PUT /platforms/1.json
     def update
         respond_to do |format|
             if @platform.update(platform_params)
-                format.html { redirect_to @platform, notice: 'Platform was successfully updated.' }
-                format.json { render :show, status: :ok, location: @platform }
+                format.json { render :show, status: :ok, location: user_platform_url(@platform.user, @platform) }
             else
-                format.html { render :edit }
                 format.json { render json: @platform.errors, status: :unprocessable_entity }
             end
         end
     end
 
-    # DELETE /platforms/1
-    # DELETE /platforms/1.json
     def destroy
         @platform.destroy
         respond_to do |format|
-            format.html { redirect_to platforms_url, notice: 'Platform was successfully destroyed.' }
-            format.json { head :no_content }
+            format.json { render :show }
         end
     end
 
