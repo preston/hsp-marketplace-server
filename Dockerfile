@@ -18,7 +18,7 @@ WORKDIR /app
 # will be cached unless changes to one of those two files
 # are made.
 COPY Gemfile Gemfile.lock Rakefile config.ru ./
-RUN gem install -N bundler && bundle install --jobs 16
+RUN gem install -N bundler rspec && bundle install --jobs 8
 
 # Copy the main application.
 # COPY app app
