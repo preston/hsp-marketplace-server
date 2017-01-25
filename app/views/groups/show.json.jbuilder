@@ -1,1 +1,1 @@
-json.extract! @group, :id, :name, :description, :created_at, :updated_at
+json.partial! 'groups/group', group: @group

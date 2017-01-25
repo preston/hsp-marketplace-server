@@ -1,12 +1,11 @@
 class UsersController < ApplicationController
+    load_and_authorize_resource
 
-	load_and_authorize_resource
-
-	def index
+    def index
         @users = User.paginate(page: params[:page], per_page: params[:per_page])
-		if params[:role]
-			@users = @users.joins(appointments: :role).where('roles.code = ?', params[:role])
-		end
+        if params[:role]
+            @users = @users.joins(appointments: :role).where('roles.code = ?', params[:role])
+        end
         sort = %w(name external_id).include?(params[:sort]) ? params[:sort] : :name
         order = 'desc' == params[:order] ? :desc : :asc
         @users = @users.order(sort => order)
@@ -14,14 +13,10 @@ class UsersController < ApplicationController
             @users = @users.where('external_id = ?', params[:external_id])
         end
         @users = @users.search_by_name(params[:name]) if params[:name]
-    end
+      end
 
-    # GET /users/1
-    # GET /users/1.json
     def show; end
 
-    # POST /users
-    # POST /users.json
     def create
         @user = User.new(user_params)
 
@@ -34,8 +29,6 @@ class UsersController < ApplicationController
         end
     end
 
-    # PATCH/PUT /users/1
-    # PATCH/PUT /users/1.json
     def update
         respond_to do |format|
             if @user.update(user_params)
@@ -66,5 +59,4 @@ class UsersController < ApplicationController
     def user_params
         params.require(:user).permit(:name, :external_id, :salutation, :first_name, :middle_name, :last_name)
     end
-
 end

@@ -1,5 +1,5 @@
-json.array!(@roles) do |role|
-  json.extract! role, :id, :name, :code, :description, :default
-  json.path role_path(role)
-  json.url role_url(role)
+json.extract! @roles, :total_pages, :previous_page, :next_page
+json.total_results @roles.total_entries
+json.results do
+	json.partial! 'roles/role', collection: @roles, as: :role
 end

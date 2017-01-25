@@ -1,10 +1,12 @@
 class ServicesController < ApplicationController
     load_and_authorize_resource
 
-    # GET /services
-    # GET /services.json
     def index
-        @services = Service.all
+        @services = Service.paginate(page: params[:page], per_page: params[:per_page])
+        sort = %w(name description).include?(params[:sort]) ? params[:sort] : :name
+        order = 'desc' == params[:order] ? :desc : :asc
+        @services = @services.order(sort => order)
+        @services = @services.search_by_name(params[:name]) if params[:name]
     end
 
     def small
