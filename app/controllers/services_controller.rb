@@ -6,10 +6,16 @@ class ServicesController < ApplicationController
         sort = %w(name description).include?(params[:sort]) ? params[:sort] : :name
         order = 'desc' == params[:order] ? :desc : :asc
         @services = @services.order(sort => order)
-        if params['published'] == 'true'
+		if params['published'] == 'true'
             @services = @services.where('published_at IS NOT NULL')
         elsif params['published'] == 'false'
             @services = @services.where('published_at IS NULL')
+        end
+		if params['license_id']
+            @services = @services.where(license_id: params['license_id'])
+        end
+		if params['user_id']
+            @services = @services.where(user_id: params['user_id'])
         end
         @services = @services.search_by_name(params[:name]) if params[:name]
     end

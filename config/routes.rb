@@ -63,6 +63,8 @@ Rails.application.routes.draw do
     resources :identity_providers do
         member do
             get 'redirect'
+            post :enable
+            post :disable
         end
     end
 

@@ -3,18 +3,12 @@ class BuildsController < ApplicationController
     load_and_authorize_resource	:service
     load_and_authorize_resource
 
-    # GET /builds
-    # GET /builds.json
     def index
         @builds = @service.builds
     end
 
-    # GET /builds/1
-    # GET /builds/1.json
     def show; end
 
-    # POST /builds
-    # POST /builds.json
     def create
         @build = Build.new(build_params)
 
@@ -27,8 +21,6 @@ class BuildsController < ApplicationController
         end
     end
 
-    # PATCH/PUT /builds/1
-    # PATCH/PUT /builds/1.json
     def update
         respond_to do |format|
             if @build.update(build_params)
@@ -39,8 +31,6 @@ class BuildsController < ApplicationController
         end
     end
 
-    # DELETE /builds/1
-    # DELETE /builds/1.json
     def destroy
         @build.destroy
         respond_to do |format|

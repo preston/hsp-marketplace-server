@@ -2,14 +2,15 @@ class InterfacesController < ApplicationController
 
     load_and_authorize_resource
 
-    # GET /interfaces
-    # GET /interfaces.json
-    def index
-        @interfaces = Interface.all
+	def index
+        @interfaces = Interface.paginate(page: params[:page], per_page: params[:per_page])
+        sort = %w(name uri version).include?(params[:sort]) ? params[:sort] : :name
+        order = 'desc' == params[:order] ? :desc : :asc
+        @interfaces = @interfaces.order(sort => order)
+        @interfaces = @interfaces.search_by_name(params[:name]) if params[:name]
     end
 
-    # GET /interfaces/1
-    # GET /interfaces/1.json
+
     def show; end
 
     # POST /interfaces
