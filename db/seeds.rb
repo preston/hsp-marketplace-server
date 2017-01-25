@@ -29,7 +29,7 @@ knartwork = Service.create!(
     logo: logo,
     uri: 'https://marketplace.hspconsortium.org/services/knartwork',
     support_url: 'https://github.com/cqframework/knartwork',
-    approved_at: now,
+    published_at: now,
     visible_at: now
 )
 
@@ -56,7 +56,7 @@ cql_translation_service = Service.create!(
     logo: logo,
     uri: 'https://marketplace.hspconsortium.org/services/cql-translation-service',
     support_url: 'https://github.com/mitre/cql-translation-service',
-    approved_at: now,
+    published_at: now,
     visible_at: now
 )
 

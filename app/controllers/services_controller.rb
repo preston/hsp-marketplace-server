@@ -6,30 +6,51 @@ class ServicesController < ApplicationController
         sort = %w(name description).include?(params[:sort]) ? params[:sort] : :name
         order = 'desc' == params[:order] ? :desc : :asc
         @services = @services.order(sort => order)
+        if params['published'] == 'true'
+            @services = @services.where('published_at IS NOT NULL')
+        elsif params['published'] == 'false'
+            @services = @services.where('published_at IS NULL')
+        end
         @services = @services.search_by_name(params[:name]) if params[:name]
+    end
+
+    def search
+        @services = []
+        @services = Service.paginate(page: params[:page], per_page: params[:per_page])
+        @services = @services.search_by_name_or_description(params['text']) if params['text']
+        if params['published'] == 'true'
+            @services = @services.where('published_at IS NOT NULL')
+        elsif params['published'] == 'false'
+            @services = @services.where('published_at IS NULL')
+        end
+        # puts "LENGTH: #{@services.length}"
+        render :index
     end
 
     def small
         send_image_data(:small)
-  	end
+    end
 
     def medium
         send_image_data(:medium)
-	end
+  end
 
     def large
         send_image_data(:large)
     end
 
+    def publish
+        @service.update(published_at: Time.now)
+        render :show
+     end
+
+    def unpublish
+        @service.update(published_at: nil)
+        render :show
+     end
+
     def send_image_data(size)
         send_data @service.logo.file_for(size).file_contents, type: @service.logo.content_type, disposition: 'inline'
-    end
-
-    def search
-        @services = []
-        @services = Service.search_by_name_or_description(params['text']) if params['text']
-        puts "LENGTH: #{@services.length}"
-        render :index
     end
 
     # GET /services/1
@@ -40,6 +61,11 @@ class ServicesController < ApplicationController
     # POST /services.json
     def create
         @service = Service.new(service_params)
+        # byebug
+        if service_params['logo'].nil?
+            @service.logo = File.open(File.join(Rails.root, 'public', 'placeholder_logo.png'))
+            # puts "LOGO: " + @service.logo
+        end
         respond_to do |format|
             if @service.save
                 format.json { render :show, status: :created, location: @service }
@@ -79,6 +105,6 @@ class ServicesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def service_params
-        params.require(:service).permit(:name, :description, :user_id, :uri, :support_url, :license_id, :logo, :approved_at, :visible_at)
+        params.require(:service).permit(:name, :description, :user_id, :uri, :support_url, :license_id, :logo, :published_at, :visible_at)
     end
 end

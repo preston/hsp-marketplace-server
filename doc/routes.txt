@@ -8,6 +8,8 @@
                                       PATCH   /licenses/:id(.:format)                                                                          licenses#update
                                       PUT     /licenses/:id(.:format)                                                                          licenses#update
                                       DELETE  /licenses/:id(.:format)                                                                          licenses#destroy
+                      publish_service POST    /services/:id/publish(.:format)                                                                  services#publish
+                    unpublish_service POST    /services/:id/unpublish(.:format)                                                                services#unpublish
                    large_logo_service GET     /services/:id/logo/large(.:format)                                                               services#large
                   medium_logo_service GET     /services/:id/logo/medium(.:format)                                                              services#medium
                    small_logo_service GET     /services/:id/logo/small(.:format)                                                               services#small

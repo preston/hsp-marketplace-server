@@ -1,4 +1,4 @@
-json.extract! service, :id, :name, :description, :user_id, :uri, :support_url, :license_id, :approved_at, :visible_at, :created_at, :updated_at
+json.extract! service, :id, :name, :description, :user_id, :uri, :support_url, :license_id, :published_at, :visible_at, :created_at, :updated_at
 json.url service_url(service)
 json.path service_url(service)
 

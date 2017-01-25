@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
     resources :services do
         member do
+            post :publish
+            post :unpublish
             get 'logo/large' => 'services#large', as: :large_logo
             get 'logo/medium' => 'services#medium', as: :medium_logo
             get 'logo/small' => 'services#small', as: :small_logo
