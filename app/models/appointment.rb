@@ -6,4 +6,6 @@ class Appointment < ActiveRecord::Base
 	validates_presence_of	:entity
 	validates_presence_of	:role
 
+	validates_uniqueness_of :entity_id, scope: [:role_id]
+
 end

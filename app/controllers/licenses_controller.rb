@@ -1,10 +1,7 @@
 class LicensesController < ApplicationController
     before_action :set_license, only: [:show, :edit, :update, :destroy]
 
-    # GET /licenses
-    # GET /licenses.json
     def index
-# debugger
         @licenses = License.paginate(page: params[:page], per_page: params[:per_page])
         sort = %w(name url).include?(params[:sort]) ? params[:sort] : :name
         order = 'desc' == params[:order] ? :desc : :asc
@@ -12,12 +9,8 @@ class LicensesController < ApplicationController
         @licenses = @licenses.search_by_name(params[:filter]) if params[:filter]
     end
 
-    # GET /licenses/1
-    # GET /licenses/1.json
     def show; end
 
-    # POST /licenses
-    # POST /licenses.json
     def create
         @license = License.new(license_params)
 
@@ -30,8 +23,6 @@ class LicensesController < ApplicationController
         end
     end
 
-    # PATCH/PUT /licenses/1
-    # PATCH/PUT /licenses/1.json
     def update
         respond_to do |format|
             if @license.update(license_params)
@@ -42,8 +33,6 @@ class LicensesController < ApplicationController
         end
     end
 
-    # DELETE /licenses/1
-    # DELETE /licenses/1.json
     def destroy
         @license.destroy
         respond_to do |format|
