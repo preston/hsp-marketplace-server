@@ -18,6 +18,7 @@ gem 'cancancan'	# Declarative authorization DSL.
 gem 'puma' # Better web server
 gem 'pg' # Only PostgreSQL is supported!
 gem 'pg_search' # Full-text search. RAD!!!
+gem 'redis' # WebSockets!
 
 gem 'httparty'  # Simple REST client.
 gem 'faker'	# For generating synthetic data.
