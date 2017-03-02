@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
+
+
     match '*all' => 'application#cors_preflight_check', via: :options
+
+    # Serve websocket cable requests in-process
+    mount ActionCable.server => '/websocket'
 
     # Service-related resources
 

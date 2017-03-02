@@ -50,6 +50,7 @@ The HSP Marketplace Server application is designed in [12factor](http://12factor
 " # Only used in "production" mode!
  * export MARKETPLACE\_DATABASE\_URL\_TEST="postgres://marketplace:password@db.example.com:5432/marketplace\_test
 " # Only used in "test" mode!
+* export MARKETPLACE\_REDIS\_URL="redis://localhost:6379"
 
 
 The following additional environment variables are optional, but potentially useful in a production context. Note that the database connection pool is adjusted automatically based on these values. If in doubt, do NOT set these.

@@ -1,0 +1,15 @@
+default: &default
+  adapter: redis
+  url: <%= ENV['MARKETPLACE_REDIS_URL'] %>
+
+development:
+  <<: *default
+  channel_prefix: marketplace_development
+
+test:
+  <<: *default
+  channel_prefix: marketplace_test
+
+production:
+  <<: *default
+  channel_prefix: marketplace_production

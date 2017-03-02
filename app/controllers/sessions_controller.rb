@@ -6,6 +6,7 @@ class SessionsController < ApplicationController
 
     def cleanse_session
         session['provider_id'] = nil
+        cookies.signed['identity_id'] = nil
     end
 
     def callback
@@ -93,6 +94,7 @@ class SessionsController < ApplicationController
                 )
             end
             session['identity_id'] = identity.id
+            cookies.signed['identity_id'] = session['identity_id']
             jwt = JsonWebToken.new(identity_id: identity.id, expires_at: 24.hours.from_now)
             jwt.save!
             redirect_to ENV['MARKETPLACE_UI_URL']
