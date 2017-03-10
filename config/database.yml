@@ -1,7 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: utf8
-  pool: <%= (ENV['MARKETPLACE_SERVER_THREADS'].to_i + 2) || 6 %>
+  pool: <%= (ENV['MARKETPLACE_SERVER_THREADS'].to_i + 2) || 8 %>
 
 development:
   <<: *default

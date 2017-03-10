@@ -1,6 +1,6 @@
 class ScreenshotsController < ApplicationController
+    load_and_authorize_resource	#:screenshot
     load_and_authorize_resource	:service
-    load_and_authorize_resource	:screenshot
 
     def index
         @screenshots = Screenshot.all
@@ -49,7 +49,7 @@ class ScreenshotsController < ApplicationController
     def destroy
         @screenshot.destroy
         respond_to do |format|
-            format.json { head :no_content }
+            format.json { render :show }
         end
     end
 

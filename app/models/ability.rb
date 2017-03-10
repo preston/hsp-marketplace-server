@@ -4,33 +4,33 @@ class Ability
     def initialize(user)
         user ||= User.new # Unauthenticated
 
-        # We're going to disable detailed authorization controls for now!
-        can :manage, :all
+        # TODO FIXME: We're going to disable detailed authorization controls for now!!!
+        # can :manage, :all
 
-        # can :read, Service do |s| s.visible_at <= Time.now end
-        # can :read, Interface do |i| i.published_at <= Time.now end
-        # can :read, Build
-        # can :read, Exposure
-		#
-        # if user.id.nil? # Unauthenticated guest.
-        # # Nada!
-        # else # Normal authenticated user.
-		#
-        #   # We're going to disable detailed authorization controls for now!
-        #   can :manage, :all
-		#
-        #   # can :manage, User
-        #   #
-        #   # # Identity and Access Management (IAM)
-        #   can :read,	Identity, user_id: user.id
-        #   can :delete, Identity, user_id: user.id
-        #   can :read, User, id: user.id
-		#
-        #   can :edit, User, id: user.id
-        #     #
-        #     # can :read, Client
-        #     # can :launch, Client
-		#
-        # end
+        can [:read, :search, :small, :medium, :large], Service do |s| s.visible_at <= Time.now end
+        can [:read, :small, :medium, :large], Screenshot
+        can :read, Build
+        can :read, Dependency
+        can :read, Exposure
+        can :read, Configuration
+        can :read, Interface
+        can [:read, :redirect], IdentityProvider # Needed for login purposes, but will be filtered at the field level.
+        #
+        if user.id.nil? # Unauthenticated guest.
+            # Nothing additional!
+        else # Normal authenticated user.
+            if user.permissions.dig('everything', 'manage')
+                can :manage, :all # God mode!
+                cannot	:destroy, User,	id: user.id	# No suicides for these folks to prevent complete system lockouts.
+            else
+                # Always grant Identity and Access Management (IAM) right to the current account and owned objects.
+                can :read,	Identity, user_id: user.id
+                can :delete, Identity, user_id: user.id
+                can :read, User, id: user.id
+
+                can :manage, Platform, user_id: user.id
+                can :manage, Instance, platform: {user_id: user.id}
+            end
+        end
     end
 end

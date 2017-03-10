@@ -48,13 +48,18 @@ class ApplicationController < ActionController::Base
         end
     end
 
-    # CanCanCan's authorization
     rescue_from CanCan::AccessDenied do |exception|
-        # byebug
         Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
-        flash[:error] = exception.message
-        redirect_to root_url
+        render json: {message: 'You are not authorized, sorry!'}, status: :unauthorized
     end
+
+    # CanCanCan's authorization
+    # rescue_from CanCan::AccessDenied do |exception|
+    #     # byebug
+    #     Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
+    #     flash[:error] = exception.message
+    #     redirect_to root_url
+    # end
 
     # We'll completely disable authentication for now!
     def set_identity_from_session!

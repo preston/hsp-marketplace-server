@@ -1,5 +1,6 @@
 class PlatformsController < ApplicationController
     load_and_authorize_resource
+    load_and_authorize_resource :user
 
     def index
         @platforms = Platform.paginate(page: params[:page], per_page: params[:per_page])
