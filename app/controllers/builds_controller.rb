@@ -47,6 +47,6 @@ class BuildsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def build_params
-        params.require(:build).permit(:id, :service_id, :service_version, :version, :container_respository_url, :container_tag, :validated_at, :published_at, :permissions, :release_notes)
+        params.require(:build).permit(:id, :service_id, :service_version, :version, :container_repository, :container_tag, :validated_at, :published_at, :permissions, :release_notes)
     end
 end

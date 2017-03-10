@@ -9,6 +9,6 @@ class Build < ApplicationRecord
     validates_presence_of	:version
     validates_presence_of	:service_version
     validates_presence_of	:container_tag
-    validates_presence_of	:container_respository_url
+    validates_presence_of	:container_repository
 
 end

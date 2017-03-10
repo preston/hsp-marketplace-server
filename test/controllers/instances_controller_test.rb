@@ -20,11 +20,11 @@ class InstancesControllerTest < ActionDispatch::IntegrationTest
       post instances_url, params: { instance: { build_id: @instance.build_id, deployed_at: @instance.deployed_at, launch_bindings: @instance.launch_bindings, platform_id: @instance.platform_id } }
     end
 
-    assert_redirected_to instance_url(Instance.last)
+    assert_redirected_to user_platform_instance_url(@user, @platform, Instance.last)
   end
 
   test "should show instance" do
-    get instance_url(@instance)
+    get user_platform_instance_url(@user, @platform, @instance)
     assert_response :success
   end
 
@@ -34,13 +34,13 @@ class InstancesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update instance" do
-    patch instance_url(@instance), params: { instance: { build_id: @instance.build_id, deployed_at: @instance.deployed_at, launch_bindings: @instance.launch_bindings, platform_id: @instance.platform_id } }
-    assert_redirected_to instance_url(@instance)
+    patch user_platform_instance_url(@user, @platform, @instance), params: { instance: { build_id: @instance.build_id, deployed_at: @instance.deployed_at, launch_bindings: @instance.launch_bindings, platform_id: @instance.platform_id } }
+    assert_redirected_to user_platform_instance_url(@user, @platform, @instance)
   end
 
   test "should destroy instance" do
     assert_difference('Instance.count', -1) do
-      delete instance_url(@instance)
+      delete user_platform_instance_url(@user, @platform, @instance)
     end
 
     assert_redirected_to instances_url

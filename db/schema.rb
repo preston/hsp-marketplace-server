@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125203307) do
+ActiveRecord::Schema.define(version: 20170310212850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,17 +28,17 @@ ActiveRecord::Schema.define(version: 20170125203307) do
   end
 
   create_table "builds", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid     "service_id",                             null: false
-    t.string   "service_version",                        null: false
-    t.string   "version",                                null: false
-    t.string   "container_respository_url",              null: false
-    t.string   "container_tag",                          null: false
+    t.uuid     "service_id",                        null: false
+    t.string   "service_version",                   null: false
+    t.string   "version",                           null: false
+    t.string   "container_repository",              null: false
+    t.string   "container_tag",                     null: false
     t.datetime "validated_at"
     t.datetime "published_at"
-    t.json     "permissions",               default: {}, null: false
+    t.json     "permissions",          default: {}, null: false
     t.text     "release_notes"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.index ["id"], name: "index_builds_on_id", using: :btree
   end
 

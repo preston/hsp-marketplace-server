@@ -12,10 +12,9 @@ class InstancesController < ApplicationController
 
     def create
         @instance = Instance.new(instance_params)
-
         respond_to do |format|
             if @instance.save
-                format.json { render :show, status: :created, location: @instance }
+                format.json { render :show, status: :created, location: user_platform_instance_url(@instance.platform.user, @instance.platform, @instance) }
             else
                 format.json { render json: @instance.errors, status: :unprocessable_entity }
             end
@@ -25,7 +24,7 @@ class InstancesController < ApplicationController
     def update
         respond_to do |format|
             if @instance.update(instance_params)
-                format.json { render :show, status: :ok, location: @instance }
+                format.json { render :show, status: :ok, location: user_platform_instance_url(@instance.platform.user, @instance.platform, @instance) }
             else
                 format.json { render json: @instance.errors, status: :unprocessable_entity }
             end
