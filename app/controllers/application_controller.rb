@@ -2,51 +2,52 @@ class ApplicationController < ActionController::Base
     include CanCan::ControllerAdditions
 
     # Short-circuit any/all CORS pre-flight OPTIONS requests.
-    before_action :cors_preflight_check
+    # before_action :cors_preflight_check
 
     # Allow the browser to make CORS requests since we do not provide a UI.
     # This is expected and totally cool, so long as subsequent requests are encrypted and include either
     # a tamper-proof cookie or JWT.
-    after_action :cors_set_access_control_headers
+    # after_action :cors_set_access_control_headers
 
     # Assure that CanCanCan authorization checks run.
     # check_authorization
 
-    before_action :set_identity_from_session!
+    # before_action :set_identity_from_session!
+    before_action :set_identity_from_jwt!
 
-    def set_options_from(request)
-        @options = {}
-        request.body.split(/&/).each do |param|
-            key, val = param.split('=').map { |v| CGI.unescape(v) }
-            @options[key] = val
-        end
-    end
+    # def set_options_from(request)
+    #     @options = {}
+    #     request.body.split(/&/).each do |param|
+    #         key, val = param.split('=').map { |v| CGI.unescape(v) }
+    #         @options[key] = val
+    #     end
+    # end
 
-	MARKETPLACE_UI_URL = ENV['MARKETPLACE_UI_URL']
+	# MARKETPLACE_UI_URL = ENV['MARKETPLACE_UI_URL']
 
     # Return the CORS access control headers.
-    def cors_set_access_control_headers
-        headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
-		headers['Access-Control-Allow-Credentials'] = true
-        headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
-        headers['Access-Control-Allow-Headers'] = 'Authorization'
-        headers['Access-Control-Max-Age'] = '1728000'
-    end
+    # def cors_set_access_control_headers
+    #     headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
+	# 	headers['Access-Control-Allow-Credentials'] = true
+    #     headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
+    #     headers['Access-Control-Allow-Headers'] = 'Authorization'
+    #     headers['Access-Control-Max-Age'] = '1728000'
+    # end
 
     # If this is a preflight OPTIONS request, then short-circuit the
     # request, return only the necessary headers and return an empty
     # text/plain.
-    def cors_preflight_check
-        # byebug
-        if request.method.to_sym.downcase == :options
-            headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
-			headers['Access-Control-Allow-Credentials'] = true
-            headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
-            headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
-            headers['Access-Control-Max-Age'] = '1728000'
-            render plain: '', content_type: 'text/plain'
-        end
-    end
+    # def cors_preflight_check
+    #     # byebug
+    #     if request.method.to_sym.downcase == :options
+    #         headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
+	# 		headers['Access-Control-Allow-Credentials'] = true
+    #         headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
+    #         headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
+    #         headers['Access-Control-Max-Age'] = '1728000'
+    #         render plain: '', content_type: 'text/plain'
+    #     end
+    # end
 
     rescue_from CanCan::AccessDenied do |exception|
         Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
@@ -62,22 +63,20 @@ class ApplicationController < ActionController::Base
     # end
 
     # We'll completely disable authentication for now!
-    def set_identity_from_session!
-        # identity_id = nil
-        # if authorization = request.headers['Authorization']
-        #     json = JsonWebToken.decode_authorization(authorization)
-        #     jwt = JsonWebToken.find(json['id'])
-        #     identity_id = jwt[:identity_id]
-        # else
-            identity_id = session['identity_id']
-			puts "IDENTITY_ID: #{identity_id}"
-        # end
-        # puts "set_identity_from_session!: identity_id: #{identity_id}"
+    def set_identity_from_jwt!
+        identity_id = nil
+        if authorization = request.headers['Authorization']
+            json = JsonWebToken.decode_authorization(authorization)
+			if json
+            	jwt = JsonWebToken.find(json['id'])
+            	identity_id = jwt.identity_id
+			end
+        end
         if identity_id.nil?
-        #     respond_to do |format|
-        #         format.json { render json: { message: 'Invalid or expired JWT. Please (re)authenticate and sign your request properly!' }, status: :unauthorized }
-        #         format.html { redirect_to landing_path, notice: 'Unable to authenticate your identity. Please log in again.' }
-        #     end
+            # respond_to do |format|
+                # format.json { render json: { message: 'Invalid or expired JWT. Please (re)authenticate and sign your request properly!' }, status: :unauthorized }
+                # format.html { redirect_to landing_path, notice: 'Unable to authenticate your identity. Please log in again.' }
+            # end
         else
             begin
                 @current_identity = Identity.find(identity_id)
@@ -104,22 +103,28 @@ class ApplicationController < ActionController::Base
 
     # attr_reader :current_identity
 
-    def new_nonce
-        session[:nonce] = SecureRandom.hex(16)
-    end
+    # def new_nonce
+    #     session[:nonce] = SecureRandom.hex(16)
+    # end
 
-    def stored_nonce
-        session.delete(:nonce)
-    end
+    # def stored_nonce
+    #     session.delete(:nonce)
+    # end
 
     def redirect_to_identity_provider(provider)
-        session['provider_id'] = provider.id
+        # session['provider_id'] = provider.id
 		# session['referer_url'] = request.referer
         uri = URI(provider.configuration['authorization_endpoint'])
         query = {
+			state: Base64.encode64({
+				provider_id: provider.id
+				# nonce: new_nonce
+			}.to_json),
             redirect_uri:	callback_url,
-            state: 			new_nonce,
-            response_type: 	:code,
+	        # redirect_uri:	ENV['MARKETPLACE_UI_URL'],
+            # state: 			new_nonce,
+            # response_type: 	:token, # Older implicit grant flow since the client can't securely store a client_secret.
+            response_type: 	:code, # No longer requires a client_secret on the initial authentication stage.
             # access_type: 	:offline,
             # aud: provider.client_id,
             client_id: 		provider.client_id,

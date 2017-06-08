@@ -9,6 +9,7 @@ gem 'sdoc', group: :doc # bundle exec rake doc:rails generates the API under doc
 gem 'will_paginate' # Better query pagination support.
 
 gem 'openid_connect'
+gem 'devise'	# Assists with OAuth2 stuff.
 
 gem 'slim' # Better HTML templating.
 
@@ -19,6 +20,7 @@ gem 'puma' # Better web server
 gem 'pg' # Only PostgreSQL is supported!
 gem 'pg_search' # Full-text search. RAD!!!
 gem 'redis' # WebSockets!
+gem 'rack-cors'	# Allowing cross-origin clients.. which is all of them.
 
 gem 'httparty'  # Simple REST client.
 gem 'faker'	# For generating synthetic data.
@@ -26,7 +28,10 @@ gem 'paperclip'	# Dealing with images.
 gem 'paperclip_database', git: 'https://github.com/pwnall/paperclip_database.git', branch: 'rails5' # For database storage. Using a fork for Rails 5 support, unfortunately. :(
 
 group :development, :test do
-    gem 'byebug' # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+	gem 'byebug' # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+	gem 'web-console'
+	gem 'binding_of_caller'
+
 end
 
 group :development do

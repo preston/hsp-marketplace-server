@@ -19,7 +19,9 @@ class SessionsController < ApplicationController
     end
 
     def openid_connect_login
-        provider = IdentityProvider.find(session['provider_id'])
+        # provider = IdentityProvider.find(session['provider_id'])
+		provider_id = JSON.parse(Base64.decode64(params['state']))['provider_id']
+	    provider = IdentityProvider.find(provider_id)
         uri = URI(provider.configuration['token_endpoint'])
         data = {
             code: params['code'],
@@ -61,7 +63,7 @@ class SessionsController < ApplicationController
         else
             # Looks good!
             # logger.debug jwt
-            session['expires_at'] = DateTime.strptime(jwt[0]['exp'].to_s, '%s')
+            # session['expires_at'] = DateTime.strptime(jwt[0]['exp'].to_s, '%s')
             subject = jwt[0]['sub']
             # byebug
             identity = Identity.where(sub: subject, identity_provider: provider).first
@@ -93,11 +95,11 @@ class SessionsController < ApplicationController
                     last_name: jwt[0]['family_name']
                 )
             end
-            session['identity_id'] = identity.id
-            cookies.signed['identity_id'] = session['identity_id']
+            # session['identity_id'] = identity.id
+            # cookies.signed['identity_id'] = session['identity_id']
             jwt = JsonWebToken.new(identity_id: identity.id, expires_at: 24.hours.from_now)
             jwt.save!
-            redirect_to ENV['MARKETPLACE_UI_URL']
+            redirect_to ENV['MARKETPLACE_UI_URL'] + "\#jwt=#{jwt.encode}"
         end
     end
 
