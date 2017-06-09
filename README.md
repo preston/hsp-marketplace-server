@@ -35,8 +35,8 @@ If you don't already have Postgres running locally:
 
 Create a "hsp-marketplace-server" Postgres user using the dev/test credentials in config/database.yml, and assigned them full rights to manage schemas. As with most Ruby projects, use [RVM](https://rvm.io) to manage your local Ruby versions. [Install RVM](https://rvm.io) and:
 
-	rvm install 2.3.3
-	rvm use 2.3.3
+	rvm install 2.4.1
+	rvm use 2.4.1
 
 Then,
 
