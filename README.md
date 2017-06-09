@@ -1,6 +1,6 @@
 # HSP Marketplace Server
 
-The Health Service Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published service container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. For details, see:
+The Health Service Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published service container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment. For details, see:
 
 https://healthservices.atlassian.net/wiki/display/PE/Platform+Engineering
 
@@ -85,12 +85,13 @@ To build your current version:
 
 ## Running a Container
 
+You need a recent PostgreSQL database set up with an empty schema ready for the Marketplace to use. The schema will be automatically forward-migrated to the most current state every time the container starts.
+
 When running the container, **all environment variables defined in the above section must be set using `-e FOO="bar"` options** to docker. The foreground form of the command is:
 
 	docker run -it --rm -p 3000:3000 --name hsp-marketplace-server \
 		-e "MARKETPLACE_UI_URL=http://localhost:9000" \
 		-e "MARKETPLACE_TITLE=My Marketplace" \
-		-e "MARKETPLACE_PASSWORD_SALT=development_only" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
 		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.115:5432/marketplace_development" \
 		p3000/hsp-marketplace-server:latest
@@ -100,10 +101,44 @@ When running the container, **all environment variables defined in the above sec
 	docker run -d -p 3000:3000 --name hsp-marketplace-server \
 		-e "MARKETPLACE_UI_URL=http://localhost:9000" \
 		-e "MARKETPLACE_TITLE=My Marketplace" \
-		-e "MARKETPLACE_PASSWORD_SALT=development_only" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
 		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.103:5432/marketplace_development" \
 		p3000/hsp-marketplace-server:latest
+
+Once your server appears to be running, check your Postgres database to make sure tables have been created. First, run the including data seeding script: (You may keep any existing Makretplace containers running.)
+
+	docker run -it --rm -p 3000:3000 --name hsp-marketplace-server \
+		-e "MARKETPLACE_UI_URL=http://localhost:9000" \
+		-e "MARKETPLACE_TITLE=My Marketplace" \
+		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
+		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.115:5432/marketplace_development" \
+		p3000/hsp-marketplace-server:latest \
+		rake db:seed
+
+This should be fast, and the script will exit once completed. Finally, you'll want to add a default data set and establish yourself as the initial administrator. Since the Marketplace _requires_ an OpenID Connect identity provider (IDP) and does not authenticate on its own, the initial IDP setup takes a few additional steps. Once the first IDP is established, however, all future IDPs may be managed by the Marketplace UI or another client.
+
+The seed data includes a default configuration for Google as an example. To use it, go to the [Google Developers Console](https://console.developers.google.com) -> Credentials and create an "OAutuh Client ID" for a "web application". Note the client ID and client secret, which are specific to _your_ installation. Now, start an interactive container into Marketplace Console mode to update the IDP configuration.
+
+	docker run -it --rm -p 3000:3000 --name hsp-marketplace-server \
+		-e "MARKETPLACE_UI_URL=http://localhost:9000" \
+		-e "MARKETPLACE_TITLE=My Marketplace" \
+		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
+		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.115:5432/marketplace_development" \
+		p3000/hsp-marketplace-server:latest \
+		rails console
+
+	idp = IdentityProvider.where(name: 'Google').first
+	idp.client_id = 'your_client_id'
+	idp.client_secret = 'your_client_secret'
+	idp.save!
+
+Load a Marketplace UI in your browser and test your configuration. You should be able to log in using your existing Google account, which will trigger the Marketplace to create a local account for you as well. Finally, make yourself a full administrator at the previous contaier console by assigning your account to the adminstrator role.
+
+	me = idp.identities.first.user
+	administrator_role = Role.where(name: 'Administrator').first
+	Appointment.create(entity: me, role: administrator_role)
+
+You're done! You may now use the Marketplace UI for all further admistratration. You should probably back up your database, too. ;)
 
 ## Regression Testing a Container
 

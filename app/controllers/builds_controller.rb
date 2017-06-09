@@ -4,7 +4,13 @@ class BuildsController < ApplicationController
     load_and_authorize_resource
 
     def index
-        @builds = @service.builds
+        # @builds = @service.builds
+		@builds = Build.paginate(page: params[:page], per_page: params[:per_page])
+		sort = %w(version).include?(params[:sort]) ? params[:sort] : :version
+		order = 'desc' == params[:order] ? :desc : :asc
+		@builds = @builds.order(sort => order)
+		@builds = @builds.search_by_version(params[:version]) if params[:version]
+
     end
 
     def show; end

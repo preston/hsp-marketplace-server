@@ -68,8 +68,12 @@ class ApplicationController < ActionController::Base
         if authorization = request.headers['Authorization']
             json = JsonWebToken.decode_authorization(authorization)
 			if json
-            	jwt = JsonWebToken.find(json['id'])
-            	identity_id = jwt.identity_id
+				begin
+            		jwt = JsonWebToken.find(json['id'])
+            		identity_id = jwt.identity_id
+				rescue Exception => e
+					Rails.logger.warn "JWT #{json['id']} couldn't be found. It may have been deleted or a client may be misbehaving."
+				end
 			end
         end
         if identity_id.nil?
@@ -84,7 +88,6 @@ class ApplicationController < ActionController::Base
             rescue Exception => e
         		Rails.logger.warn 'Claimed identity not found. User may be have been deleted? Removing identity from session!'
         		Rails.logger.warn e
-                session[:identity_id] = nil
             end
         end
         # @current_user
