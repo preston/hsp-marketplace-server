@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby '2.4.1'
+ruby '2.4.2'
 
-gem 'rails', '5.1.1'	# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '5.1.4'	# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 
 gem 'jbuilder'			# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'sdoc', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
@@ -27,12 +27,8 @@ gem 'faker'	# For generating synthetic data.
 gem 'paperclip'	# Dealing with images.
 gem 'paperclip_database', git: 'https://github.com/pwnall/paperclip_database.git', branch: 'rails5' # For database storage. Using a fork for Rails 5 support, unfortunately. :(
 
-group :development, :test do
-	gem 'byebug' # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-	gem 'web-console'
-	gem 'binding_of_caller'
-
-end
+# group :development, :test do
+# end
 
 group :development do
     # gem 'web-console', '~> 2.0'     # Access an IRB console on exception pages or by using <%= console %> in views
@@ -40,4 +36,7 @@ group :development do
     gem 'guard'
     gem 'railroady'
     gem 'rubocop' # For editor reformatting support
+	gem 'byebug' # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+	gem 'web-console'
+	gem 'binding_of_caller'
 end
