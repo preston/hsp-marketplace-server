@@ -1,4 +1,4 @@
-class Collapse < ActiveRecord::Migration
+class Collapse < ActiveRecord::Migration[5.0]
     def change
         enable_extension 'uuid-ossp'
 

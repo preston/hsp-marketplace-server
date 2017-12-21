@@ -7,7 +7,8 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins '*' #ENV['MARKETPLACE_UI_URL']
+    # origins '*'
+	origins ENV['MARKETPLACE_UI_URL']
 
     resource '*',
       headers: :any,

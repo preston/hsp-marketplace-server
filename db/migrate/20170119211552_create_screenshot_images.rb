@@ -1,4 +1,4 @@
-class CreateScreenshotImages < ActiveRecord::Migration
+class CreateScreenshotImages < ActiveRecord::Migration[5.0]
     def self.up
         create_table :images, id: :uuid do |t|
             t.uuid :screenshot_id, null: false

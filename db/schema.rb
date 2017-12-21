@@ -120,8 +120,8 @@ ActiveRecord::Schema.define(version: 20170310212850) do
     t.uuid "screenshot_id", null: false
     t.string "style"
     t.binary "file_contents"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["screenshot_id"], name: "index_images_on_screenshot_id"
   end
 
