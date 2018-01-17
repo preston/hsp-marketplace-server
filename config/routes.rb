@@ -68,17 +68,17 @@ Rails.application.routes.draw do
     end
     resources :identity_providers do
         member do
-            get 'redirect'
-            post :enable
-            post :disable
+            get		:redirect
+            post	:enable
+            post	:disable
         end
     end
 
-    get		'sessions' => 'sessions#callback',	as: :callback
+    get		'sessions' => 'sessions#callback',		as: :callback
     post	'sessions' => 'sessions#authenticate',	as: :login
-    delete	'sessions' => 'sessions#destroy',	as: :logout
-    get 'dashboard' => 'welcome#dashboard', as: :dashboard
-    get 'status' => 'welcome#status', as: :status
+    delete	'sessions' => 'sessions#destroy',		as: :logout
+    get 'dashboard' => 'welcome#dashboard',			as: :dashboard
+    get 'status' => 'welcome#status',				as: :status
 
     # The priority is based upon order of creation: first created -> highest priority.
     # See how all your routes lay out with "rake routes".

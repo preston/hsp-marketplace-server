@@ -56,7 +56,7 @@ class SessionsController < ApplicationController
         elsif jwt[0]['aud'] != provider.client_id && jwt[0]['aud'] != provider.alternate_client_id
             flash[:error] = "#{msg} (Provider mismatch.)"
             # redirect_to :login
-			render json: {message: 'Error processingn login response. Sorry!'} # FIXME Report error to the user!
+			render json: {message: 'Error processing login response. Sorry!'} # FIXME Report error to the user!
         # elsif authorization['state'] != session[:session_id]
         # 	flash[:error] = "#{msg} (Session ID mismatch.)"
         # 	render 	:sorry
