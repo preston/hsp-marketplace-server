@@ -9,12 +9,12 @@ google = IdentityProvider.create_with(
 google.reconfigure
 google.save!
 
-mit = License.create!(name: 'MIT', url: 'https://opensource.org/licenses/MIT')
-apache20 = License.create!(name: 'Apache 2.0', url: 'https://opensource.org/licenses/Apache-2.0')
-bsd2 = License.create!(name: 'BSD 2-Clause', url: 'https://opensource.org/licenses/BSD-2-Clause')
-bsd3 = License.create!(name: 'BSD 3-Clause', url: 'https://opensource.org/licenses/BSD-3-Clause')
+mit = License.find_or_create_by!(name: 'MIT', url: 'https://opensource.org/licenses/MIT')
+apache20 = License.find_or_create_by!(name: 'Apache 2.0', url: 'https://opensource.org/licenses/Apache-2.0')
+bsd2 = License.find_or_create_by!(name: 'BSD 2-Clause', url: 'https://opensource.org/licenses/BSD-2-Clause')
+bsd3 = License.find_or_create_by!(name: 'BSD 3-Clause', url: 'https://opensource.org/licenses/BSD-3-Clause')
 
-administrator = User.create!(name: 'Administrator')
+administrator = User.find_or_create_by!(name: 'Administrator')
 
 
 now = Time.now

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170310212850) do
+ActiveRecord::Schema.define(version: 2017_03_10_212850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,7 +215,7 @@ ActiveRecord::Schema.define(version: 20170310212850) do
     t.uuid "service_id", null: false
     t.string "image_file_name"
     t.string "image_content_type"
-    t.integer "image_file_size"
+    t.bigint "image_file_size"
     t.datetime "image_updated_at"
     t.index ["service_id"], name: "index_screenshots_on_service_id"
   end
@@ -233,7 +233,7 @@ ActiveRecord::Schema.define(version: 20170310212850) do
     t.datetime "updated_at", null: false
     t.string "logo_file_name"
     t.string "logo_content_type"
-    t.integer "logo_file_size"
+    t.bigint "logo_file_size"
     t.datetime "logo_updated_at"
     t.index ["name"], name: "index_services_on_name", unique: true
   end
