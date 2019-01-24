@@ -30,18 +30,26 @@ Rails.application.routes.draw do
             post :search, as: :search_services
         end
         resources :builds do
-            resources :dependencies
-            resources :exposures do
-                resources :parameters
-            end
-            resources :configurations do
-                resources :tasks
+            member do
+                resources :dependencies
+                resources :exposures do
+                    member do
+                        resources :parameters
+                    end
+                end
+                resources :configurations do
+                    member do
+                        resources :tasks
+                    end
+                end
             end
         end
     end
 
     resources :interfaces do
-        resources :surrogates
+        member do
+            resources :surrogates
+        end
     end
 
     # IAM-related stuff
@@ -60,12 +68,7 @@ Rails.application.routes.draw do
     resources :roles do
         resources :appointments
     end
-
-    resources :clients do
-        member do
-            get 'launch'
-        end
-    end
+    
     resources :identity_providers do
         member do
             get		:redirect

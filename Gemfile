@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby '2.5.3'
+ruby '2.6.0'
 
-gem 'rails', '5.2.1.1'	# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '5.2.2'	# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 
 gem 'jbuilder'			# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'sdoc', group: :doc # bundle exec rake doc:rails generates the API under doc/api.

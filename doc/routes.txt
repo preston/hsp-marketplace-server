@@ -1,188 +1,181 @@
-                               Prefix Verb    URI Pattern                                                                                      Controller#Action
-                                      OPTIONS /*all(.:format)                                                                                  application#cors_preflight_check
-                             licenses GET     /licenses(.:format)                                                                              licenses#index
-                                      POST    /licenses(.:format)                                                                              licenses#create
-                          new_license GET     /licenses/new(.:format)                                                                          licenses#new
-                         edit_license GET     /licenses/:id/edit(.:format)                                                                     licenses#edit
-                              license GET     /licenses/:id(.:format)                                                                          licenses#show
-                                      PATCH   /licenses/:id(.:format)                                                                          licenses#update
-                                      PUT     /licenses/:id(.:format)                                                                          licenses#update
-                                      DELETE  /licenses/:id(.:format)                                                                          licenses#destroy
-                      publish_service POST    /services/:id/publish(.:format)                                                                  services#publish
-                    unpublish_service POST    /services/:id/unpublish(.:format)                                                                services#unpublish
-                   large_logo_service GET     /services/:id/logo/large(.:format)                                                               services#large
-                  medium_logo_service GET     /services/:id/logo/medium(.:format)                                                              services#medium
-                   small_logo_service GET     /services/:id/logo/small(.:format)                                                               services#small
-             large_service_screenshot GET     /services/:service_id/screenshots/:id/large(.:format)                                            screenshots#large
-            medium_service_screenshot GET     /services/:service_id/screenshots/:id/medium(.:format)                                           screenshots#medium
-             small_service_screenshot GET     /services/:service_id/screenshots/:id/small(.:format)                                            screenshots#small
-                  service_screenshots GET     /services/:service_id/screenshots(.:format)                                                      screenshots#index
-                                      POST    /services/:service_id/screenshots(.:format)                                                      screenshots#create
-               new_service_screenshot GET     /services/:service_id/screenshots/new(.:format)                                                  screenshots#new
-              edit_service_screenshot GET     /services/:service_id/screenshots/:id/edit(.:format)                                             screenshots#edit
-                   service_screenshot GET     /services/:service_id/screenshots/:id(.:format)                                                  screenshots#show
-                                      PATCH   /services/:service_id/screenshots/:id(.:format)                                                  screenshots#update
-                                      PUT     /services/:service_id/screenshots/:id(.:format)                                                  screenshots#update
-                                      DELETE  /services/:service_id/screenshots/:id(.:format)                                                  screenshots#destroy
-             search_services_services POST    /services/search(.:format)                                                                       services#search
-           service_build_dependencies GET     /services/:service_id/builds/:build_id/dependencies(.:format)                                    dependencies#index
-                                      POST    /services/:service_id/builds/:build_id/dependencies(.:format)                                    dependencies#create
-         new_service_build_dependency GET     /services/:service_id/builds/:build_id/dependencies/new(.:format)                                dependencies#new
-        edit_service_build_dependency GET     /services/:service_id/builds/:build_id/dependencies/:id/edit(.:format)                           dependencies#edit
-             service_build_dependency GET     /services/:service_id/builds/:build_id/dependencies/:id(.:format)                                dependencies#show
-                                      PATCH   /services/:service_id/builds/:build_id/dependencies/:id(.:format)                                dependencies#update
-                                      PUT     /services/:service_id/builds/:build_id/dependencies/:id(.:format)                                dependencies#update
-                                      DELETE  /services/:service_id/builds/:build_id/dependencies/:id(.:format)                                dependencies#destroy
-    service_build_exposure_parameters GET     /services/:service_id/builds/:build_id/exposures/:exposure_id/parameters(.:format)               parameters#index
-                                      POST    /services/:service_id/builds/:build_id/exposures/:exposure_id/parameters(.:format)               parameters#create
- new_service_build_exposure_parameter GET     /services/:service_id/builds/:build_id/exposures/:exposure_id/parameters/new(.:format)           parameters#new
-edit_service_build_exposure_parameter GET     /services/:service_id/builds/:build_id/exposures/:exposure_id/parameters/:id/edit(.:format)      parameters#edit
-     service_build_exposure_parameter GET     /services/:service_id/builds/:build_id/exposures/:exposure_id/parameters/:id(.:format)           parameters#show
-                                      PATCH   /services/:service_id/builds/:build_id/exposures/:exposure_id/parameters/:id(.:format)           parameters#update
-                                      PUT     /services/:service_id/builds/:build_id/exposures/:exposure_id/parameters/:id(.:format)           parameters#update
-                                      DELETE  /services/:service_id/builds/:build_id/exposures/:exposure_id/parameters/:id(.:format)           parameters#destroy
-              service_build_exposures GET     /services/:service_id/builds/:build_id/exposures(.:format)                                       exposures#index
-                                      POST    /services/:service_id/builds/:build_id/exposures(.:format)                                       exposures#create
-           new_service_build_exposure GET     /services/:service_id/builds/:build_id/exposures/new(.:format)                                   exposures#new
-          edit_service_build_exposure GET     /services/:service_id/builds/:build_id/exposures/:id/edit(.:format)                              exposures#edit
-               service_build_exposure GET     /services/:service_id/builds/:build_id/exposures/:id(.:format)                                   exposures#show
-                                      PATCH   /services/:service_id/builds/:build_id/exposures/:id(.:format)                                   exposures#update
-                                      PUT     /services/:service_id/builds/:build_id/exposures/:id(.:format)                                   exposures#update
-                                      DELETE  /services/:service_id/builds/:build_id/exposures/:id(.:format)                                   exposures#destroy
-    service_build_configuration_tasks GET     /services/:service_id/builds/:build_id/configurations/:configuration_id/tasks(.:format)          tasks#index
-                                      POST    /services/:service_id/builds/:build_id/configurations/:configuration_id/tasks(.:format)          tasks#create
- new_service_build_configuration_task GET     /services/:service_id/builds/:build_id/configurations/:configuration_id/tasks/new(.:format)      tasks#new
-edit_service_build_configuration_task GET     /services/:service_id/builds/:build_id/configurations/:configuration_id/tasks/:id/edit(.:format) tasks#edit
-     service_build_configuration_task GET     /services/:service_id/builds/:build_id/configurations/:configuration_id/tasks/:id(.:format)      tasks#show
-                                      PATCH   /services/:service_id/builds/:build_id/configurations/:configuration_id/tasks/:id(.:format)      tasks#update
-                                      PUT     /services/:service_id/builds/:build_id/configurations/:configuration_id/tasks/:id(.:format)      tasks#update
-                                      DELETE  /services/:service_id/builds/:build_id/configurations/:configuration_id/tasks/:id(.:format)      tasks#destroy
-         service_build_configurations GET     /services/:service_id/builds/:build_id/configurations(.:format)                                  configurations#index
-                                      POST    /services/:service_id/builds/:build_id/configurations(.:format)                                  configurations#create
-      new_service_build_configuration GET     /services/:service_id/builds/:build_id/configurations/new(.:format)                              configurations#new
-     edit_service_build_configuration GET     /services/:service_id/builds/:build_id/configurations/:id/edit(.:format)                         configurations#edit
-          service_build_configuration GET     /services/:service_id/builds/:build_id/configurations/:id(.:format)                              configurations#show
-                                      PATCH   /services/:service_id/builds/:build_id/configurations/:id(.:format)                              configurations#update
-                                      PUT     /services/:service_id/builds/:build_id/configurations/:id(.:format)                              configurations#update
-                                      DELETE  /services/:service_id/builds/:build_id/configurations/:id(.:format)                              configurations#destroy
-                       service_builds GET     /services/:service_id/builds(.:format)                                                           builds#index
-                                      POST    /services/:service_id/builds(.:format)                                                           builds#create
-                    new_service_build GET     /services/:service_id/builds/new(.:format)                                                       builds#new
-                   edit_service_build GET     /services/:service_id/builds/:id/edit(.:format)                                                  builds#edit
-                        service_build GET     /services/:service_id/builds/:id(.:format)                                                       builds#show
-                                      PATCH   /services/:service_id/builds/:id(.:format)                                                       builds#update
-                                      PUT     /services/:service_id/builds/:id(.:format)                                                       builds#update
-                                      DELETE  /services/:service_id/builds/:id(.:format)                                                       builds#destroy
-                             services GET     /services(.:format)                                                                              services#index
-                                      POST    /services(.:format)                                                                              services#create
-                          new_service GET     /services/new(.:format)                                                                          services#new
-                         edit_service GET     /services/:id/edit(.:format)                                                                     services#edit
-                              service GET     /services/:id(.:format)                                                                          services#show
-                                      PATCH   /services/:id(.:format)                                                                          services#update
-                                      PUT     /services/:id(.:format)                                                                          services#update
-                                      DELETE  /services/:id(.:format)                                                                          services#destroy
-                 interface_surrogates GET     /interfaces/:interface_id/surrogates(.:format)                                                   surrogates#index
-                                      POST    /interfaces/:interface_id/surrogates(.:format)                                                   surrogates#create
-              new_interface_surrogate GET     /interfaces/:interface_id/surrogates/new(.:format)                                               surrogates#new
-             edit_interface_surrogate GET     /interfaces/:interface_id/surrogates/:id/edit(.:format)                                          surrogates#edit
-                  interface_surrogate GET     /interfaces/:interface_id/surrogates/:id(.:format)                                               surrogates#show
-                                      PATCH   /interfaces/:interface_id/surrogates/:id(.:format)                                               surrogates#update
-                                      PUT     /interfaces/:interface_id/surrogates/:id(.:format)                                               surrogates#update
-                                      DELETE  /interfaces/:interface_id/surrogates/:id(.:format)                                               surrogates#destroy
-                           interfaces GET     /interfaces(.:format)                                                                            interfaces#index
-                                      POST    /interfaces(.:format)                                                                            interfaces#create
-                        new_interface GET     /interfaces/new(.:format)                                                                        interfaces#new
-                       edit_interface GET     /interfaces/:id/edit(.:format)                                                                   interfaces#edit
-                            interface GET     /interfaces/:id(.:format)                                                                        interfaces#show
-                                      PATCH   /interfaces/:id(.:format)                                                                        interfaces#update
-                                      PUT     /interfaces/:id(.:format)                                                                        interfaces#update
-                                      DELETE  /interfaces/:id(.:format)                                                                        interfaces#destroy
-                      user_identities GET     /users/:user_id/identities(.:format)                                                             identities#index
-                                      POST    /users/:user_id/identities(.:format)                                                             identities#create
-                    new_user_identity GET     /users/:user_id/identities/new(.:format)                                                         identities#new
-                   edit_user_identity GET     /users/:user_id/identities/:id/edit(.:format)                                                    identities#edit
-                        user_identity GET     /users/:user_id/identities/:id(.:format)                                                         identities#show
-                                      PATCH   /users/:user_id/identities/:id(.:format)                                                         identities#update
-                                      PUT     /users/:user_id/identities/:id(.:format)                                                         identities#update
-                                      DELETE  /users/:user_id/identities/:id(.:format)                                                         identities#destroy
-              user_platform_instances GET     /users/:user_id/platforms/:platform_id/instances(.:format)                                       instances#index
-                                      POST    /users/:user_id/platforms/:platform_id/instances(.:format)                                       instances#create
-           new_user_platform_instance GET     /users/:user_id/platforms/:platform_id/instances/new(.:format)                                   instances#new
-          edit_user_platform_instance GET     /users/:user_id/platforms/:platform_id/instances/:id/edit(.:format)                              instances#edit
-               user_platform_instance GET     /users/:user_id/platforms/:platform_id/instances/:id(.:format)                                   instances#show
-                                      PATCH   /users/:user_id/platforms/:platform_id/instances/:id(.:format)                                   instances#update
-                                      PUT     /users/:user_id/platforms/:platform_id/instances/:id(.:format)                                   instances#update
-                                      DELETE  /users/:user_id/platforms/:platform_id/instances/:id(.:format)                                   instances#destroy
-                       user_platforms GET     /users/:user_id/platforms(.:format)                                                              platforms#index
-                                      POST    /users/:user_id/platforms(.:format)                                                              platforms#create
-                    new_user_platform GET     /users/:user_id/platforms/new(.:format)                                                          platforms#new
-                   edit_user_platform GET     /users/:user_id/platforms/:id/edit(.:format)                                                     platforms#edit
-                        user_platform GET     /users/:user_id/platforms/:id(.:format)                                                          platforms#show
-                                      PATCH   /users/:user_id/platforms/:id(.:format)                                                          platforms#update
-                                      PUT     /users/:user_id/platforms/:id(.:format)                                                          platforms#update
-                                      DELETE  /users/:user_id/platforms/:id(.:format)                                                          platforms#destroy
-                                users GET     /users(.:format)                                                                                 users#index
-                                      POST    /users(.:format)                                                                                 users#create
-                             new_user GET     /users/new(.:format)                                                                             users#new
-                            edit_user GET     /users/:id/edit(.:format)                                                                        users#edit
-                                 user GET     /users/:id(.:format)                                                                             users#show
-                                      PATCH   /users/:id(.:format)                                                                             users#update
-                                      PUT     /users/:id(.:format)                                                                             users#update
-                                      DELETE  /users/:id(.:format)                                                                             users#destroy
-                        group_members GET     /groups/:group_id/members(.:format)                                                              members#index
-                                      POST    /groups/:group_id/members(.:format)                                                              members#create
-                     new_group_member GET     /groups/:group_id/members/new(.:format)                                                          members#new
-                    edit_group_member GET     /groups/:group_id/members/:id/edit(.:format)                                                     members#edit
-                         group_member GET     /groups/:group_id/members/:id(.:format)                                                          members#show
-                                      PATCH   /groups/:group_id/members/:id(.:format)                                                          members#update
-                                      PUT     /groups/:group_id/members/:id(.:format)                                                          members#update
-                                      DELETE  /groups/:group_id/members/:id(.:format)                                                          members#destroy
-                               groups GET     /groups(.:format)                                                                                groups#index
-                                      POST    /groups(.:format)                                                                                groups#create
-                            new_group GET     /groups/new(.:format)                                                                            groups#new
-                           edit_group GET     /groups/:id/edit(.:format)                                                                       groups#edit
-                                group GET     /groups/:id(.:format)                                                                            groups#show
-                                      PATCH   /groups/:id(.:format)                                                                            groups#update
-                                      PUT     /groups/:id(.:format)                                                                            groups#update
-                                      DELETE  /groups/:id(.:format)                                                                            groups#destroy
-                    role_appointments GET     /roles/:role_id/appointments(.:format)                                                           appointments#index
-                                      POST    /roles/:role_id/appointments(.:format)                                                           appointments#create
-                 new_role_appointment GET     /roles/:role_id/appointments/new(.:format)                                                       appointments#new
-                edit_role_appointment GET     /roles/:role_id/appointments/:id/edit(.:format)                                                  appointments#edit
-                     role_appointment GET     /roles/:role_id/appointments/:id(.:format)                                                       appointments#show
-                                      PATCH   /roles/:role_id/appointments/:id(.:format)                                                       appointments#update
-                                      PUT     /roles/:role_id/appointments/:id(.:format)                                                       appointments#update
-                                      DELETE  /roles/:role_id/appointments/:id(.:format)                                                       appointments#destroy
-                                roles GET     /roles(.:format)                                                                                 roles#index
-                                      POST    /roles(.:format)                                                                                 roles#create
-                             new_role GET     /roles/new(.:format)                                                                             roles#new
-                            edit_role GET     /roles/:id/edit(.:format)                                                                        roles#edit
-                                 role GET     /roles/:id(.:format)                                                                             roles#show
-                                      PATCH   /roles/:id(.:format)                                                                             roles#update
-                                      PUT     /roles/:id(.:format)                                                                             roles#update
-                                      DELETE  /roles/:id(.:format)                                                                             roles#destroy
-                        launch_client GET     /clients/:id/launch(.:format)                                                                    clients#launch
-                              clients GET     /clients(.:format)                                                                               clients#index
-                                      POST    /clients(.:format)                                                                               clients#create
-                           new_client GET     /clients/new(.:format)                                                                           clients#new
-                          edit_client GET     /clients/:id/edit(.:format)                                                                      clients#edit
-                               client GET     /clients/:id(.:format)                                                                           clients#show
-                                      PATCH   /clients/:id(.:format)                                                                           clients#update
-                                      PUT     /clients/:id(.:format)                                                                           clients#update
-                                      DELETE  /clients/:id(.:format)                                                                           clients#destroy
-           redirect_identity_provider GET     /identity_providers/:id/redirect(.:format)                                                       identity_providers#redirect
-                   identity_providers GET     /identity_providers(.:format)                                                                    identity_providers#index
-                                      POST    /identity_providers(.:format)                                                                    identity_providers#create
-                new_identity_provider GET     /identity_providers/new(.:format)                                                                identity_providers#new
-               edit_identity_provider GET     /identity_providers/:id/edit(.:format)                                                           identity_providers#edit
-                    identity_provider GET     /identity_providers/:id(.:format)                                                                identity_providers#show
-                                      PATCH   /identity_providers/:id(.:format)                                                                identity_providers#update
-                                      PUT     /identity_providers/:id(.:format)                                                                identity_providers#update
-                                      DELETE  /identity_providers/:id(.:format)                                                                identity_providers#destroy
-                             callback GET     /sessions(.:format)                                                                              sessions#callback
-                                login POST    /sessions(.:format)                                                                              sessions#authenticate
-                               logout DELETE  /sessions(.:format)                                                                              sessions#destroy
-                            dashboard GET     /dashboard(.:format)                                                                             welcome#dashboard
-                               status GET     /status(.:format)                                                                                welcome#status
-                         smart_launch GET     /smart/launch(.:format)                                                                          smart/launch#launch
-                                 root GET     /                                                                                                welcome#landing
+                     Prefix Verb   URI Pattern                                                                              Controller#Action
+                                   /websocket                                                                               
+                   licenses GET    /licenses(.:format)                                                                      licenses#index
+                            POST   /licenses(.:format)                                                                      licenses#create
+                new_license GET    /licenses/new(.:format)                                                                  licenses#new
+               edit_license GET    /licenses/:id/edit(.:format)                                                             licenses#edit
+                    license GET    /licenses/:id(.:format)                                                                  licenses#show
+                            PATCH  /licenses/:id(.:format)                                                                  licenses#update
+                            PUT    /licenses/:id(.:format)                                                                  licenses#update
+                            DELETE /licenses/:id(.:format)                                                                  licenses#destroy
+            publish_service POST   /services/:id/publish(.:format)                                                          services#publish
+          unpublish_service POST   /services/:id/unpublish(.:format)                                                        services#unpublish
+         large_logo_service GET    /services/:id/logo/large(.:format)                                                       services#large
+        medium_logo_service GET    /services/:id/logo/medium(.:format)                                                      services#medium
+         small_logo_service GET    /services/:id/logo/small(.:format)                                                       services#small
+   large_service_screenshot GET    /services/:service_id/screenshots/:id/large(.:format)                                    screenshots#large
+  medium_service_screenshot GET    /services/:service_id/screenshots/:id/medium(.:format)                                   screenshots#medium
+   small_service_screenshot GET    /services/:service_id/screenshots/:id/small(.:format)                                    screenshots#small
+        service_screenshots GET    /services/:service_id/screenshots(.:format)                                              screenshots#index
+                            POST   /services/:service_id/screenshots(.:format)                                              screenshots#create
+     new_service_screenshot GET    /services/:service_id/screenshots/new(.:format)                                          screenshots#new
+    edit_service_screenshot GET    /services/:service_id/screenshots/:id/edit(.:format)                                     screenshots#edit
+         service_screenshot GET    /services/:service_id/screenshots/:id(.:format)                                          screenshots#show
+                            PATCH  /services/:service_id/screenshots/:id(.:format)                                          screenshots#update
+                            PUT    /services/:service_id/screenshots/:id(.:format)                                          screenshots#update
+                            DELETE /services/:service_id/screenshots/:id(.:format)                                          screenshots#destroy
+   search_services_services POST   /services/search(.:format)                                                               services#search
+       service_dependencies GET    /services/:service_id/builds/:id/dependencies(.:format)                                  dependencies#index
+                            POST   /services/:service_id/builds/:id/dependencies(.:format)                                  dependencies#create
+     new_service_dependency GET    /services/:service_id/builds/:id/dependencies/new(.:format)                              dependencies#new
+    edit_service_dependency GET    /services/:service_id/builds/:id/dependencies/:id/edit(.:format)                         dependencies#edit
+         service_dependency GET    /services/:service_id/builds/:id/dependencies/:id(.:format)                              dependencies#show
+                            PATCH  /services/:service_id/builds/:id/dependencies/:id(.:format)                              dependencies#update
+                            PUT    /services/:service_id/builds/:id/dependencies/:id(.:format)                              dependencies#update
+                            DELETE /services/:service_id/builds/:id/dependencies/:id(.:format)                              dependencies#destroy
+         service_parameters GET    /services/:service_id/builds/:id/exposures/:id/parameters(.:format)                      parameters#index
+                            POST   /services/:service_id/builds/:id/exposures/:id/parameters(.:format)                      parameters#create
+      new_service_parameter GET    /services/:service_id/builds/:id/exposures/:id/parameters/new(.:format)                  parameters#new
+     edit_service_parameter GET    /services/:service_id/builds/:id/exposures/:id/parameters/:id/edit(.:format)             parameters#edit
+          service_parameter GET    /services/:service_id/builds/:id/exposures/:id/parameters/:id(.:format)                  parameters#show
+                            PATCH  /services/:service_id/builds/:id/exposures/:id/parameters/:id(.:format)                  parameters#update
+                            PUT    /services/:service_id/builds/:id/exposures/:id/parameters/:id(.:format)                  parameters#update
+                            DELETE /services/:service_id/builds/:id/exposures/:id/parameters/:id(.:format)                  parameters#destroy
+          service_exposures GET    /services/:service_id/builds/:id/exposures(.:format)                                     exposures#index
+                            POST   /services/:service_id/builds/:id/exposures(.:format)                                     exposures#create
+       new_service_exposure GET    /services/:service_id/builds/:id/exposures/new(.:format)                                 exposures#new
+      edit_service_exposure GET    /services/:service_id/builds/:id/exposures/:id/edit(.:format)                            exposures#edit
+           service_exposure GET    /services/:service_id/builds/:id/exposures/:id(.:format)                                 exposures#show
+                            PATCH  /services/:service_id/builds/:id/exposures/:id(.:format)                                 exposures#update
+                            PUT    /services/:service_id/builds/:id/exposures/:id(.:format)                                 exposures#update
+                            DELETE /services/:service_id/builds/:id/exposures/:id(.:format)                                 exposures#destroy
+              service_tasks GET    /services/:service_id/builds/:id/configurations/:id/tasks(.:format)                      tasks#index
+                            POST   /services/:service_id/builds/:id/configurations/:id/tasks(.:format)                      tasks#create
+           new_service_task GET    /services/:service_id/builds/:id/configurations/:id/tasks/new(.:format)                  tasks#new
+          edit_service_task GET    /services/:service_id/builds/:id/configurations/:id/tasks/:id/edit(.:format)             tasks#edit
+               service_task GET    /services/:service_id/builds/:id/configurations/:id/tasks/:id(.:format)                  tasks#show
+                            PATCH  /services/:service_id/builds/:id/configurations/:id/tasks/:id(.:format)                  tasks#update
+                            PUT    /services/:service_id/builds/:id/configurations/:id/tasks/:id(.:format)                  tasks#update
+                            DELETE /services/:service_id/builds/:id/configurations/:id/tasks/:id(.:format)                  tasks#destroy
+     service_configurations GET    /services/:service_id/builds/:id/configurations(.:format)                                configurations#index
+                            POST   /services/:service_id/builds/:id/configurations(.:format)                                configurations#create
+  new_service_configuration GET    /services/:service_id/builds/:id/configurations/new(.:format)                            configurations#new
+ edit_service_configuration GET    /services/:service_id/builds/:id/configurations/:id/edit(.:format)                       configurations#edit
+      service_configuration GET    /services/:service_id/builds/:id/configurations/:id(.:format)                            configurations#show
+                            PATCH  /services/:service_id/builds/:id/configurations/:id(.:format)                            configurations#update
+                            PUT    /services/:service_id/builds/:id/configurations/:id(.:format)                            configurations#update
+                            DELETE /services/:service_id/builds/:id/configurations/:id(.:format)                            configurations#destroy
+             service_builds GET    /services/:service_id/builds(.:format)                                                   builds#index
+                            POST   /services/:service_id/builds(.:format)                                                   builds#create
+          new_service_build GET    /services/:service_id/builds/new(.:format)                                               builds#new
+         edit_service_build GET    /services/:service_id/builds/:id/edit(.:format)                                          builds#edit
+              service_build GET    /services/:service_id/builds/:id(.:format)                                               builds#show
+                            PATCH  /services/:service_id/builds/:id(.:format)                                               builds#update
+                            PUT    /services/:service_id/builds/:id(.:format)                                               builds#update
+                            DELETE /services/:service_id/builds/:id(.:format)                                               builds#destroy
+                   services GET    /services(.:format)                                                                      services#index
+                            POST   /services(.:format)                                                                      services#create
+                new_service GET    /services/new(.:format)                                                                  services#new
+               edit_service GET    /services/:id/edit(.:format)                                                             services#edit
+                    service GET    /services/:id(.:format)                                                                  services#show
+                            PATCH  /services/:id(.:format)                                                                  services#update
+                            PUT    /services/:id(.:format)                                                                  services#update
+                            DELETE /services/:id(.:format)                                                                  services#destroy
+       interface_surrogates GET    /interfaces/:interface_id/surrogates(.:format)                                           surrogates#index
+                            POST   /interfaces/:interface_id/surrogates(.:format)                                           surrogates#create
+    new_interface_surrogate GET    /interfaces/:interface_id/surrogates/new(.:format)                                       surrogates#new
+   edit_interface_surrogate GET    /interfaces/:interface_id/surrogates/:id/edit(.:format)                                  surrogates#edit
+        interface_surrogate GET    /interfaces/:interface_id/surrogates/:id(.:format)                                       surrogates#show
+                            PATCH  /interfaces/:interface_id/surrogates/:id(.:format)                                       surrogates#update
+                            PUT    /interfaces/:interface_id/surrogates/:id(.:format)                                       surrogates#update
+                            DELETE /interfaces/:interface_id/surrogates/:id(.:format)                                       surrogates#destroy
+                 interfaces GET    /interfaces(.:format)                                                                    interfaces#index
+                            POST   /interfaces(.:format)                                                                    interfaces#create
+              new_interface GET    /interfaces/new(.:format)                                                                interfaces#new
+             edit_interface GET    /interfaces/:id/edit(.:format)                                                           interfaces#edit
+                  interface GET    /interfaces/:id(.:format)                                                                interfaces#show
+                            PATCH  /interfaces/:id(.:format)                                                                interfaces#update
+                            PUT    /interfaces/:id(.:format)                                                                interfaces#update
+                            DELETE /interfaces/:id(.:format)                                                                interfaces#destroy
+            user_identities GET    /users/:user_id/identities(.:format)                                                     identities#index
+                            POST   /users/:user_id/identities(.:format)                                                     identities#create
+          new_user_identity GET    /users/:user_id/identities/new(.:format)                                                 identities#new
+         edit_user_identity GET    /users/:user_id/identities/:id/edit(.:format)                                            identities#edit
+              user_identity GET    /users/:user_id/identities/:id(.:format)                                                 identities#show
+                            PATCH  /users/:user_id/identities/:id(.:format)                                                 identities#update
+                            PUT    /users/:user_id/identities/:id(.:format)                                                 identities#update
+                            DELETE /users/:user_id/identities/:id(.:format)                                                 identities#destroy
+    user_platform_instances GET    /users/:user_id/platforms/:platform_id/instances(.:format)                               instances#index
+                            POST   /users/:user_id/platforms/:platform_id/instances(.:format)                               instances#create
+ new_user_platform_instance GET    /users/:user_id/platforms/:platform_id/instances/new(.:format)                           instances#new
+edit_user_platform_instance GET    /users/:user_id/platforms/:platform_id/instances/:id/edit(.:format)                      instances#edit
+     user_platform_instance GET    /users/:user_id/platforms/:platform_id/instances/:id(.:format)                           instances#show
+                            PATCH  /users/:user_id/platforms/:platform_id/instances/:id(.:format)                           instances#update
+                            PUT    /users/:user_id/platforms/:platform_id/instances/:id(.:format)                           instances#update
+                            DELETE /users/:user_id/platforms/:platform_id/instances/:id(.:format)                           instances#destroy
+             user_platforms GET    /users/:user_id/platforms(.:format)                                                      platforms#index
+                            POST   /users/:user_id/platforms(.:format)                                                      platforms#create
+          new_user_platform GET    /users/:user_id/platforms/new(.:format)                                                  platforms#new
+         edit_user_platform GET    /users/:user_id/platforms/:id/edit(.:format)                                             platforms#edit
+              user_platform GET    /users/:user_id/platforms/:id(.:format)                                                  platforms#show
+                            PATCH  /users/:user_id/platforms/:id(.:format)                                                  platforms#update
+                            PUT    /users/:user_id/platforms/:id(.:format)                                                  platforms#update
+                            DELETE /users/:user_id/platforms/:id(.:format)                                                  platforms#destroy
+                      users GET    /users(.:format)                                                                         users#index
+                            POST   /users(.:format)                                                                         users#create
+                   new_user GET    /users/new(.:format)                                                                     users#new
+                  edit_user GET    /users/:id/edit(.:format)                                                                users#edit
+                       user GET    /users/:id(.:format)                                                                     users#show
+                            PATCH  /users/:id(.:format)                                                                     users#update
+                            PUT    /users/:id(.:format)                                                                     users#update
+                            DELETE /users/:id(.:format)                                                                     users#destroy
+              group_members GET    /groups/:group_id/members(.:format)                                                      members#index
+                            POST   /groups/:group_id/members(.:format)                                                      members#create
+           new_group_member GET    /groups/:group_id/members/new(.:format)                                                  members#new
+          edit_group_member GET    /groups/:group_id/members/:id/edit(.:format)                                             members#edit
+               group_member GET    /groups/:group_id/members/:id(.:format)                                                  members#show
+                            PATCH  /groups/:group_id/members/:id(.:format)                                                  members#update
+                            PUT    /groups/:group_id/members/:id(.:format)                                                  members#update
+                            DELETE /groups/:group_id/members/:id(.:format)                                                  members#destroy
+                     groups GET    /groups(.:format)                                                                        groups#index
+                            POST   /groups(.:format)                                                                        groups#create
+                  new_group GET    /groups/new(.:format)                                                                    groups#new
+                 edit_group GET    /groups/:id/edit(.:format)                                                               groups#edit
+                      group GET    /groups/:id(.:format)                                                                    groups#show
+                            PATCH  /groups/:id(.:format)                                                                    groups#update
+                            PUT    /groups/:id(.:format)                                                                    groups#update
+                            DELETE /groups/:id(.:format)                                                                    groups#destroy
+          role_appointments GET    /roles/:role_id/appointments(.:format)                                                   appointments#index
+                            POST   /roles/:role_id/appointments(.:format)                                                   appointments#create
+       new_role_appointment GET    /roles/:role_id/appointments/new(.:format)                                               appointments#new
+      edit_role_appointment GET    /roles/:role_id/appointments/:id/edit(.:format)                                          appointments#edit
+           role_appointment GET    /roles/:role_id/appointments/:id(.:format)                                               appointments#show
+                            PATCH  /roles/:role_id/appointments/:id(.:format)                                               appointments#update
+                            PUT    /roles/:role_id/appointments/:id(.:format)                                               appointments#update
+                            DELETE /roles/:role_id/appointments/:id(.:format)                                               appointments#destroy
+                      roles GET    /roles(.:format)                                                                         roles#index
+                            POST   /roles(.:format)                                                                         roles#create
+                   new_role GET    /roles/new(.:format)                                                                     roles#new
+                  edit_role GET    /roles/:id/edit(.:format)                                                                roles#edit
+                       role GET    /roles/:id(.:format)                                                                     roles#show
+                            PATCH  /roles/:id(.:format)                                                                     roles#update
+                            PUT    /roles/:id(.:format)                                                                     roles#update
+                            DELETE /roles/:id(.:format)                                                                     roles#destroy
+ redirect_identity_provider GET    /identity_providers/:id/redirect(.:format)                                               identity_providers#redirect
+   enable_identity_provider POST   /identity_providers/:id/enable(.:format)                                                 identity_providers#enable
+  disable_identity_provider POST   /identity_providers/:id/disable(.:format)                                                identity_providers#disable
+         identity_providers GET    /identity_providers(.:format)                                                            identity_providers#index
+                            POST   /identity_providers(.:format)                                                            identity_providers#create
+      new_identity_provider GET    /identity_providers/new(.:format)                                                        identity_providers#new
+     edit_identity_provider GET    /identity_providers/:id/edit(.:format)                                                   identity_providers#edit
+          identity_provider GET    /identity_providers/:id(.:format)                                                        identity_providers#show
+                            PATCH  /identity_providers/:id(.:format)                                                        identity_providers#update
+                            PUT    /identity_providers/:id(.:format)                                                        identity_providers#update
+                            DELETE /identity_providers/:id(.:format)                                                        identity_providers#destroy
+                   callback GET    /sessions(.:format)                                                                      sessions#callback
+                      login POST   /sessions(.:format)                                                                      sessions#authenticate
+                     logout DELETE /sessions(.:format)                                                                      sessions#destroy
+                  dashboard GET    /dashboard(.:format)                                                                     welcome#dashboard
+                     status GET    /status(.:format)                                                                        welcome#status
+               smart_launch GET    /smart/launch(.:format)                                                                  smart/launch#launch
+                       root GET    /                                                                                        

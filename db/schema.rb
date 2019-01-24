@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2017_03_10_212850) do
+ActiveRecord::Schema.define(version: 2018_11_29_063220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,16 +42,6 @@ ActiveRecord::Schema.define(version: 2017_03_10_212850) do
     t.index ["id"], name: "index_builds_on_id"
   end
 
-  create_table "clients", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "launch_url", null: false
-    t.string "icon_url"
-    t.boolean "available", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_clients_on_name", unique: true
-  end
-
   create_table "configurations", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid "build_id", null: false
     t.string "name", null: false
@@ -65,6 +55,8 @@ ActiveRecord::Schema.define(version: 2017_03_10_212850) do
     t.uuid "interface_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "required", default: true, null: false
+    t.json "mappings", default: {}, null: false
     t.index ["build_id"], name: "index_dependencies_on_build_id"
     t.index ["interface_id"], name: "index_dependencies_on_interface_id"
   end
@@ -236,13 +228,6 @@ ActiveRecord::Schema.define(version: 2017_03_10_212850) do
     t.bigint "logo_file_size"
     t.datetime "logo_updated_at"
     t.index ["name"], name: "index_services_on_name", unique: true
-  end
-
-  create_table "sessions", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid "identity_id", null: false
-    t.datetime "expires_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "surrogates", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

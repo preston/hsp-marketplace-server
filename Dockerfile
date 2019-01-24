@@ -1,4 +1,4 @@
-FROM ruby:2.4.3
+FROM ruby:2.6.0
 MAINTAINER Preston Lee
 
 RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y build-essential
