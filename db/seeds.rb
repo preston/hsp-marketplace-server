@@ -1,13 +1,13 @@
 # This is a general-purpose IDP for development purposes only.
 # Please relpace this with your own, and NEVER use it for production!
-google = IdentityProvider.create_with(
-    name: 'Google',
-    client_id: '418783041492-sfsdepjvultlju47mvtcrm2ug3gjumo0.apps.googleusercontent.com',
-    client_secret: 'tlaAwAx-1MH3YAm1fkFbFCvY',
-    scopes: 'openid email profile'
-).find_or_create_by(issuer: 'https://accounts.google.com')
-google.reconfigure
-google.save!
+idp = IdentityProvider.create_with(
+    name: 'HSPC',
+    client_id: 'marketplace-server-production',
+    client_secret: 'change-me',
+    scopes: 'openid email profile roles'
+).find_or_create_by(issuer: 'https://id.hspconsortium.org/auth/realms/master')
+idp.reconfigure
+idp.save!
 
 mit = License.find_or_create_by!(name: 'MIT', url: 'https://opensource.org/licenses/MIT')
 apache20 = License.find_or_create_by!(name: 'Apache 2.0', url: 'https://opensource.org/licenses/Apache-2.0')
