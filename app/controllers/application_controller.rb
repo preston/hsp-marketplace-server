@@ -2,12 +2,12 @@ class ApplicationController < ActionController::Base
     include CanCan::ControllerAdditions
 
     # Short-circuit any/all CORS pre-flight OPTIONS requests.
-    # before_action :cors_preflight_check
+    before_action :cors_preflight_check
 
     # Allow the browser to make CORS requests since we do not provide a UI.
     # This is expected and totally cool, so long as subsequent requests are encrypted and include either
     # a tamper-proof cookie or JWT.
-    # after_action :cors_set_access_control_headers
+    after_action :cors_set_access_control_headers
 
     # Assure that CanCanCan authorization checks run.
     # check_authorization
@@ -26,28 +26,28 @@ class ApplicationController < ActionController::Base
 	# MARKETPLACE_UI_URL = ENV['MARKETPLACE_UI_URL']
 
     # Return the CORS access control headers.
-    # def cors_set_access_control_headers
-    #     headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
-	# 	headers['Access-Control-Allow-Credentials'] = true
-    #     headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
-    #     headers['Access-Control-Allow-Headers'] = 'Authorization'
-    #     headers['Access-Control-Max-Age'] = '1728000'
-    # end
+    def cors_set_access_control_headers
+        headers['Access-Control-Allow-Origin'] = ENV['MARKETPLACE_UI_URL']
+		headers['Access-Control-Allow-Credentials'] = true
+        headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
+        headers['Access-Control-Allow-Headers'] = 'Authorization'
+        headers['Access-Control-Max-Age'] = '1728000'
+    end
 
     # If this is a preflight OPTIONS request, then short-circuit the
     # request, return only the necessary headers and return an empty
     # text/plain.
-    # def cors_preflight_check
-    #     # byebug
-    #     if request.method.to_sym.downcase == :options
-    #         headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
-	# 		headers['Access-Control-Allow-Credentials'] = true
-    #         headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
-    #         headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
-    #         headers['Access-Control-Max-Age'] = '1728000'
-    #         render plain: '', content_type: 'text/plain'
-    #     end
-    # end
+    def cors_preflight_check
+        # byebug
+        if request.method.to_sym.downcase == :options
+            headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
+			headers['Access-Control-Allow-Credentials'] = true
+            headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
+            headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
+            headers['Access-Control-Max-Age'] = '1728000'
+            render plain: '', content_type: 'text/plain'
+        end
+    end
 
     rescue_from CanCan::AccessDenied do |exception|
         Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
@@ -121,20 +121,16 @@ class ApplicationController < ActionController::Base
         query = {
 			state: Base64.encode64({
 				provider_id: provider.id
-				# nonce: new_nonce
 			}.to_json),
             redirect_uri:	callback_url,
 	        # redirect_uri:	ENV['MARKETPLACE_UI_URL'],
             # state: 			new_nonce,
-            # response_type: 	:token, # Older implicit grant flow since the client can't securely store a client_secret.
-            response_type: 	:code, # No longer requires a client_secret on the initial authentication stage.
+            response_type: 	:code,
+            prompt: :login,
             # access_type: 	:offline,
             # aud: provider.client_id,
             client_id: 		provider.client_id,
             scope: provider.scopes
-            # scope: 			'openid email profile'
-            # scope: 			'launch/encounter user/*.read launch openid patient/*.read profile'
-            # scope: 			'phone email address launch/encounter user/*.read launch openid patient/*.read profile'
         }
         uri.query = URI.encode_www_form(query)
         redirect_to uri.to_s

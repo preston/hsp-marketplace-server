@@ -1,11 +1,11 @@
 # This is a general-purpose IDP for development purposes only.
 # Please relpace this with your own, and NEVER use it for production!
 idp = IdentityProvider.create_with(
-    name: 'HSPC',
+    name: 'Logica Health',
     client_id: 'marketplace-server-development',
     client_secret: '233cec68-c4db-4948-9357-5b58b4004d4b',
-    scopes: 'openid email profile roles'
-).find_or_create_by(issuer: 'https://id.hspconsortium.org/auth/realms/master')
+    scopes: 'openid,email,profile,roles'
+).find_or_create_by(issuer: 'https://id.logicahealth.org/auth/realms/master')
 idp.reconfigure
 idp.save!
 

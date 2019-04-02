@@ -32,7 +32,8 @@ class SessionsController < ApplicationController
             # state: session[:session_id],
             # nonce: new_nonce
         }
-        response = Net::HTTP.post_form(uri, data)
+        puts uri.to_s
+        response = Net::HTTP.get(uri, data)
         authorization = JSON.parse(response.body)
         logger.debug "Authorization JSON response: #{authorization}"
         jwt = nil
