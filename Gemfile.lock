@@ -159,6 +159,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (3.1.0)
+    puma (3.12.1)
     rack (2.0.7)
     rack-cors (1.0.3)
     rack-oauth2 (1.10.0)
@@ -283,6 +284,7 @@ DEPENDENCIES
   paperclip_database!
   pg
   pg_search
+  puma
   rack-cors
   railroady
   rails (= 5.2.3)
