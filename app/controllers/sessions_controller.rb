@@ -11,8 +11,10 @@ class SessionsController < ApplicationController
 
     def callback
         if params['code'].nil?
-            flash[:warning] = "We couldn't verify your single sign-on identity, sorry. Please try again. If you continue to have issues, try logging out first."
-            redirect_to :root
+            # @flash[:warning] =
+            Rails.logger.error "We couldn't verify your single sign-on identity, sorry. Please try again. If you continue to have issues, try logging out first."
+            # redirect_to :root
+            redirect_to ENV['MARKETPLACE_UI_URL']
         else
             openid_connect_login
         end
@@ -24,25 +26,32 @@ class SessionsController < ApplicationController
 	    provider = IdentityProvider.find(provider_id)
         uri = URI(provider.configuration['token_endpoint'])
         data = {
+            client_id: 	provider.client_id,
             code: params['code'],
             grant_type: 	:authorization_code,
-            client_id: 	provider.client_id,
-            client_secret: 	provider.client_secret,
-            redirect_uri:	callback_url
+            client_secret: 	provider.client_secret
+            # redirect_uri:	callback_url
             # state: session[:session_id],
             # nonce: new_nonce
         }
         puts uri.to_s
-        response = Net::HTTP.get(uri, data)
+        response = Net::HTTP.post_form(uri, data)
         authorization = JSON.parse(response.body)
         logger.debug "Authorization JSON response: #{authorization}"
-        jwt = nil
+        # Decode the JWT first.
+        jwt = JWT.decode(authorization['access_token'], nil, false)
+        Rails.logger.debug "JWT decoded data: #{jwt}"
+        alg = jwt[-1]['alg']
         # byebug
+        # Now verify the JWT is legit.
+        verified = nil
         public_keys_for(provider).each_with_index do |pk, i|
+            # byebug
             public_key = OpenSSL::PKey::RSA.new(pk)
             begin
-                jwt = JWT.decode(authorization['id_token'], public_key)
+                jwt = JWT.decode(authorization['access_token'], public_key, true, {algorithm: alg})
                 logger.debug("Key #{i} worked!")
+                verified = true
                 break
             rescue
                 # Probably the wrong key.
@@ -50,16 +59,17 @@ class SessionsController < ApplicationController
                 next
             end
         end
-        # byebug
         msg = "Hmm.. #{provider.name} didn't return what we expected, so we are playing it safe and not authenticating you. Sorry!"
-        if jwt.nil?
+        # byebug
+        if !verified
             redirect_to	:login, message: "#{msg} (Couldn't decrypt token with known public keys.)"
-        elsif jwt[0]['aud'] != provider.client_id && jwt[0]['aud'] != provider.alternate_client_id
-            flash[:error] = "#{msg} (Provider mismatch.)"
+        elsif jwt[0]['azp'] != provider.client_id && jwt[0]['azp'] != provider.alternate_client_id
+            # @flash[:error] = 
+            Rails.logger.error "#{msg} (Provider mismatch.)"
             # redirect_to :login
 			render json: {message: 'Error processing login response. Sorry!'} # FIXME Report error to the user!
         # elsif authorization['state'] != session[:session_id]
-        # 	flash[:error] = "#{msg} (Session ID mismatch.)"
+        # 	@flash[:error] = "#{msg} (Session ID mismatch.)"
         # 	render 	:sorry
         else
             # Looks good!
@@ -100,7 +110,7 @@ class SessionsController < ApplicationController
             # cookies.signed['identity_id'] = session['identity_id']
             jwt = JsonWebToken.new(identity_id: identity.id, expires_at: 24.hours.from_now)
             jwt.save!
-            redirect_to ENV['MARKETPLACE_UI_URL'] + "\#jwt=#{jwt.encode}"
+            redirect_to ENV['MARKETPLACE_UI_URL'] + "\?jwt=#{jwt.encode}"
         end
     end
 
@@ -110,7 +120,7 @@ class SessionsController < ApplicationController
     #
     # To assure we always have current copies of the public keys, we'll force hourly reconfiguration.
     def public_keys_for(provider)
-        if provider.updated_at < 1.hour.ago
+        if provider.updated_at < 15.minutes.ago
             logger.debug 'Forcing IDP reconfiguration to update public keys.'
             provider.reconfigure
             provider.save
@@ -120,10 +130,10 @@ class SessionsController < ApplicationController
         provider.public_keys
     end
 
-    def authenticate
-        idp = IdentityProvider.find(params['provider_id'])
-		redirect_to_identity_provider(idp)
-    end
+    # def authenticate
+    #     idp = IdentityProvider.find(params['provider_id'])
+	# 	redirect_to_identity_provider(idp)
+    # end
 
     def destroy
         unauthenticate!

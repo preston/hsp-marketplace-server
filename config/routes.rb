@@ -78,7 +78,7 @@ Rails.application.routes.draw do
     end
 
     get		'sessions' => 'sessions#callback',		as: :callback
-    post	'sessions' => 'sessions#authenticate',	as: :login
+    # post	'sessions' => 'sessions#authenticate',	as: :login
     delete	'sessions' => 'sessions#destroy',		as: :logout
     get 'dashboard' => 'welcome#dashboard',			as: :dashboard
     get 'status' => 'welcome#status',				as: :status
@@ -86,9 +86,6 @@ Rails.application.routes.draw do
     # The priority is based upon order of creation: first created -> highest priority.
     # See how all your routes lay out with "rake routes".
 
-    namespace :smart do
-        get 'launch' => 'launch#launch'
-    end
     # You can have the root of your site routed with "root"
-    root 'welcome#landing'
+    root 'sessions#callback'
 end

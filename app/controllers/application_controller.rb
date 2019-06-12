@@ -2,12 +2,12 @@ class ApplicationController < ActionController::Base
     include CanCan::ControllerAdditions
 
     # Short-circuit any/all CORS pre-flight OPTIONS requests.
-    before_action :cors_preflight_check
+    # before_action :cors_preflight_check
 
     # Allow the browser to make CORS requests since we do not provide a UI.
     # This is expected and totally cool, so long as subsequent requests are encrypted and include either
     # a tamper-proof cookie or JWT.
-    after_action :cors_set_access_control_headers
+    # after_action :cors_set_access_control_headers
 
     # Assure that CanCanCan authorization checks run.
     # check_authorization
@@ -26,28 +26,27 @@ class ApplicationController < ActionController::Base
 	# MARKETPLACE_UI_URL = ENV['MARKETPLACE_UI_URL']
 
     # Return the CORS access control headers.
-    def cors_set_access_control_headers
-        headers['Access-Control-Allow-Origin'] = ENV['MARKETPLACE_UI_URL']
-		headers['Access-Control-Allow-Credentials'] = true
-        headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
-        headers['Access-Control-Allow-Headers'] = 'Authorization'
-        headers['Access-Control-Max-Age'] = '1728000'
-    end
+    # def cors_set_access_control_headers
+    #     headers['Access-Control-Allow-Origin'] = '*' #ENV['MARKETPLACE_UI_URL']
+	# 	headers['Access-Control-Allow-Credentials'] = 'true'
+    #     headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
+    #     headers['Access-Control-Allow-Headers'] = 'Authorization'
+    #     # headers['Access-Control-Max-Age'] = '1728000'
+    # end
 
     # If this is a preflight OPTIONS request, then short-circuit the
     # request, return only the necessary headers and return an empty
     # text/plain.
-    def cors_preflight_check
-        # byebug
-        if request.method.to_sym.downcase == :options
-            headers['Access-Control-Allow-Origin'] = MARKETPLACE_UI_URL
-			headers['Access-Control-Allow-Credentials'] = true
-            headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
-            headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
-            headers['Access-Control-Max-Age'] = '1728000'
-            render plain: '', content_type: 'text/plain'
-        end
-    end
+    # def cors_preflight_check
+    #     if request.method.to_sym.downcase == :options
+    #         headers['Access-Control-Allow-Origin'] = '*' #ENV['MARKETPLACE_UI_URL']
+	# 		headers['Access-Control-Allow-Credentials'] = true
+    #         headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, PATCH, DELETE'
+    #         headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
+    #         headers['Access-Control-Max-Age'] = '1728000'
+    #         render plain: '', content_type: 'text/plain'
+    #     end
+    # end
 
     rescue_from CanCan::AccessDenied do |exception|
         Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
@@ -119,21 +118,25 @@ class ApplicationController < ActionController::Base
 		# session['referer_url'] = request.referer
         uri = URI(provider.configuration['authorization_endpoint'])
         query = {
+            client_id: 		provider.client_id,
+            response_type: 	:code,
+            # redirect_uri:	callback_url,
+            scope: provider.scopes,
 			state: Base64.encode64({
 				provider_id: provider.id
 			}.to_json),
-            redirect_uri:	callback_url,
-	        # redirect_uri:	ENV['MARKETPLACE_UI_URL'],
+	        # redirect_uri:	ENV['MARKETPLACE_UI_URL']
             # state: 			new_nonce,
-            response_type: 	:code,
-            prompt: :login,
-            # access_type: 	:offline,
-            # aud: provider.client_id,
-            client_id: 		provider.client_id,
-            scope: provider.scopes
+            # prompt: :login,
+            access_type: 	:offline,
+            aud: provider.client_id
         }
         uri.query = URI.encode_www_form(query)
-        redirect_to uri.to_s
+        # byebug
+        # redirect_to uri.to_s
+        s = URI.unescape(uri.to_s)
+        Rails.logger.info("Redirecting SSO login to: #{s}")
+        redirect_to s
     end
 
     def build_oauth_request(tool, uri, options)

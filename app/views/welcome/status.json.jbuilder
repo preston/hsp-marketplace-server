@@ -3,13 +3,13 @@ if jwt
     if jwt = JsonWebToken.decode_authorization(jwt)
         if jwt = JsonWebToken.find(jwt['id'])
             # json.identity do
-            # 	id: jwt.identity.id,
-            # 	user: {
-            # 		id: jwt.identity.user.id,
-            # 		name: jwt.identity.user.name,
-            # 		url: user_url(jwt.identity.user),
-            # 		path: user_path(jwt.identity.user)
-            # 	}
+            # 	json.id jwt.identity.id
+            	# json.user do 
+            	# 	json.id jwt.identity.user.id
+            	# 	json.name jwt.identity.user.name
+            	# 	json.url user_url(jwt.identity.user)
+            	# 	json.path user_path(jwt.identity.user)
+                # end
             # end
             json.jwt do
                 json.id jwt.id
