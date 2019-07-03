@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @entitlement.user_id %>
+</p>
+
+<p>
+  <strong>Product license:</strong>
+  <%= @entitlement.product_license_id %>
+</p>
+
+<p>
+  <strong>Valid from:</strong>
+  <%= @entitlement.valid_from %>
+</p>
+
+<%= link_to 'Edit', edit_entitlement_path(@entitlement) %> |
+<%= link_to 'Back', entitlements_path %>

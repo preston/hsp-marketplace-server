@@ -7,7 +7,7 @@ class Ability
         # TODO FIXME: We're going to disable detailed authorization controls for now!!!
         can :manage, :all
 
-        can [:read, :search, :small, :medium, :large], Service do |s| s.published_at ? (s.published_at <= Time.now) : false end
+        can [:read, :search, :small, :medium, :large], Product do |s| s.published_at ? (s.published_at <= Time.now) : false end
         can [:read, :small, :medium, :large], Screenshot
         can :read, Build
         can :read, Dependency

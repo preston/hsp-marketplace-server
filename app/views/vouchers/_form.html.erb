@@ -1,0 +1,52 @@
+<%= form_with(model: voucher, local: true) do |form| %>
+  <% if voucher.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(voucher.errors.count, "error") %> prohibited this voucher from being saved:</h2>
+
+      <ul>
+      <% voucher.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :product_license_id %>
+    <%= form.text_field :product_license_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :entitlement_id %>
+    <%= form.text_field :entitlement_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :code %>
+    <%= form.text_field :code %>
+  </div>
+
+  <div class="field">
+    <%= form.label :issued_at %>
+    <%= form.datetime_select :issued_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :expires_at %>
+    <%= form.datetime_select :expires_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :redeemed_at %>
+    <%= form.datetime_select :redeemed_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :redeemed_by %>
+    <%= form.text_field :redeemed_by %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

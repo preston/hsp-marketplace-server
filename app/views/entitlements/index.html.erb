@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Entitlements</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Product license</th>
+      <th>Valid from</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @entitlements.each do |entitlement| %>
+      <tr>
+        <td><%= entitlement.user_id %></td>
+        <td><%= entitlement.product_license_id %></td>
+        <td><%= entitlement.valid_from %></td>
+        <td><%= link_to 'Show', entitlement %></td>
+        <td><%= link_to 'Edit', edit_entitlement_path(entitlement) %></td>
+        <td><%= link_to 'Destroy', entitlement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Entitlement', new_entitlement_path %>

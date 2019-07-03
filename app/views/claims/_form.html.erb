@@ -1,0 +1,42 @@
+<%= form_with(model: claim, local: true) do |form| %>
+  <% if claim.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(claim.errors.count, "error") %> prohibited this claim from being saved:</h2>
+
+      <ul>
+      <% claim.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :claimant_id %>
+    <%= form.text_field :claimant_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :claimant_type %>
+    <%= form.text_field :claimant_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :entitlement_id %>
+    <%= form.text_field :entitlement_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :authorization_count %>
+    <%= form.number_field :authorization_count %>
+  </div>
+
+  <div class="field">
+    <%= form.label :authorized_at %>
+    <%= form.datetime_select :authorized_at %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

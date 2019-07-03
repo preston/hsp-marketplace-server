@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Product license:</strong>
+  <%= @voucher.product_license_id %>
+</p>
+
+<p>
+  <strong>Entitlement:</strong>
+  <%= @voucher.entitlement_id %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @voucher.code %>
+</p>
+
+<p>
+  <strong>Issued at:</strong>
+  <%= @voucher.issued_at %>
+</p>
+
+<p>
+  <strong>Expires at:</strong>
+  <%= @voucher.expires_at %>
+</p>
+
+<p>
+  <strong>Redeemed at:</strong>
+  <%= @voucher.redeemed_at %>
+</p>
+
+<p>
+  <strong>Redeemed by:</strong>
+  <%= @voucher.redeemed_by %>
+</p>
+
+<%= link_to 'Edit', edit_voucher_path(@voucher) %> |
+<%= link_to 'Back', vouchers_path %>

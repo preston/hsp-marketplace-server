@@ -11,10 +11,10 @@ idp = IdentityProvider.create_with(
 idp.reconfigure
 idp.save!
 
-mit = License.find_or_create_by!(name: 'MIT', url: 'https://opensource.org/licenses/MIT')
-apache20 = License.find_or_create_by!(name: 'Apache 2.0', url: 'https://opensource.org/licenses/Apache-2.0')
-bsd2 = License.find_or_create_by!(name: 'BSD 2-Clause', url: 'https://opensource.org/licenses/BSD-2-Clause')
-bsd3 = License.find_or_create_by!(name: 'BSD 3-Clause', url: 'https://opensource.org/licenses/BSD-3-Clause')
+mit = License.find_or_create_by!(name: 'MIT', url: 'https://opensource.org/licenses/MIT', expiry: License::EXPIRY_INDEFINITE)
+apache20 = License.find_or_create_by!(name: 'Apache 2.0', url: 'https://opensource.org/licenses/Apache-2.0', expiry: License::EXPIRY_INDEFINITE)
+bsd2 = License.find_or_create_by!(name: 'BSD 2-Clause', url: 'https://opensource.org/licenses/BSD-2-Clause', expiry: License::EXPIRY_INDEFINITE)
+bsd3 = License.find_or_create_by!(name: 'BSD 3-Clause', url: 'https://opensource.org/licenses/BSD-3-Clause', expiry: License::EXPIRY_INDEFINITE)
 
 administrator = User.find_or_create_by!(name: 'Administrator')
 
@@ -29,7 +29,6 @@ placeholder = File.new(File.join(Rails.root, 'public', 'placeholder_logo.png'))
 davinci = [
   { name: 'Patient Data Exchange Formulary Client',
     description: 'Da Vinci Plan Coverage and Medical Formulary Client Reference Implementation. The client reference implementation can installed and run locally on your machine.',
-    license: apache20,
     user: administrator,
     uri: 'hspc/davinci-pdex-formulary-client',
     support_url: 'https://github.com/HL7-DaVinci/pdex-formulary-client',
@@ -38,7 +37,6 @@ davinci = [
     visible_at: now },
   { name: 'Coverage Requirements Discovery (CRD) Server',
     description: 'The Coverage Requirements Discovery (CRD) Reference Implementation (RI) is a software project that conforms to the Implementation Guide developed by the Da Vinci Project within the HL7 Standards Organization. The CRD RI project is software that can simulate all of the systems involved in a CRD exchange. The main component in this project is the server, which acts as a healthcare payer information system. This system handles healthcare provider requests to understand what documentation is necessary prior to prescribing a particular treatment. Users are able to formulate a request for durable medical equipment coverage requirements, such as “what are the documentation requirements for prescribing home oxygen therapy (HCPCS E0424) to a 65 year old male living in MA?”. This type of question is not asked in plain English through a user interface, but submitted through CDS Hooks. The CRD RI consults a small, example database and provides a response, such as a PDF with the requirements back to the requesting system. This software lets EHR vendors and payer organizations examine how the proposed standard will work and test their own implementations of the standard.',
-    license: apache20,
     user: administrator,
     uri: 'hspc/davinci-crd',
     support_url: 'https://github.com/HL7-DaVinci/CRD',
@@ -47,7 +45,6 @@ davinci = [
     visible_at: now },
   { name: 'Documentation Templates and Rules (DTR) - SMART on FHIR Application',
     description: 'This subproject contains a SMART on FHIR app, which provides a standardized way to interact with FHIR servers. This Reference Impementation (RI) supports the Documents Templates and Rules (DTR) IG which specifies how payer rules can be executed in a provider context to ensure that documentation requirements are met. This RI and IG are companions to the Coverage Requirements Discovery (CRD) IG and Coverage Requirements Discovery (CRD) RI.',
-    license: apache20,
     user: administrator,
     uri: 'hspc/davinci-dtr',
     support_url: 'https://github.com/HL7-DaVinci/dtr',
@@ -56,13 +53,14 @@ davinci = [
     visible_at: now }
 ]
 davinci.each do |n|
-  s = Service.create!(n)
+  s = Product.create!(n)
   s.save!
-  Screenshot.create!(service: s, caption: 'Example screenshot 1', image: headshot)
-  Screenshot.create!(service: s, caption: 'Example screenshot 2', image: headshot)
+  ProductLicense.create!(product: s, license: apache20)
+  Screenshot.create!(product: s, caption: 'Example screenshot 1', image: headshot)
+  Screenshot.create!(product: s, caption: 'Example screenshot 2', image: headshot)
   Build.create!(
-    service: s,
-    service_version: 'latest',
+    product: s,
+    product_version: 'latest',
     version: '0.0.0',
     container_repository: n[:uri],
     container_tag: 'latest',
@@ -73,10 +71,9 @@ davinci.each do |n|
 end
 
 
-marketplace_server = Service.create!(
+marketplace_server = Product.create!(
     name: 'Marketplace Server',
-    description: 'The Health Service Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published service container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment.',
-    license: apache20,
+    description: 'The Health Product Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published product container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment.',
     user: administrator,
     logo: asu,
     uri: 'https://github.com/preston/hsp-marketplace-server',
@@ -84,12 +81,12 @@ marketplace_server = Service.create!(
     published_at: now,
     visible_at: now
   )
+ProductLicense.create!(product: marketplace_server, license: apache20)
 
 
-marketplace_ui = Service.create!(
+marketplace_ui = Product.create!(
     name: 'Marketplace UI',
     description: 'The Marketplace UI is web-based frontend for Marketplace Server, and requires an instance of the server to be launched.',
-    license: apache20,
     user: administrator,
     logo: asu,
     uri: 'https://github.com/preston/hsp-marketplace-ui',
@@ -97,53 +94,54 @@ marketplace_ui = Service.create!(
     published_at: now,
     visible_at: now
   )
+ProductLicense.create!(product: marketplace_ui, license: apache20)
 
-knartwork = Service.create!(
+knartwork = Product.create!(
   name: 'Knartwork',
   description: 'KNARTwork is a multi-purpose web application for authoring, viewing, and transforming knowledge artifacts across popular specifications, with a strong slant towards healthcare-specific formats. By default, this application provides a purely standalone experience that does not use any standard-specific APIs (such as FHIR) or databases (such as RDBMS or NoSQL) systems, and may be used as-is by end users wanting to manage source documents as an out-of-band process using git/subversion, Dropbox, email etc.',
-  license: apache20,
   user: administrator,
   logo: asu,
-  uri: 'https://marketplace.hspconsortium.org/services/knartwork',
+  uri: 'https://marketplace.hspconsortium.org/products/knartwork',
   support_url: 'https://github.com/cqframework/knartwork',
   published_at: now,
   visible_at: now
 )
+ProductLicense.create!(product: knartwork, license: apache20)
 
-Screenshot.create!(service: knartwork, caption: 'Create new and update HL7 knowledge documents.', image: headshot)
-Screenshot.create!(service: knartwork, caption: 'Manage metadata.', image: headshot)
-Screenshot.create!(service: knartwork, caption: 'Create complex flows mapped to stardard terminologies.', image: headshot)
+Screenshot.create!(product: knartwork, caption: 'Create new and update HL7 knowledge documents.', image: headshot)
+Screenshot.create!(product: knartwork, caption: 'Manage metadata.', image: headshot)
+Screenshot.create!(product: knartwork, caption: 'Create complex flows mapped to stardard terminologies.', image: headshot)
 
 knartwork_build = Build.create!(
-  service: knartwork,
-  service_version: 'head',
+  product: knartwork,
+  product_version: 'head',
   version: '0.5.1',
   container_repository: 'p3000/knartwork',
   container_tag: 'v0.5.1',
   published_at: now,
-  release_notes: 'From service source of the same release tag.',
+  release_notes: 'From product source of the same release tag.',
   permissions: {}
 )
 
-cql_translation_service = Service.create!(
-  name: 'CQL Translation Service',
+cql_translation_service = Product.create!(
+  name: 'CQL Translation Product',
   description: 'A microservice wrapper for the CQL to ELM conversion library.',
-  license: apache20,
   user: administrator,
   logo: placeholder,
-  uri: 'https://marketplace.hspconsortium.org/services/cql-translation-service',
-  support_url: 'https://github.com/mitre/cql-translation-service',
+  uri: 'https://marketplace.hspconsortium.org/products/cql-translation-product',
+  support_url: 'https://github.com/mitre/cql-translation-product',
   published_at: now,
   visible_at: now
 )
+ProductLicense.create!(product: cql_translation_service, license: apache20)
 
-Screenshot.create!(service: cql_translation_service, caption: 'An API for CQL-to-ELM conversion.', image: headshot)
+Screenshot.create!(product: cql_translation_service, caption: 'An API for CQL-to-ELM conversion.', image: headshot)
 
 cql_translation_service_build = Build.create!(
-  service: cql_translation_service,
-  service_version: 'head',
+  product: cql_translation_service,
+  product_version: 'head',
   version: '1.0.2',
-  container_repository: 'p3000/cql-translation-service/',
+  container_repository: 'p3000/cql-translation-product/',
   container_tag: 'v1.0.2',
   published_at: now,
   release_notes: 'Built from master HEAD December 2016. See the project source for API usage information.',
@@ -160,7 +158,7 @@ standard_role = Role.create!(name: 'Standard User',
                              description: 'No-frills role assigned to all new users.',
                              default: true,
                              permissions: Role.merge_other_permissions_into_template({
-                                                                                       'services' => { 'read' => true }
+                                                                                       'products' => { 'read' => true }
                                                                                      }, Role.permissions_template))
 
 Appointment.create!(entity: administrator, role: administrator_role)

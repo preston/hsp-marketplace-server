@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Claimant:</strong>
+  <%= @claim.claimant_id %>
+</p>
+
+<p>
+  <strong>Claimant type:</strong>
+  <%= @claim.claimant_type %>
+</p>
+
+<p>
+  <strong>Entitlement:</strong>
+  <%= @claim.entitlement_id %>
+</p>
+
+<p>
+  <strong>Authorization count:</strong>
+  <%= @claim.authorization_count %>
+</p>
+
+<p>
+  <strong>Authorized at:</strong>
+  <%= @claim.authorized_at %>
+</p>
+
+<%= link_to 'Edit', edit_claim_path(@claim) %> |
+<%= link_to 'Back', claims_path %>

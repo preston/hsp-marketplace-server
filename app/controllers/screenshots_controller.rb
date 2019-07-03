@@ -1,6 +1,6 @@
 class ScreenshotsController < ApplicationController
     load_and_authorize_resource	#:screenshot
-    load_and_authorize_resource	:service
+    load_and_authorize_resource	:product
 
     def index
         @screenshots = Screenshot.all
@@ -29,7 +29,7 @@ class ScreenshotsController < ApplicationController
         # debugger
         respond_to do |format|
             if @screenshot.save
-                format.json { render :show, status: :created, location: service_screenshot_url(@service, @screenshot) }
+                format.json { render :show, status: :created, location: service_screenshot_url(@product, @screenshot) }
             else
                 format.json { render json: @screenshot.errors, status: :unprocessable_entity }
             end
@@ -39,7 +39,7 @@ class ScreenshotsController < ApplicationController
     def update
         respond_to do |format|
             if @screenshot.update(screenshot_params)
-                format.json { render :show, status: :ok, location: service_screenshot_url(@service, @screenshot) }
+                format.json { render :show, status: :ok, location: service_screenshot_url(@product, @screenshot) }
             else
                 format.json { render json: @screenshot.errors, status: :unprocessable_entity }
             end
@@ -57,6 +57,6 @@ class ScreenshotsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def screenshot_params
-        params.require(:screenshot).permit(:service_id, :caption, :image)
+        params.require(:screenshot).permit(:product_id, :caption, :image)
     end
 end

@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Vouchers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Product license</th>
+      <th>Entitlement</th>
+      <th>Code</th>
+      <th>Issued at</th>
+      <th>Expires at</th>
+      <th>Redeemed at</th>
+      <th>Redeemed by</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vouchers.each do |voucher| %>
+      <tr>
+        <td><%= voucher.product_license_id %></td>
+        <td><%= voucher.entitlement_id %></td>
+        <td><%= voucher.code %></td>
+        <td><%= voucher.issued_at %></td>
+        <td><%= voucher.expires_at %></td>
+        <td><%= voucher.redeemed_at %></td>
+        <td><%= voucher.redeemed_by %></td>
+        <td><%= link_to 'Show', voucher %></td>
+        <td><%= link_to 'Edit', edit_voucher_path(voucher) %></td>
+        <td><%= link_to 'Destroy', voucher, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Voucher', new_voucher_path %>

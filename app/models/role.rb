@@ -45,7 +45,7 @@ class Role < ActiveRecord::Base
                 update: false,
                 delete: false
             },
-            services: {
+            products: {
                 create: false,
                 read: false,
                 update: false,

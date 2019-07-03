@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 1) do
+ActiveRecord::Schema.define(version: 2019_07_03_002925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,9 +27,18 @@ ActiveRecord::Schema.define(version: 1) do
     t.index ["role_id"], name: "index_appointments_on_role_id"
   end
 
+  create_table "attempts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "claim_id"
+    t.uuid "claimant_id"
+    t.string "claimant_type"
+    t.uuid "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "builds", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid "service_id", null: false
-    t.string "service_version", null: false
+    t.uuid "product_id", null: false
+    t.string "product_version", null: false
     t.string "version", null: false
     t.string "container_repository", null: false
     t.string "container_tag", null: false
@@ -40,6 +49,16 @@ ActiveRecord::Schema.define(version: 1) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["id"], name: "index_builds_on_id"
+  end
+
+  create_table "claims", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "claimant_id"
+    t.string "claimant_type"
+    t.uuid "entitlement_id"
+    t.integer "authorization_count"
+    t.datetime "authorized_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "configurations", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -59,6 +78,14 @@ ActiveRecord::Schema.define(version: 1) do
     t.json "mappings", default: {}, null: false
     t.index ["build_id"], name: "index_dependencies_on_build_id"
     t.index ["interface_id"], name: "index_dependencies_on_interface_id"
+  end
+
+  create_table "entitlements", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "product_license_id"
+    t.datetime "valid_from"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "exposures", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -151,16 +178,22 @@ ActiveRecord::Schema.define(version: 1) do
     t.string "url", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
+    t.integer "expiry"
+    t.datetime "expires_at"
+    t.integer "days_valid", default: 0
+    t.integer "uses", default: 0
+    t.string "external_id"
     t.index ["name"], name: "index_licenses_on_name", unique: true
   end
 
   create_table "logos", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid "service_id", null: false
+    t.uuid "product_id", null: false
     t.string "style"
     t.binary "file_contents"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["service_id"], name: "index_logos_on_service_id"
+    t.index ["product_id"], name: "index_logos_on_product_id"
   end
 
   create_table "members", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -190,6 +223,33 @@ ActiveRecord::Schema.define(version: 1) do
     t.index ["user_id"], name: "index_platforms_on_user_id"
   end
 
+  create_table "product_licenses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "product_id"
+    t.uuid "license_id"
+    t.uuid "external_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "products", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.uuid "user_id"
+    t.string "uri"
+    t.string "support_url"
+    t.datetime "published_at"
+    t.datetime "visible_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "logo_file_name"
+    t.string "logo_content_type"
+    t.bigint "logo_file_size"
+    t.datetime "logo_updated_at"
+    t.string "external_id"
+    t.string "locale"
+    t.index ["name"], name: "index_products_on_name", unique: true
+  end
+
   create_table "roles", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -204,30 +264,19 @@ ActiveRecord::Schema.define(version: 1) do
     t.string "caption", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "service_id", null: false
+    t.uuid "product_id", null: false
     t.string "image_file_name"
     t.string "image_content_type"
     t.bigint "image_file_size"
     t.datetime "image_updated_at"
-    t.index ["service_id"], name: "index_screenshots_on_service_id"
+    t.index ["product_id"], name: "index_screenshots_on_product_id"
   end
 
-  create_table "services", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.text "description"
-    t.uuid "user_id"
-    t.string "uri"
-    t.string "support_url"
-    t.uuid "license_id"
-    t.datetime "published_at"
-    t.datetime "visible_at"
+  create_table "sub_products", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "parent_id"
+    t.uuid "child_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "logo_file_name"
-    t.string "logo_content_type"
-    t.bigint "logo_file_size"
-    t.datetime "logo_updated_at"
-    t.index ["name"], name: "index_services_on_name", unique: true
   end
 
   create_table "surrogates", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -261,8 +310,20 @@ ActiveRecord::Schema.define(version: 1) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "vouchers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "product_license_id"
+    t.uuid "entitlement_id"
+    t.string "code"
+    t.datetime "issued_at"
+    t.datetime "expires_at"
+    t.datetime "redeemed_at"
+    t.uuid "redeemed_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "appointments", "roles"
-  add_foreign_key "builds", "services"
+  add_foreign_key "builds", "products"
   add_foreign_key "configurations", "builds"
   add_foreign_key "dependencies", "builds"
   add_foreign_key "dependencies", "interfaces"
@@ -274,13 +335,13 @@ ActiveRecord::Schema.define(version: 1) do
   add_foreign_key "instances", "builds"
   add_foreign_key "instances", "platforms"
   add_foreign_key "json_web_tokens", "identities"
-  add_foreign_key "logos", "services", on_delete: :cascade
+  add_foreign_key "logos", "products", on_delete: :cascade
   add_foreign_key "members", "groups"
   add_foreign_key "members", "users"
   add_foreign_key "parameters", "exposures"
   add_foreign_key "platforms", "users"
-  add_foreign_key "screenshots", "services"
-  add_foreign_key "services", "users"
+  add_foreign_key "products", "users"
+  add_foreign_key "screenshots", "products"
   add_foreign_key "surrogates", "interfaces"
   add_foreign_key "surrogates", "interfaces", column: "substitute_id"
   add_foreign_key "tasks", "configurations"

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Claim:</strong>
+  <%= @attempt.claim_id %>
+</p>
+
+<p>
+  <strong>Claimant:</strong>
+  <%= @attempt.claimant_id %>
+</p>
+
+<p>
+  <strong>Claimant type:</strong>
+  <%= @attempt.claimant_type %>
+</p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @attempt.product_id %>
+</p>
+
+<%= link_to 'Edit', edit_attempt_path(@attempt) %> |
+<%= link_to 'Back', attempts_path %>

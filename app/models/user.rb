@@ -12,9 +12,16 @@ class User < ActiveRecord::Base
     has_many	:appointments,	class_name: 'Appointment',	as: :entity,	dependent: :destroy
     has_many	:roles,	class_name: 'Role',	through: :appointments,	source: :role
 
+    has_many	:entitlements,	dependent: :destroy
+    has_many	:attempts,	as: :claimant,	dependent: :destroy
+    has_many    :vouchers, foreign_key: :redeemed_by, dependent: :destroy
+    has_many	:claims,    class_name: 'Claim',    as: :claimant,  dependent: :destroy
+
+    has_many	:appointments,	class_name: 'Appointment',	as: :entity,	dependent: :destroy
+
     has_many	:identities, dependent: :destroy
     has_many	:platforms, dependent: :destroy
-    has_many	:services,	dependent: :destroy
+    has_many	:products,	dependent: :destroy
 
     validates_presence_of :name
 

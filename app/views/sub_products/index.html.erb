@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Sub Products</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parent</th>
+      <th>Child</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sub_products.each do |sub_product| %>
+      <tr>
+        <td><%= sub_product.parent_id %></td>
+        <td><%= sub_product.child_id %></td>
+        <td><%= link_to 'Show', sub_product %></td>
+        <td><%= link_to 'Edit', edit_sub_product_path(sub_product) %></td>
+        <td><%= link_to 'Destroy', sub_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sub Product', new_sub_product_path %>

@@ -19,7 +19,7 @@ if jwt
     end
 end
 json.message 'This application server and underlying database connection appear to be healthy.'
-json.service do
+json.product do
     json.datetime Time.now
 end
 json.database do

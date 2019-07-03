@@ -1,6 +1,6 @@
 class ExposuresController < ApplicationController
     
-    load_and_authorize_resource	:service
+    load_and_authorize_resource	:product
     load_and_authorize_resource	:build
     load_and_authorize_resource	:exposure
 

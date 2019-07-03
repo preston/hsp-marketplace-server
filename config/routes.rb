@@ -1,23 +1,33 @@
 Rails.application.routes.draw do
 
 
+  resources :attempts
     # match '*all' => 'application#cors_preflight_check', via: :options
 
     # Serve websocket cable requests in-process
     # mount ActionCable.server => '/websocket/:platform_id'
     mount ActionCable.server => '/websocket'
 
-    # Service-related resources
+    # Product-related resources
 
+    resources :vouchers
     resources :licenses
 
-    resources :services do
+    resources :attempts,	only: [:index, :show]
+    resources :entitlements do
+		member do
+    		get :claims
+		end
+    end
+
+    resources :products do
+        resources :licenses, controller: :product_licenses
         member do
             post :publish
             post :unpublish
-            get 'logo/large' => 'services#large', as: :large_logo
-            get 'logo/medium' => 'services#medium', as: :medium_logo
-            get 'logo/small' => 'services#small', as: :small_logo
+            get 'logo/large' => 'products#large', as: :large_logo
+            get 'logo/medium' => 'products#medium', as: :medium_logo
+            get 'logo/small' => 'products#small', as: :small_logo
         end
         resources :screenshots do
             member do
@@ -45,6 +55,7 @@ Rails.application.routes.draw do
             end
         end
     end
+    resources :sub_products
 
     resources :interfaces do
         member do
@@ -76,6 +87,11 @@ Rails.application.routes.draw do
             post	:disable
         end
     end
+
+    put 'authorizations/users/:user_id/products/:product_id' => 'authorizations#user_product',	as: :authorize_user_product
+	put 'authorizations/groups/:group_id/products/:product_id' => 'authorizations#group_product',	as: :authorize_group_product
+	put 'authorizations/products/:product_id' => 'authorizations#requester_role_product',	as: :authorize_requester_role_product
+
 
     get		'sessions' => 'sessions#callback',		as: :callback
     # post	'sessions' => 'sessions#authenticate',	as: :login

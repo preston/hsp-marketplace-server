@@ -1,4 +1,4 @@
-class Service < ApplicationRecord
+class Product < ApplicationRecord
     include PgSearch
     pg_search_scope :search_by_name_or_description, against: [:name, :description], using: {
         #    trigram: {},
@@ -20,7 +20,6 @@ class Service < ApplicationRecord
     has_many	:screenshots,	dependent: :destroy
 
     validates_presence_of	:name
-    validates_presence_of	:license
     validates_presence_of	:user
     validates_uniqueness_of	:name
 end

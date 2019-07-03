@@ -18,8 +18,8 @@ class Instance < ApplicationRecord
                        id: build.id,
                        container_repository: build.container_repository,
                        container_tag: build.container_tag,
-                       service: {
-                           id: build.service.id
+                       product: {
+                           id: build.product.id
                        }
                    },
                    platform: {
