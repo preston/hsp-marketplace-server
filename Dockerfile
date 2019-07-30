@@ -37,4 +37,5 @@ ENV RAILS_ENV=production
 
 # Showtime!
 EXPOSE 3000
-CMD bundle exec rake db:migrate && bundle exec puma -C config/puma.rb
+# CMD bundle exec rake db:migrate && bundle exec puma -C config/puma.rb
+CMD bundle exec rake db:migrate && rails s

@@ -7,7 +7,7 @@
                                  PATCH  /attempts/:id(.:format)                                                                  attempts#update
                                  PUT    /attempts/:id(.:format)                                                                  attempts#update
                                  DELETE /attempts/:id(.:format)                                                                  attempts#destroy
-                                        /websocket                                                                               #<ActionCable::Server::Base:0x00007fcc6529b330 @mutex=#<Monitor:0x00007fcc6529b308 @mon_mutex=#<Thread::Mutex:0x00007fcc6529b2b8>, @mon_mutex_owner_object_id=70257923643780, @mon_owner=nil, @mon_count=0>, @pubsub=nil, @worker_pool=nil, @event_loop=nil, @remote_connections=nil>
+                                        /websocket                                                                               #<ActionCable::Server::Base:0x00007fb1cf1bbe70 @mutex=#<Monitor:0x00007fb1cf1bbe48 @mon_mutex=#<Thread::Mutex:0x00007fb1cf1bbdf8>, @mon_mutex_owner_object_id=70200830320420, @mon_owner=nil, @mon_count=0>, @pubsub=nil, @worker_pool=nil, @event_loop=nil, @remote_connections=nil>
                         vouchers GET    /vouchers(.:format)                                                                      vouchers#index
                                  POST   /vouchers(.:format)                                                                      vouchers#create
                      new_voucher GET    /vouchers/new(.:format)                                                                  vouchers#new
