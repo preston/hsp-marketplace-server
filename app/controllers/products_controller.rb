@@ -34,15 +34,15 @@ class ProductsController < ApplicationController
     end
 
     def small
-        send_image_data(:small)
+        send_image_data('100x100')
     end
 
     def medium
-        send_image_data(:medium)
+        send_image_data('200x200')
   end
 
     def large
-        send_image_data(:large)
+        send_image_data('400x400')
     end
 
     def publish
@@ -55,9 +55,14 @@ class ProductsController < ApplicationController
         render :show
      end
 
+
     def send_image_data(size)
-        send_data @product.logo.file_for(size).file_contents, type: @product.logo.content_type, disposition: 'inline'
-    end
+        response.headers["Content-Type"] = @product.logo.content_type
+        response.headers["Content-Disposition"] = "inline; #{@product.logo.filename.parameters}"
+        @product.logo.variant(resize: size).blob.download do |chunk|
+            response.stream.write(chunk)
+        end
+	end
 
     # GET /products/1
     # GET /products/1.json
@@ -66,9 +71,9 @@ class ProductsController < ApplicationController
     # POST /products
     # POST /products.json
     def create
-        @product = Product.new(service_params)
+        @product = Product.new(product_params)
         # byebug
-        if service_params['logo'].nil?
+        if product_params['logo'].nil?
             @product.logo = File.open(File.join(Rails.root, 'public', 'placeholder_logo.png'))
             # puts "LOGO: " + @product.logo
         end
@@ -85,7 +90,7 @@ class ProductsController < ApplicationController
     # PATCH/PUT /products/1.json
     def update
         respond_to do |format|
-            if @product.update(service_params)
+            if @product.update(product_params)
                 format.json { render :show, status: :ok, location: @product }
             else
                 format.json { render json: @product.errors, status: :unprocessable_entity }
@@ -110,7 +115,7 @@ class ProductsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def service_params
-        params.require(:product).permit(:name, :description, :external_id, :locale, :user_id, :uri, :support_url, :license_id, :logo, :published_at, :visible_at)
+    def product_params
+        params.require(:product).permit(:name, :description, :external_id, :locale, :mime_type, :user_id, :uri, :support_url, :license_id, :logo, :published_at, :visible_at)
     end
 end

@@ -20,11 +20,11 @@ administrator = User.find_or_create_by!(name: 'Administrator')
 
 now = Time.now
 
-headshot = File.new(File.join(Rails.root, 'public', 'headshot.jpg'))
-hspc = File.new(File.join(Rails.root, 'public', 'hspc.png'))
-asu = File.new(File.join(Rails.root, 'public', 'asu.jpg'))
-mitre = File.new(File.join(Rails.root, 'public', 'mitre.png'))
-placeholder = File.new(File.join(Rails.root, 'public', 'placeholder_logo.png'))
+headshot = File.open(File.join(Rails.root, 'public', 'headshot.jpg'))
+hspc = File.open(File.join(Rails.root, 'public', 'hspc.png'))
+asu = File.open(File.join(Rails.root, 'public', 'asu.jpg'))
+mitre = File.open(File.join(Rails.root, 'public', 'mitre.png'))
+placeholder = File.open(File.join(Rails.root, 'public', 'placeholder_logo.png'))
 
 davinci = [
   { name: 'Patient Data Exchange Formulary Client',
@@ -32,7 +32,6 @@ davinci = [
     user: administrator,
     uri: 'hspc/davinci-pdex-formulary-client',
     support_url: 'https://github.com/HL7-DaVinci/pdex-formulary-client',
-    logo: mitre,
     published_at: now,
     visible_at: now },
   { name: 'Coverage Requirements Discovery (CRD) Server',
@@ -40,7 +39,6 @@ davinci = [
     user: administrator,
     uri: 'hspc/davinci-crd',
     support_url: 'https://github.com/HL7-DaVinci/CRD',
-    logo: mitre,
     published_at: now,
     visible_at: now },
   { name: 'Documentation Templates and Rules (DTR) - SMART on FHIR Application',
@@ -48,16 +46,26 @@ davinci = [
     user: administrator,
     uri: 'hspc/davinci-dtr',
     support_url: 'https://github.com/HL7-DaVinci/dtr',
-    logo: mitre,
     published_at: now,
     visible_at: now }
 ]
 davinci.each do |n|
   s = Product.create!(n)
+  mitre.rewind
+  s.logo.attach(io: mitre, filename: File.basename(mitre.path))
+  mitre.rewind
   s.save!
   ProductLicense.create!(product: s, license: apache20)
-  Screenshot.create!(product: s, caption: 'Example screenshot 1', image: headshot)
-  Screenshot.create!(product: s, caption: 'Example screenshot 2', image: headshot)
+ 
+  screenshot = Screenshot.create!(product: s, caption: 'Example screenshot 1', image: headshot)
+  screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+  placeholder.rewind
+  screenshot.save!
+ 
+  screenshot =  Screenshot.create!(product: s, caption: 'Example screenshot 2', image: headshot)
+  screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+  placeholder.rewind
+  screenshot.save!
   Build.create!(
     product: s,
     product_version: 'latest',
@@ -75,12 +83,14 @@ marketplace_server = Product.create!(
     name: 'Marketplace Server',
     description: 'The Health Product Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published product container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment.',
     user: administrator,
-    logo: asu,
     uri: 'https://github.com/preston/hsp-marketplace-server',
     support_url: 'https://github.com/preston/hsp-marketplace-server',
     published_at: now,
     visible_at: now
   )
+marketplace_server.logo.attach(io: asu, filename: File.basename(asu.path))
+asu.rewind
+marketplace_server.save!
 ProductLicense.create!(product: marketplace_server, license: apache20)
 
 
@@ -88,29 +98,54 @@ marketplace_ui = Product.create!(
     name: 'Marketplace UI',
     description: 'The Marketplace UI is web-based frontend for Marketplace Server, and requires an instance of the server to be launched.',
     user: administrator,
-    logo: asu,
     uri: 'https://github.com/preston/hsp-marketplace-ui',
     support_url: 'https://github.com/preston/hsp-marketplace-ui',
     published_at: now,
     visible_at: now
   )
+marketplace_ui.logo.attach(io: asu, filename: File.basename(asu.path))
+asu.rewind
+marketplace_ui.save!
 ProductLicense.create!(product: marketplace_ui, license: apache20)
 
+# knartwork = Product.create!(
+#   name: 'Knartwork2',
+#   description: 'KNARTwork is a multi-purpose web application for authoring, viewing, and transforming knowledge artifacts across popular specifications, with a strong slant towards healthcare-specific formats. By default, this application provides a purely standalone experience that does not use any standard-specific APIs (such as FHIR) or databases (such as RDBMS or NoSQL) systems, and may be used as-is by end users wanting to manage source documents as an out-of-band process using git/subversion, Dropbox, email etc.',
+#   user: administrator,
+#   logo: placeholder,
+#   uri: 'https://marketplace.hspconsortium.org/products/knartwork',
+#   support_url: 'https://github.com/cqframework/knartwork',
+#   published_at: now,
+#   visible_at: now
+# )
 knartwork = Product.create!(
   name: 'Knartwork',
   description: 'KNARTwork is a multi-purpose web application for authoring, viewing, and transforming knowledge artifacts across popular specifications, with a strong slant towards healthcare-specific formats. By default, this application provides a purely standalone experience that does not use any standard-specific APIs (such as FHIR) or databases (such as RDBMS or NoSQL) systems, and may be used as-is by end users wanting to manage source documents as an out-of-band process using git/subversion, Dropbox, email etc.',
   user: administrator,
-  logo: asu,
   uri: 'https://marketplace.hspconsortium.org/products/knartwork',
   support_url: 'https://github.com/cqframework/knartwork',
   published_at: now,
   visible_at: now
 )
+knartwork.logo.attach(io: asu, filename: File.basename(asu.path))
+knartwork.logo.analyze
+asu.rewind
 ProductLicense.create!(product: knartwork, license: apache20)
 
-Screenshot.create!(product: knartwork, caption: 'Create new and update HL7 knowledge documents.', image: headshot)
-Screenshot.create!(product: knartwork, caption: 'Manage metadata.', image: headshot)
-Screenshot.create!(product: knartwork, caption: 'Create complex flows mapped to stardard terminologies.', image: headshot)
+screenshot = Screenshot.create!(product: knartwork, caption: 'Create new and update HL7 knowledge documents.')
+screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+placeholder.rewind
+screenshot.save!
+
+screenshot = Screenshot.create!(product: knartwork, caption: 'Manage metadata.')
+screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+placeholder.rewind
+screenshot.save!
+
+screenshot = Screenshot.create!(product: knartwork, caption: 'Create complex flows mapped to stardard terminologies.')
+screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+placeholder.rewind
+screenshot.save!
 
 knartwork_build = Build.create!(
   product: knartwork,
@@ -127,15 +162,20 @@ cql_translation_service = Product.create!(
   name: 'CQL Translation Product',
   description: 'A microservice wrapper for the CQL to ELM conversion library.',
   user: administrator,
-  logo: placeholder,
   uri: 'https://marketplace.hspconsortium.org/products/cql-translation-product',
   support_url: 'https://github.com/mitre/cql-translation-product',
   published_at: now,
   visible_at: now
 )
+cql_translation_service.logo.attach(io: placeholder, filename: File.basename(placeholder.path))
+cql_translation_service.save!
+placeholder.rewind
 ProductLicense.create!(product: cql_translation_service, license: apache20)
 
-Screenshot.create!(product: cql_translation_service, caption: 'An API for CQL-to-ELM conversion.', image: headshot)
+screenshot = Screenshot.create!(product: cql_translation_service, caption: 'An API for CQL-to-ELM conversion.')
+screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+placeholder.rewind
+screenshot.save!
 
 cql_translation_service_build = Build.create!(
   product: cql_translation_service,

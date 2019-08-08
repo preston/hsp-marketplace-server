@@ -6,6 +6,9 @@
 
 .DS_Store
 
+# ActiveStorage local directory
+storage/*
+
 # Ignore bundler config.
 /.bundle
 

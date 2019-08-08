@@ -8,20 +8,26 @@ class ScreenshotsController < ApplicationController
 
     def show; end
 
-	def small
-		send_image_data(:small)
-	end
+    def small
+        send_image_data('100x100')
+    end
 
-	def medium
-		send_image_data(:medium)
-	end
+    def medium
+        send_image_data('200x200')
+  end
 
-	def large
-		send_image_data(:large)
-	end
+    def large
+        send_image_data('400x400')
+    end
 
-	def send_image_data(size)
-		send_data @screenshot.image.file_for(size).file_contents, type: @screenshot.image.content_type, disposition: 'inline'
+    def send_image_data(size)
+        response.headers["Content-Type"] = @screenshot.image.content_type
+        response.headers["Content-Disposition"] = "inline; #{@screenshot.image.filename.parameters}"
+        @screenshot.image.download do |chunk|
+            response.stream.write(chunk)
+        end
+
+		# send_data @screenshot.image.file_for(size).file_contents, type: @screenshot.image.content_type, disposition: 'inline'
 	end
 
     def create

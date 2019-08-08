@@ -24,10 +24,8 @@ gem 'rack-cors'	# Allowing cross-origin clients.. which is all of them.
 
 gem 'httparty'  # Simple REST client.
 gem 'faker'	# For generating synthetic data.
-gem 'paperclip'	# Dealing with images.
-# gem 'paperclip_database'
-gem 'paperclip_database', git: 'https://github.com/pwnall/paperclip_database.git', branch: 'rails5' # For database storage. Using a fork for Rails 5 support, unfortunately. :(
 
+gem 'rexml'
 # group :development, :test do
 # end
 
