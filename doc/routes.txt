@@ -1,4 +1,12 @@
                           Prefix Verb   URI Pattern                                                                              Controller#Action
+                          badges GET    /badges(.:format)                                                                        badges#index
+                                 POST   /badges(.:format)                                                                        badges#create
+                       new_badge GET    /badges/new(.:format)                                                                    badges#new
+                      edit_badge GET    /badges/:id/edit(.:format)                                                               badges#edit
+                           badge GET    /badges/:id(.:format)                                                                    badges#show
+                                 PATCH  /badges/:id(.:format)                                                                    badges#update
+                                 PUT    /badges/:id(.:format)                                                                    badges#update
+                                 DELETE /badges/:id(.:format)                                                                    badges#destroy
                         attempts GET    /attempts(.:format)                                                                      attempts#index
                                  POST   /attempts(.:format)                                                                      attempts#create
                      new_attempt GET    /attempts/new(.:format)                                                                  attempts#new
@@ -7,7 +15,7 @@
                                  PATCH  /attempts/:id(.:format)                                                                  attempts#update
                                  PUT    /attempts/:id(.:format)                                                                  attempts#update
                                  DELETE /attempts/:id(.:format)                                                                  attempts#destroy
-                                        /websocket                                                                               #<ActionCable::Server::Base:0x00007fb1cf1bbe70 @mutex=#<Monitor:0x00007fb1cf1bbe48 @mon_mutex=#<Thread::Mutex:0x00007fb1cf1bbdf8>, @mon_mutex_owner_object_id=70200830320420, @mon_owner=nil, @mon_count=0>, @pubsub=nil, @worker_pool=nil, @event_loop=nil, @remote_connections=nil>
+                                        /websocket                                                                               #<ActionCable::Server::Base:0x00007fad28226be0 @mutex=#<Monitor:0x00007fad28226bb8 @mon_mutex=#<Thread::Mutex:0x00007fad28226b68>, @mon_mutex_owner_object_id=70190839707100, @mon_owner=nil, @mon_count=0>, @pubsub=nil, @worker_pool=nil, @event_loop=nil, @remote_connections=nil>
                         vouchers GET    /vouchers(.:format)                                                                      vouchers#index
                                  POST   /vouchers(.:format)                                                                      vouchers#create
                      new_voucher GET    /vouchers/new(.:format)                                                                  vouchers#new
@@ -60,6 +68,7 @@
                                  PUT    /products/:product_id/screenshots/:id(.:format)                                          screenshots#update
                                  DELETE /products/:product_id/screenshots/:id(.:format)                                          screenshots#destroy
         search_services_products POST   /products/search(.:format)                                                               products#search
+             asset_product_build GET    /products/:product_id/builds/:id/asset(.:format)                                         builds#asset
             product_dependencies GET    /products/:product_id/builds/:id/dependencies(.:format)                                  dependencies#index
                                  POST   /products/:product_id/builds/:id/dependencies(.:format)                                  dependencies#create
           new_product_dependency GET    /products/:product_id/builds/:id/dependencies/new(.:format)                              dependencies#new
