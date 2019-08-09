@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :badges
   resources :attempts
     # match '*all' => 'application#cors_preflight_check', via: :options
 
@@ -41,6 +42,7 @@ Rails.application.routes.draw do
         end
         resources :builds do
             member do
+                get :asset
                 resources :dependencies
                 resources :exposures do
                     member do

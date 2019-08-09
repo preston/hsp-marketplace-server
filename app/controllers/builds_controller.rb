@@ -5,7 +5,7 @@ class BuildsController < ApplicationController
 
     def index
         # @builds = @product.builds
-		@builds = Build.paginate(page: params[:page], per_page: params[:per_page])
+		@builds = Build.where(product: @product).paginate(page: params[:page], per_page: params[:per_page])
 		sort = %w(version).include?(params[:sort]) ? params[:sort] : :version
 		order = 'desc' == params[:order] ? :desc : :asc
 		@builds = @builds.order(sort => order)
@@ -14,6 +14,14 @@ class BuildsController < ApplicationController
     end
 
     def show; end
+
+    def asset
+        response.headers["Content-Type"] = @build.asset.content_type
+        response.headers["Content-Disposition"] = "attachment; #{@build.asset.filename.parameters}"
+        @build.asset.blob.download do |chunk|
+            response.stream.write(chunk)
+        end
+    end
 
     def create
         @build = Build.new(build_params)
@@ -53,6 +61,7 @@ class BuildsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def build_params
-        params.require(:build).permit(:id, :product_id, :product_version, :version, :container_repository, :container_tag, :validated_at, :published_at, :permissions, :release_notes)
+        params.require(:build).permit(:id, :product_id, :version, :container_repository, :container_tag, :validated_at, :published_at, :permissions, :release_notes)
     end
+
 end

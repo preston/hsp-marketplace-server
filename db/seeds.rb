@@ -15,6 +15,9 @@ mit = License.find_or_create_by!(name: 'MIT', url: 'https://opensource.org/licen
 apache20 = License.find_or_create_by!(name: 'Apache 2.0', url: 'https://opensource.org/licenses/Apache-2.0', expiry: License::EXPIRY_INDEFINITE)
 bsd2 = License.find_or_create_by!(name: 'BSD 2-Clause', url: 'https://opensource.org/licenses/BSD-2-Clause', expiry: License::EXPIRY_INDEFINITE)
 bsd3 = License.find_or_create_by!(name: 'BSD 3-Clause', url: 'https://opensource.org/licenses/BSD-3-Clause', expiry: License::EXPIRY_INDEFINITE)
+cc0 = License.find_or_create_by!(name: 'Creative Commons Zero 1.0 Universal', url: 'https://creativecommons.org/publicdomain/zero/1.0/', expiry: License::EXPIRY_INDEFINITE)
+ccby = License.find_or_create_by!(name: 'Creative Commons Attribution 4.0 International', url: 'https://creativecommons.org/licenses/by/4.0/', expiry: License::EXPIRY_INDEFINITE)
+loinc = License.find_or_create_by!(name: 'LOINC and RELMA', url: 'https://loinc.org/license/', expiry: License::EXPIRY_INDEFINITE)
 
 administrator = User.find_or_create_by!(name: 'Administrator')
 
@@ -68,7 +71,6 @@ davinci.each do |n|
   screenshot.save!
   Build.create!(
     product: s,
-    product_version: 'latest',
     version: '0.0.0',
     container_repository: n[:uri],
     container_tag: 'latest',
@@ -130,6 +132,7 @@ knartwork = Product.create!(
 knartwork.logo.attach(io: asu, filename: File.basename(asu.path))
 knartwork.logo.analyze
 asu.rewind
+knartwork.save!
 ProductLicense.create!(product: knartwork, license: apache20)
 
 screenshot = Screenshot.create!(product: knartwork, caption: 'Create new and update HL7 knowledge documents.')
@@ -149,7 +152,6 @@ screenshot.save!
 
 knartwork_build = Build.create!(
   product: knartwork,
-  product_version: 'head',
   version: '0.5.1',
   container_repository: 'p3000/knartwork',
   container_tag: 'v0.5.1',
@@ -179,7 +181,6 @@ screenshot.save!
 
 cql_translation_service_build = Build.create!(
   product: cql_translation_service,
-  product_version: 'head',
   version: '1.0.2',
   container_repository: 'p3000/cql-translation-product/',
   container_tag: 'v1.0.2',
@@ -213,3 +214,6 @@ users = []
     last_name: Faker::Name.last_name
   )
 end
+
+logica_badge = Badge.create!(name: 'logica', description: "Endorsed by Logica Health.")
+intermountain_badge = Badge.create!(name: 'intermountain', description: "Endorsed by Intermountain Healthcare to meet their standards of interoperability.")

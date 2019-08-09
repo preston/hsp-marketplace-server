@@ -13,11 +13,12 @@ class Product < ApplicationRecord
     has_many	:screenshots,	dependent: :destroy
 	has_many	:product_licenses,	dependent: :destroy
     has_and_belongs_to_many	:licenses, join_table: :product_licenses
+    has_and_belongs_to_many	:badges, join_table: :badges_products
 
     has_many	:children_relations,	class_name: 'SubProduct',	foreign_key: :parent_id, dependent: :destroy
     has_many	:parent_relations,		class_name: 'SubProduct',	foreign_key: :child_id, dependent: :destroy
-    has_many	:children,	through: :children_relations
-    has_many	:parents,	through: :parent_relations
+    # has_many	:children,	through: :children_relations
+    # has_many	:parents,	through: :parent_relations
 
     validates_presence_of	:name
     validates_presence_of	:user

@@ -17,6 +17,9 @@ class ProductsController < ApplicationController
 		if params['user_id']
             @products = @products.where(user_id: params['user_id'])
         end
+		if params['mime_type']
+            @products = @products.where(mime_type: params['mime_type'])
+        end
         @products = @products.search_by_name(params[:name]) if params[:name]
     end
 

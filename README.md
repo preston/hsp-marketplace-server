@@ -73,6 +73,33 @@ To automatically re-run regression tests on detected code changes, open another 
 
 	guard # hit <enter> to manually re-run all tests to run if a change isn't detected
 
+# Optional Data
+
+We have bundled in support to import/export data from several notable sources. Please feel free to  
+
+## Import Products from FHIR StructureDefinition XML Files
+The `rake marketplace:import:fhir:structuredefinition` task takes a directory of valid, well-formed XML files and imports them as distinct products. This is technically an _upsert_ operation,  as existing Products (of the same name as the FHIR StructureDefinition) will be updated instead of overwritten when found. The following will be read:
+
+	# Required: Directory where the XML files are. Non-recursive.
+	export MARKETPLACE_IMPORT_ROOT=/Users/preston/Developer/git/HSPCFHIRtest/resources/structuredefinition
+
+	# Required: Existing User.name that will be set as the owner of all upserted Products.
+	export MARKETPLACE_IMPORT_OWNER_NAME=Administrator
+
+	# Optional: Existing License.name that will be set as an available License of all upserted Products.
+	export MARKETPLACE_IMPORT_LICENSE_NAME="Creative Commons Attribution 4.0 International"
+
+	# Optional: Skip files with these names. Useful when you have other XML files in the same directory.
+	export MARKETPLACE_IMPORT_IGNORE="practitioner.xml,organization.xml"
+
+
+## Import the HL7 LOINC 2K Clinical Models
+`rake marketplace:import:fhir:structuredefinition` is the same as `rake marketplace:import:fhir:structuredefinition`, but also upserts a meta-Products including every found StructureDefinition for one-click licensing of the entire collection. The following are additional read:
+
+	# Optional: Existing License.name that will be set as an available License of the upserted meta-Products. If set, you might want to unset MARKETPLACE_IMPORT_LICENSE_NAME if you only want to allow licensing of the meta-Product.
+	export MARKETPLACE_IMPORT_META_LICENSE_NAME="LOINC and RELMA"
+
+
 # Deployment
 
 Deployment is done exclusively with Docker, though "raw" deployment using Passenger and all another common methods, including Heroku, are supported as well.

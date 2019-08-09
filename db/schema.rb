@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_07_224159) do
+ActiveRecord::Schema.define(version: 2019_08_08_191156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,12 +56,27 @@ ActiveRecord::Schema.define(version: 2019_08_07_224159) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "badges", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_badges_on_name", unique: true
+  end
+
+  create_table "badges_products", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "badge_id", null: false
+    t.uuid "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["badge_id", "product_id"], name: "index_badges_products_on_badge_id_and_product_id", unique: true
+  end
+
   create_table "builds", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid "product_id", null: false
-    t.string "product_version", null: false
     t.string "version", null: false
-    t.string "container_repository", null: false
-    t.string "container_tag", null: false
+    t.string "container_repository"
+    t.string "container_tag"
     t.datetime "validated_at"
     t.datetime "published_at"
     t.json "permissions", default: {}, null: false
@@ -272,6 +287,7 @@ ActiveRecord::Schema.define(version: 2019_08_07_224159) do
     t.uuid "child_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["parent_id", "child_id"], name: "index_sub_products_on_parent_id_and_child_id"
   end
 
   create_table "surrogates", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

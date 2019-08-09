@@ -15,6 +15,7 @@ class Ability
         can :read, Configuration
         can :read, Interface
 		can :read, License
+		can :read, Badge
         can [:read, :redirect], IdentityProvider # Needed for login purposes, but will be filtered at the field level.
         #
         if user.id.nil? # Unauthenticated guest.

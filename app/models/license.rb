@@ -8,8 +8,6 @@ class License < ApplicationRecord
 	has_many	:entitlements
 	has_many	:product_licenses,	dependent: :destroy
 
-	has_and_belongs_to_many	:products, join_table: :product_licenses
-
     validates_presence_of	:name
     validates_presence_of	:url
     validates_uniqueness_of	:url
