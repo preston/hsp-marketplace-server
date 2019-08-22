@@ -90,7 +90,7 @@ marketplace_server = Product.create!(
     user: administrator,
     uri: 'https://github.com/preston/hsp-marketplace-server',
     support_url: 'https://github.com/preston/hsp-marketplace-server',
-    mime_type: 'application/vnd.docker+smart',
+    mime_type: 'application/vnd.docker',
     published_at: now,
     visible_at: now
   )

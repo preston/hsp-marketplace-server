@@ -17,8 +17,8 @@ class ProductsController < ApplicationController
 		if params['user_id']
             @products = @products.where(user_id: params['user_id'])
         end
-        if !params['mime_type'].empty?
-            types = params['mime_type'].split(',')
+        if !params['mime_type'].blank?
+            types = params['mime_type'].gsub(' ', '+').split(',')
             @products = @products.where(mime_type: types)
         end
         @products = @products.search_by_name(params[:name]) if params[:name]
@@ -32,6 +32,10 @@ class ProductsController < ApplicationController
             @products = @products.where('published_at IS NOT NULL')
         elsif params['published'] == 'false'
             @products = @products.where('published_at IS NULL')
+        end
+        if !params['mime_type'].blank?
+            types = params['mime_type'].split(',')
+            @products = @products.where(mime_type: types)
         end
         # puts "LENGTH: #{@products.length}"
         render :index
