@@ -1,3 +1,6 @@
 .git
+.dockerignore
+Dockerfile
+.byebug_history
 db/*.sql
 log/*.log

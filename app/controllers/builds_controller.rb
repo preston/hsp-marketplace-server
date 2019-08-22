@@ -17,7 +17,7 @@ class BuildsController < ApplicationController
 
     def asset
         response.headers["Content-Type"] = @build.asset.content_type
-        response.headers["Content-Disposition"] = "attachment; #{@build.asset.filename.parameters}"
+        response.headers["Content-Disposition"] = "attachment; #{@build.asset.filename}"
         @build.asset.blob.download do |chunk|
             response.stream.write(chunk)
         end
