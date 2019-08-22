@@ -94,7 +94,7 @@ The `rake marketplace:import:fhir:structuredefinition` task takes a directory of
 
 
 ## Import the HL7 LOINC 2K Clinical Models
-`rake marketplace:import:fhir:structuredefinition` is the same as `rake marketplace:import:fhir:structuredefinition`, but also upserts a meta-Products including every found StructureDefinition for one-click licensing of the entire collection. The following are additional read:
+`rake marketplace:import:fhir:loinc2k` is the same as `rake marketplace:import:fhir:structuredefinition`, but also upserts a meta-Products including every found StructureDefinition for one-click licensing of the entire collection. The following are additional read:
 
 	# Optional: Existing License.name that will be set as an available License of the upserted meta-Products. If set, you might want to unset MARKETPLACE_IMPORT_LICENSE_NAME if you only want to allow licensing of the meta-Product.
 	export MARKETPLACE_IMPORT_META_LICENSE_NAME="LOINC and RELMA"

@@ -60,12 +60,12 @@ davinci.each do |n|
   s.save!
   ProductLicense.create!(product: s, license: apache20)
  
-  screenshot = Screenshot.create!(product: s, caption: 'Example screenshot 1', image: headshot)
+  screenshot = Screenshot.create!(product: s, caption: 'Example screenshot 1')
   screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
   placeholder.rewind
   screenshot.save!
  
-  screenshot =  Screenshot.create!(product: s, caption: 'Example screenshot 2', image: headshot)
+  screenshot =  Screenshot.create!(product: s, caption: 'Example screenshot 2')
   screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
   placeholder.rewind
   screenshot.save!
