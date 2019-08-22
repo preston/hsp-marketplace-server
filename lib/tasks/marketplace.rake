@@ -33,9 +33,11 @@ namespace :marketplace do
                 name = XPath.first(doc, '/StructureDefinition/name/@value').value
                 puts "No product name found for #{xml_file.to_s}!" unless name
                 p = Product.where(name: name).first_or_initialize
+                id = XPath.first(doc, '/StructureDefinition/id/@value').value
                 p.attributes = {
                     description: XPath.first(doc, '/StructureDefinition/description/@value').value,
-                    uri: XPath.first(doc, '/StructureDefinition/url/@value').value,
+                    # uri: XPath.first(doc, '/StructureDefinition/url/@value').value,
+                    uri: "http://models.opencimi.org/ig/top-2k-loinc-lab-fhir-profiles/StructureDefinition-#{id}-definitions.html",
                     support_url: LOINC_FHIR_SUPPORT_URL,
                     mime_type: FHIR_MIME_TYPE,
                     published_at: Time.now
