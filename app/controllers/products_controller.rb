@@ -17,8 +17,9 @@ class ProductsController < ApplicationController
 		if params['user_id']
             @products = @products.where(user_id: params['user_id'])
         end
-		if params['mime_type']
-            @products = @products.where(mime_type: params['mime_type'])
+        if !params['mime_type'].empty?
+            types = params['mime_type'].split(',')
+            @products = @products.where(mime_type: types)
         end
         @products = @products.search_by_name(params[:name]) if params[:name]
     end
@@ -61,7 +62,7 @@ class ProductsController < ApplicationController
 
     def send_image_data(size)
         response.headers["Content-Type"] = @product.logo.content_type
-        response.headers["Content-Disposition"] = "inline; #{@product.logo.filename.parameters}"
+        response.headers["Content-Disposition"] = "inline; #{@product.logo.filename}"
         @product.logo.variant(resize: size).blob.download do |chunk|
             response.stream.write(chunk)
         end

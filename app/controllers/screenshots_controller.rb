@@ -22,7 +22,7 @@ class ScreenshotsController < ApplicationController
 
     def send_image_data(size)
         response.headers["Content-Type"] = @screenshot.image.content_type
-        response.headers["Content-Disposition"] = "inline; #{@screenshot.image.filename.parameters}"
+        response.headers["Content-Disposition"] = "inline; #{@screenshot.image.filename}"
         @screenshot.image.download do |chunk|
             response.stream.write(chunk)
         end

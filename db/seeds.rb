@@ -35,6 +35,7 @@ davinci = [
     user: administrator,
     uri: 'hspc/davinci-pdex-formulary-client',
     support_url: 'https://github.com/HL7-DaVinci/pdex-formulary-client',
+    mime_type: 'application/vnd.docker+smart',
     published_at: now,
     visible_at: now },
   { name: 'Coverage Requirements Discovery (CRD) Server',
@@ -42,6 +43,7 @@ davinci = [
     user: administrator,
     uri: 'hspc/davinci-crd',
     support_url: 'https://github.com/HL7-DaVinci/CRD',
+    mime_type: 'application/vnd.docker+fhir',
     published_at: now,
     visible_at: now },
   { name: 'Documentation Templates and Rules (DTR) - SMART on FHIR Application',
@@ -49,6 +51,7 @@ davinci = [
     user: administrator,
     uri: 'hspc/davinci-dtr',
     support_url: 'https://github.com/HL7-DaVinci/dtr',
+    mime_type: 'application/vnd.docker+smart',
     published_at: now,
     visible_at: now }
 ]
@@ -87,6 +90,7 @@ marketplace_server = Product.create!(
     user: administrator,
     uri: 'https://github.com/preston/hsp-marketplace-server',
     support_url: 'https://github.com/preston/hsp-marketplace-server',
+    mime_type: 'application/vnd.docker+smart',
     published_at: now,
     visible_at: now
   )
@@ -102,6 +106,7 @@ marketplace_ui = Product.create!(
     user: administrator,
     uri: 'https://github.com/preston/hsp-marketplace-ui',
     support_url: 'https://github.com/preston/hsp-marketplace-ui',
+    mime_type: 'application/vnd.docker',
     published_at: now,
     visible_at: now
   )
@@ -126,6 +131,7 @@ knartwork = Product.create!(
   user: administrator,
   uri: 'https://marketplace.hspconsortium.org/products/knartwork',
   support_url: 'https://github.com/cqframework/knartwork',
+  mime_type: 'application/vnd.docker',
   published_at: now,
   visible_at: now
 )
@@ -166,6 +172,7 @@ cql_translation_service = Product.create!(
   user: administrator,
   uri: 'https://marketplace.hspconsortium.org/products/cql-translation-product',
   support_url: 'https://github.com/mitre/cql-translation-product',
+  mime_type: 'application/vnd.docker',
   published_at: now,
   visible_at: now
 )

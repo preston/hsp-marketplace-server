@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
     include CanCan::ControllerAdditions
 
+    skip_before_action :verify_authenticity_token
+
     # Short-circuit any/all CORS pre-flight OPTIONS requests.
     # before_action :cors_preflight_check
 
