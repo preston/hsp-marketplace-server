@@ -77,6 +77,25 @@ To automatically re-run regression tests on detected code changes, open another 
 
 We have bundled in support to import/export data from several notable sources. Please feel free to  
 
+## Import HL7 knowledge artifacts
+The `rake marketplace:import:knart:manifest` task takes a directory of manifested KNARTs and upserts them as distinct products.
+
+	# Required: Directory where the manifest.json lives.
+	export MARKETPLACE_IMPORT_ROOT=/Users/preston/Developer/git/vha-kbs-knarts/
+
+	# Required: Existing User.name that will be set as the owner of all upserted Products.
+	export MARKETPLACE_IMPORT_OWNER_NAME=Administrator
+
+	# Optional: Existing License.name that will be set as an available License of all upserted Products.
+	export MARKETPLACE_IMPORT_LICENSE_NAME="Apache 2.0"
+	
+	# Optional: Existing License.name that will be set as an available License of the upserted meta-Product. If set, you might want to unset MARKETPLACE_IMPORT_LICENSE_NAME if you only want to allow licensing of the meta-Product.
+	export MARKETPLACE_IMPORT_META_LICENSE_NAME="Apache 2.0"
+
+	# Optional: Support URL for products.
+	export MARKETPLACE_KNART_SUPPORT_URL="https://github.com/osehra/vha-kbs-knarts"
+
+
 ## Import Products from FHIR StructureDefinition XML Files
 The `rake marketplace:import:fhir:structuredefinition` task takes a directory of valid, well-formed XML files and imports them as distinct products. This is technically an _upsert_ operation,  as existing Products (of the same name as the FHIR StructureDefinition) will be updated instead of overwritten when found. The following will be read:
 

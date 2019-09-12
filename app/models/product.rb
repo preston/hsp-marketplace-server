@@ -17,8 +17,8 @@ class Product < ApplicationRecord
 
     has_many	:children_relations,	class_name: 'SubProduct',	foreign_key: :parent_id, dependent: :destroy
     has_many	:parent_relations,		class_name: 'SubProduct',	foreign_key: :child_id, dependent: :destroy
-    # has_many	:children,	through: :children_relations
-    # has_many	:parents,	through: :parent_relations
+    has_many	:children,	through: :children_relations
+    has_many	:parents,	through: :parent_relations
 
     validates_presence_of	:name
     validates_presence_of	:user
