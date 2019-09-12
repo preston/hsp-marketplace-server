@@ -26,6 +26,8 @@ Rails.application.routes.draw do
         member do
             post :publish
             post :unpublish
+            get :children
+            get :parents
             get 'logo/large' => 'products#large', as: :large_logo
             get 'logo/medium' => 'products#medium', as: :medium_logo
             get 'logo/small' => 'products#small', as: :small_logo
