@@ -26,14 +26,14 @@ class ProductsController < ApplicationController
 
   def children
     ids = SubProduct.where(parent_id: @product.id).pluck(:child_id)
-	@products = Product.paginate(page: params[:page], per_page: params[:per_page]).where(id: ids).order(name: :asc)
-	render :index #, format: :json
+    @products = Product.paginate(page: params[:page], per_page: params[:per_page]).where(id: ids).order(name: :asc)
+    render :index # , format: :json
   end
 
   def parents
     ids = SubProduct.where(child_id: @product.id).pluck(:parent_id)
-	@products = Product.paginate(page: params[:page], per_page: params[:per_page]).where(id: ids).order(name: :asc)
-	render :index
+    @products = Product.paginate(page: params[:page], per_page: params[:per_page]).where(id: ids).order(name: :asc)
+    render :index
   end
 
   def search
@@ -93,7 +93,10 @@ class ProductsController < ApplicationController
     @product = Product.new(product_params)
     # byebug
     if product_params['logo'].nil?
-      @product.logo = File.open(File.join(Rails.root, 'public', 'placeholder_logo.png'))
+      tmp = File.open(File.join(Rails.root, 'public', 'placeholder_logo.png'))
+      @product.logo.attach(io: tmp, filename: File.basename(tmp.path))
+      tmp.rewind
+      # @product.save!
       # puts "LOGO: " + @product.logo
     end
     respond_to do |format|
@@ -109,6 +112,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     respond_to do |format|
+      # byebug
       if @product.update(product_params)
         format.json { render :show, status: :ok, location: @product }
       else

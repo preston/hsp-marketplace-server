@@ -8,4 +8,6 @@ class Build < ApplicationRecord
     has_many	:configurations,	dependent: :destroy
 
     validates_presence_of	:version
+
+    validates_uniqueness_of :version, scope: [:product_id]
 end

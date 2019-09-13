@@ -27,8 +27,11 @@ gem 'httparty'  # Simple REST client.
 gem 'faker'	# For generating synthetic data.
 
 gem 'rexml'
-# group :development, :test do
-# end
+
+group :development, :test do
+    gem 'guard'
+    gem 'guard-minitest'
+end
 
 group :development do
     # gem 'web-console', '~> 2.0'     # Access an IRB console on exception pages or by using <%= console %> in views
@@ -40,3 +43,4 @@ group :development do
 	gem 'web-console'
 	gem 'binding_of_caller'
 end
+

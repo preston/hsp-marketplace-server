@@ -38,6 +38,7 @@ class BuildsController < ApplicationController
 
     def update
         respond_to do |format|
+            # byebug
             if @build.update(build_params)
                 format.json { render :show, status: :ok, location: product_build_url(@product, @build) }
             else
@@ -62,7 +63,7 @@ class BuildsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def build_params
-        params.require(:build).permit(:id, :product_id, :version, :container_repository, :container_tag, :validated_at, :published_at, :permissions, :release_notes)
+        params.require(:build).permit(:id, :product_id, :version, :release_notes, :permissions, :asset, :container_repository, :container_tag, :validated_at)
     end
 
 end
