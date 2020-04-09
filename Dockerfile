@@ -1,4 +1,4 @@
-FROM ruby:2.6.4
+FROM ruby:2.7.0
 LABEL maintainer="preston.lee@prestonlee.com"
 
 RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y build-essential imagemagick

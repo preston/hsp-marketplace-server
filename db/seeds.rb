@@ -88,8 +88,8 @@ marketplace_server = Product.create!(
     name: 'Marketplace Server',
     description: 'The Health Product Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published product container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment.',
     user: administrator,
-    uri: 'https://github.com/preston/hsp-marketplace-server',
-    support_url: 'https://github.com/preston/hsp-marketplace-server',
+    uri: 'https://github.com/preston/marketplace-server',
+    support_url: 'https://github.com/preston/marketplace-server',
     mime_type: 'application/vnd.docker',
     published_at: now,
     visible_at: now
@@ -104,8 +104,8 @@ marketplace_ui = Product.create!(
     name: 'Marketplace UI',
     description: 'The Marketplace UI is web-based frontend for Marketplace Server, and requires an instance of the server to be launched.',
     user: administrator,
-    uri: 'https://github.com/preston/hsp-marketplace-ui',
-    support_url: 'https://github.com/preston/hsp-marketplace-ui',
+    uri: 'https://github.com/preston/marketplace-ui',
+    support_url: 'https://github.com/preston/marketplace-ui',
     mime_type: 'application/vnd.docker',
     published_at: now,
     visible_at: now

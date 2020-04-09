@@ -1,6 +1,6 @@
-# HSP Marketplace Server
+# Health Services Platform - Marketplace Server
 
-The Health Product Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published product container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment. For details, see:
+The Health Services Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published product container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment. For details, see:
 
 https://healthservices.atlassian.net/wiki/display/PE/Platform+Engineering
 
@@ -8,10 +8,10 @@ https://healthservices.atlassian.net/wiki/display/PE/Platform+Engineering
 
 The system allows for initial web-based login via a configurable set OpenID Connect providers: part of the OAuth2 family of protocols. After, both a browser-based sessions is established, as well as a JWT that may be used to access the API for a time-limited period. As this is a model-driven system, the documentation is generated based on the model. For what the API actually does, see:
 
-* [High-Level List of REST Routes](https://github.com/preston/hsp-marketplace-server/blob/master/doc/routes.txt) - This is a generated dump.
-* [Interactive API Tutorial](https://github.com/preston/hsp-marketplace-server/blob/master/doc/marketplace.paw). *Note*: You'll need [Paw](https://luckymarmot.com/paw) for OS X to open this, and need to replace the JWT and server instance configuration with your own details to run it.
-* [Schema Diagram](https://github.com/preston/hsp-marketplace-server/blob/master/doc/models_complete.svg) - This is a normalized .svg showing the physical database model, with additional OR/M-level annotations. It's useful in understanding how resources relate behind the API.
-* [Database DSL](https://github.com/preston/hsp-marketplace-server/blob/master/db/schema.rb) - Generated database schema in ActiveRecord format.
+* [High-Level List of REST Routes](https://github.com/preston/marketplace-server/blob/master/doc/routes.txt) - This is a generated dump.
+* [Interactive API Tutorial](https://github.com/preston/marketplace-server/blob/master/doc/marketplace.paw). *Note*: You'll need [Paw](https://luckymarmot.com/paw) for OS X to open this, and need to replace the JWT and server instance configuration with your own details to run it.
+* [Schema Diagram](https://github.com/preston/marketplace-server/blob/master/doc/models_complete.svg) - This is a normalized .svg showing the physical database model, with additional OR/M-level annotations. It's useful in understanding how resources relate behind the API.
+* [Database DSL](https://github.com/preston/marketplace-server/blob/master/db/schema.rb) - Generated database schema in ActiveRecord format.
 
 # The API
 
@@ -33,7 +33,7 @@ If you don't already have Postgres running locally:
 
     brew install postgresql
 
-Create a "hsp-marketplace-server" Postgres user using the dev/test credentials in config/database.yml, and assigned them full rights to manage schemas. As with most Ruby projects, use [RVM](https://rvm.io) to manage your local Ruby versions. [Install RVM](https://rvm.io) and:
+Create a "marketplace-server" Postgres user using the dev/test credentials in config/database.yml, and assigned them full rights to manage schemas. As with most Ruby projects, use [RVM](https://rvm.io) to manage your local Ruby versions. [Install RVM](https://rvm.io) and:
 
 	rvm install 2.4.1
 	rvm use 2.4.1
@@ -55,8 +55,8 @@ The HSP Marketplace Server application is designed in [12factor](http://12factor
 
 The following additional environment variables are optional, but potentially useful in a production context. Note that the database connection pool is adjusted automatically based on these values. If in doubt, do NOT set these.
 
- * export MARKETPLACE\_SERVER\_PROCESSES=8 # To override the number of pre-forked workers.
- * export MARKETPLACE\_SERVER\_THREAD=8 # To override the number of threads per process.
+ * export MARKETPLACE\_MIN\_THREADS=5 # To override the minimum number of threads per process.
+ * export MARKETPLACE\_MAX\_THREADS=5 # To override the maximum number of threads per process.
 
 Now,
 
@@ -127,7 +127,7 @@ Deployment is done exclusively with Docker, though "raw" deployment using Passen
 
 To build your current version:
 
-	docker build -t p3000/hsp-marketplace-server:latest .
+	docker build -t p3000/marketplace-server:latest .
 
 ## Running a Container
 
@@ -135,42 +135,42 @@ You need a recent PostgreSQL database set up with an empty schema ready for the 
 
 When running the container, **all environment variables defined in the above section must be set using `-e FOO="bar"` options** to docker. The foreground form of the command is:
 
-	docker run -it --rm -p 3000:3000 --name hsp-marketplace-server \
+	docker run -it --rm -p 3000:3000 --name marketplace-server \
 		-e "MARKETPLACE_UI_URL=http://localhost:9000" \
 		-e "MARKETPLACE_TITLE=My Marketplace" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
 		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.115:5432/marketplace_development" \
-		p3000/hsp-marketplace-server:latest
+		p3000/marketplace-server:latest
 
 ...or to run in the background:
 
-	docker run -d -p 3000:3000 --name hsp-marketplace-server \
+	docker run -d -p 3000:3000 --name marketplace-server \
 		-e "MARKETPLACE_UI_URL=http://localhost:9000" \
 		-e "MARKETPLACE_TITLE=My Marketplace" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
 		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.103:5432/marketplace_development" \
-		p3000/hsp-marketplace-server:latest
+		p3000/marketplace-server:latest
 
 Once your server appears to be running, check your Postgres database to make sure tables have been created. First, run the including data seeding script: (You may keep any existing Makretplace containers running.)
 
-	docker run -it --rm -p 3000:3000 --name hsp-marketplace-server \
+	docker run -it --rm -p 3000:3000 --name marketplace-server \
 		-e "MARKETPLACE_UI_URL=http://localhost:9000" \
 		-e "MARKETPLACE_TITLE=My Marketplace" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
 		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.115:5432/marketplace_development" \
-		p3000/hsp-marketplace-server:latest \
+		p3000/marketplace-server:latest \
 		rake db:seed
 
 This should be fast, and the script will exit once completed. Finally, you'll want to add a default data set and establish yourself as the initial administrator. Since the Marketplace _requires_ an OpenID Connect identity provider (IDP) and does not authenticate on its own, the initial IDP setup takes a few additional steps. Once the first IDP is established, however, all future IDPs may be managed by the Marketplace UI or another client.
 
 The seed data includes a default configuration for Google as an example. To use it, go to the [Google Developers Console](https://console.developers.google.com) -> Credentials and create an "OAutuh Client ID" for a "web application". Note the client ID and client secret, which are specific to _your_ installation. Now, start an interactive container into Marketplace Console mode to update the IDP configuration.
 
-	docker run -it --rm -p 3000:3000 --name hsp-marketplace-server \
+	docker run -it --rm -p 3000:3000 --name marketplace-server \
 		-e "MARKETPLACE_UI_URL=http://localhost:9000" \
 		-e "MARKETPLACE_TITLE=My Marketplace" \
 		-e "MARKETPLACE_SECRET_KEY_BASE=development_only" \
 		-e "MARKETPLACE_DATABASE_URL=postgresql://marketplace:password@192.168.1.115:5432/marketplace_development" \
-		p3000/hsp-marketplace-server:latest \
+		p3000/marketplace-server:latest \
 		rails console
 
 	idp = IdentityProvider.where(name: 'Google').first
@@ -194,7 +194,7 @@ The container includes a regression test suite to ensure proper operation. Runni
 		-e "RAILS_ENV=test" \
 		-e "MARKETPLACE_DATABASE_URL_TEST=postgresql://hsp_marketplace:password@192.168.1.103:5432/marketplace_test" \
 		... \
-		p3000/hsp-marketplace-server:latest \
+		p3000/marketplace-server:latest \
 		rake test
 
 

@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
-ruby '2.6.4'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.7.0'
 
 gem 'rails'	# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'bootsnap'
@@ -36,7 +38,6 @@ end
 group :development do
     # gem 'web-console', '~> 2.0'     # Access an IRB console on exception pages or by using <%= console %> in views
     gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-    gem 'guard'
     gem 'railroady'
     gem 'rubocop-rails' # For editor reformatting support
 	gem 'byebug' # Call 'byebug' anywhere in the code to stop execution and get a debugger console
