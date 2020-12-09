@@ -1,19 +1,20 @@
-# Health Services Platform - Marketplace Server
+# Marketplace Server
 
-The Health Services Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published product container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment. For details, see:
+This is the official Marketplace Server reference implementation of the corresponding HL7 API specification: a RESTful JSON API reference implementation for publication, discovery and management of published product container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect (OIDC) Identity Provider SSO system according to the OAuth 2 specification. This service implementation is an API and does not provide a UI. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment. For details on the core concepts and nature of the system, see the HL7/ANSI-balloted and published documentation:
 
-https://healthservices.atlassian.net/wiki/display/PE/Platform+Engineering
+https://marketplace-documentation.logicahealth.org
 
 # Conceptual Overview
 
 The system allows for initial web-based login via a configurable set OpenID Connect providers: part of the OAuth2 family of protocols. After, both a browser-based sessions is established, as well as a JWT that may be used to access the API for a time-limited period. As this is a model-driven system, the documentation is generated based on the model. For what the API actually does, see:
 
 * [High-Level List of REST Routes](https://github.com/preston/marketplace-server/blob/master/doc/routes.txt) - This is a generated dump.
-* [Interactive API Tutorial](https://github.com/preston/marketplace-server/blob/master/doc/marketplace.paw). *Note*: You'll need [Paw](https://luckymarmot.com/paw) for OS X to open this, and need to replace the JWT and server instance configuration with your own details to run it.
+* Deprecated - [Interactive API Tutorial](https://github.com/preston/marketplace-server/blob/master/doc/marketplace.paw). *Note*: You'll need [Paw](https://luckymarmot.com/paw) for OS X to open this, and need to replace the JWT and server instance configuration with your own details to run it.
 * [Schema Diagram](https://github.com/preston/marketplace-server/blob/master/doc/models_complete.svg) - This is a normalized .svg showing the physical database model, with additional OR/M-level annotations. It's useful in understanding how resources relate behind the API.
 * [Database DSL](https://github.com/preston/marketplace-server/blob/master/db/schema.rb) - Generated database schema in ActiveRecord format.
 
 # The API
+The current
 
 ## Pre-existing Security Resources
 
@@ -199,5 +200,4 @@ The container includes a regression test suite to ensure proper operation. Runni
 
 
 # License
-
-[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+Copyright 2011 Preston Lee. All rights reserved. Released under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) License.
