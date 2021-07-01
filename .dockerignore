@@ -1,7 +1,12 @@
-.git
-.dockerignore
-Dockerfile
 .byebug_history
+.dockerignore
+.git
+.gitignore
+.travis.yml
+
+Dockerfile
 db/*.sql
 log/*.log
 storage/*
+tmp/*
+README.md
