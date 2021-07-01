@@ -23,7 +23,8 @@ json.product do
     json.datetime Time.now
 end
 json.database do
-    json.datetime Time.parse(ActiveRecord::Base.connection.select_value('SELECT CURRENT_TIME'))
+    # json.datetime Time.parse(ActiveRecord::Base.connection.select_value('SELECT CURRENT_TIMESTAMP')).to_s
+    json.datetime ActiveRecord::Base.connection.select_value('SELECT CURRENT_TIMESTAMP')
 end
 # json.session_dump session.inspect
 if @current_identity

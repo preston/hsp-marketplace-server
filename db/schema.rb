@@ -2,21 +2,21 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_22_153930) do
+ActiveRecord::Schema.define(version: 0) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "active_storage_attachments", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.uuid "record_id", null: false
     t.string "record_type", null: false
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,10 +33,17 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.datetime "created_at", null: false
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "appointments", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "active_storage_variant_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "appointments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "entity_id", null: false
     t.string "entity_type", null: false
     t.uuid "role_id", null: false
@@ -47,7 +54,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["role_id"], name: "index_appointments_on_role_id"
   end
 
-  create_table "attempts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "attempts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "claim_id"
     t.uuid "claimant_id"
     t.string "claimant_type"
@@ -56,7 +63,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "badges", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "badges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
@@ -64,7 +71,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["name"], name: "index_badges_on_name", unique: true
   end
 
-  create_table "badges_products", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "badges_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "badge_id", null: false
     t.uuid "product_id", null: false
     t.datetime "created_at", null: false
@@ -72,7 +79,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["badge_id", "product_id"], name: "index_badges_products_on_badge_id_and_product_id", unique: true
   end
 
-  create_table "builds", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "builds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "product_id", null: false
     t.string "version", null: false
     t.string "container_repository"
@@ -86,7 +93,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["id"], name: "index_builds_on_id"
   end
 
-  create_table "claims", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "claimant_id"
     t.string "claimant_type"
     t.uuid "entitlement_id"
@@ -96,7 +103,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "configurations", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "build_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -104,7 +111,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["build_id"], name: "index_configurations_on_build_id"
   end
 
-  create_table "dependencies", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "dependencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "build_id", null: false
     t.uuid "interface_id", null: false
     t.datetime "created_at", null: false
@@ -115,7 +122,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["interface_id"], name: "index_dependencies_on_interface_id"
   end
 
-  create_table "entitlements", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "entitlements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
     t.uuid "product_license_id"
     t.datetime "valid_from"
@@ -123,7 +130,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "exposures", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "exposures", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "build_id", null: false
     t.uuid "interface_id", null: false
     t.datetime "created_at", null: false
@@ -132,7 +139,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["interface_id"], name: "index_exposures_on_interface_id"
   end
 
-  create_table "groups", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
     t.datetime "created_at", null: false
@@ -140,7 +147,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["name"], name: "index_groups_on_name"
   end
 
-  create_table "identities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "identity_provider_id", null: false
     t.string "sub", null: false
@@ -155,7 +162,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "identity_providers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "identity_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "issuer", null: false
     t.string "client_id", null: false
@@ -170,7 +177,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["name"], name: "index_identity_providers_on_name"
   end
 
-  create_table "instances", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "instances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "platform_id", null: false
     t.uuid "build_id", null: false
     t.json "launch_bindings", default: {}, null: false
@@ -181,7 +188,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["platform_id"], name: "index_instances_on_platform_id"
   end
 
-  create_table "interfaces", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "interfaces", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "uri", null: false
     t.string "version", null: false
@@ -190,7 +197,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "json_web_tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "json_web_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "identity_id", null: false
     t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
@@ -199,7 +206,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["identity_id"], name: "index_json_web_tokens_on_identity_id"
   end
 
-  create_table "licenses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "licenses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "url", null: false
     t.datetime "created_at", null: false
@@ -213,7 +220,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["name"], name: "index_licenses_on_name", unique: true
   end
 
-  create_table "members", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "members", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "group_id", null: false
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
@@ -222,7 +229,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
-  create_table "parameters", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "parameters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "exposure_id", null: false
     t.string "name", null: false
     t.boolean "required"
@@ -231,7 +238,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["exposure_id"], name: "index_parameters_on_exposure_id"
   end
 
-  create_table "platforms", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "platforms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.uuid "user_id", null: false
     t.text "public_key"
@@ -240,7 +247,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["user_id"], name: "index_platforms_on_user_id"
   end
 
-  create_table "product_licenses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "product_licenses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "product_id"
     t.uuid "license_id"
     t.uuid "external_id"
@@ -248,7 +255,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "products", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
     t.uuid "user_id"
@@ -264,7 +271,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["name"], name: "index_products_on_name", unique: true
   end
 
-  create_table "roles", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
     t.boolean "default", default: false, null: false
@@ -274,7 +281,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
-  create_table "screenshots", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "screenshots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "caption", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -282,7 +289,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["product_id"], name: "index_screenshots_on_product_id"
   end
 
-  create_table "sub_products", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "sub_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "parent_id"
     t.uuid "child_id"
     t.datetime "created_at", null: false
@@ -290,7 +297,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["parent_id", "child_id"], name: "index_sub_products_on_parent_id_and_child_id"
   end
 
-  create_table "surrogates", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "surrogates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "interface_id", null: false
     t.uuid "substitute_id", null: false
     t.datetime "created_at", null: false
@@ -299,7 +306,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["substitute_id"], name: "index_surrogates_on_substitute_id"
   end
 
-  create_table "tasks", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "configuration_id", null: false
     t.string "name", null: false
     t.integer "minimum", default: 0, null: false
@@ -310,7 +317,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.index ["configuration_id"], name: "index_tasks_on_configuration_id"
   end
 
-  create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "external_id"
     t.string "salutation"
@@ -321,7 +328,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "vouchers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "vouchers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "product_license_id"
     t.uuid "entitlement_id"
     t.string "code"
@@ -334,6 +341,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_153930) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appointments", "roles"
   add_foreign_key "builds", "products"
   add_foreign_key "configurations", "builds"

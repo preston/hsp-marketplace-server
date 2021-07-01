@@ -8,14 +8,14 @@ class ProductsController < ApplicationController
     sort = %w[name description].include?(params[:sort]) ? params[:sort] : :name
     order = params[:order] == 'desc' ? :desc : :asc
     @products = @products.order(sort => order)
-    if params['published'] == 'true'
-      @products = @products.where('published_at IS NOT NULL')
-    elsif params['published'] == 'false'
-      @products = @products.where('published_at IS NULL')
-      end
-    if params['license_id']
-      @products = @products.where(license_id: params['license_id'])
-      end
+    @products = @products.where.not(published_at: nil)
+    @products = @products.where.not(visible_at: nil)
+    # if params['published'] == 'true'
+    #   @products = @products.where.not(published_at: nil)
+    # elsif params['published'] == 'false'
+    #   @products = @products.where(published_at: nil)
+    # end
+    @products = @products.where(license_id: params['license_id']) if params['license_id']
     @products = @products.where(user_id: params['user_id']) if params['user_id']
     unless params['mime_type'].blank?
       types = params['mime_type'].gsub(' ', '+').split(',')
@@ -40,11 +40,15 @@ class ProductsController < ApplicationController
     @products = []
     @products = Product.paginate(page: params[:page], per_page: params[:per_page])
     @products = @products.search_by_name_or_description(params['text']) if params['text']
-    if params['published'] == 'true'
-      @products = @products.where('published_at IS NOT NULL')
-    elsif params['published'] == 'false'
-      @products = @products.where('published_at IS NULL')
-    end
+    @products = @products.where.not(published_at: nil)
+    @products = @products.where.not(visible_at: nil)
+    # order = params[:order] == 'desc' ? :desc : :asc
+    # @products = @products.order(name: order)
+    # if params['published'] == 'true'
+    #   @products = @products.where('published_at IS NOT NULL')
+    # elsif params['published'] == 'false'
+    #   @products = @products.where('published_at IS NULL')
+    # end
     unless params['mime_type'].blank?
       types = params['mime_type'].split(',')
       @products = @products.where(mime_type: types)
@@ -59,7 +63,7 @@ class ProductsController < ApplicationController
 
   def medium
     send_image_data('200x200')
- end
+  end
 
   def large
     send_image_data('400x400')
@@ -68,12 +72,12 @@ class ProductsController < ApplicationController
   def publish
     @product.update(published_at: Time.now)
     render :show
-   end
+  end
 
   def unpublish
     @product.update(published_at: nil)
     render :show
-   end
+  end
 
   def send_image_data(size)
     response.headers['Content-Type'] = @product.logo.content_type
@@ -85,7 +89,14 @@ class ProductsController < ApplicationController
 
   # GET /products/1
   # GET /products/1.json
-  def show; end
+  def show
+    respond_to do |format|
+      format.json do
+        render :show
+        # render json: { message: 'You are not authorized, sorry!' }, status: :unauthorized
+      end
+    end
+  end
 
   # POST /products
   # POST /products.json
@@ -139,6 +150,7 @@ class ProductsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_params
-    params.require(:product).permit(:name, :description, :external_id, :locale, :mime_type, :user_id, :uri, :support_url, :license_id, :logo, :published_at, :visible_at)
+    params.require(:product).permit(:name, :description, :external_id, :locale, :mime_type, :user_id, :uri,
+                                    :support_url, :license_id, :logo, :published_at, :visible_at)
   end
 end

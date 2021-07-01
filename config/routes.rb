@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-
   resources :badges
   resources :attempts
     # match '*all' => 'application#cors_preflight_check', via: :options
@@ -40,7 +39,7 @@ Rails.application.routes.draw do
             end
         end
         collection do
-            post :search, as: :search_services
+            post :search, as: :search
         end
         resources :builds do
             member do
@@ -100,12 +99,14 @@ Rails.application.routes.draw do
     get		'sessions' => 'sessions#callback',		as: :callback
     # post	'sessions' => 'sessions#authenticate',	as: :login
     delete	'sessions' => 'sessions#destroy',		as: :logout
-    get 'dashboard' => 'welcome#dashboard',			as: :dashboard
+    # get 'dashboard' => 'welcome#dashboard',			as: :dashboard
     get 'status' => 'welcome#status',				as: :status
 
     # The priority is based upon order of creation: first created -> highest priority.
     # See how all your routes lay out with "rake routes".
 
     # You can have the root of your site routed with "root"
-    root 'sessions#callback'
+    # root 'sessions#callback'
+    # options 'status' => 'welcome#status'
+    root 'welcome#status'
 end

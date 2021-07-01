@@ -1,10 +1,9 @@
 class WelcomeController < ApplicationController
 
-    def dashboard
-    end
-
     def status
-        render status: :ok
+        respond_to do |format|
+            format.json { render status: :ok }
+        end
     end
 
 end

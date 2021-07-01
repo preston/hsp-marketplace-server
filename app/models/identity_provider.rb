@@ -10,7 +10,8 @@ class IdentityProvider < ActiveRecord::Base
 
 	@@CLIENT_CACHE = ThreadSafe::Cache.new
 
-	before_update	:reconfigure #update_handler
+	# Causes DoS pummeling during automated testing. 
+	# before_update	:reconfigure #update_handler
 
 	def client_auth_method
 		supported = self.configuration[:token_endpoint_auth_methods_supported]

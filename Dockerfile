@@ -1,4 +1,4 @@
-FROM ruby:2.7.2
+FROM ruby:3.0.1
 LABEL maintainer="preston.lee@prestonlee.com"
 
 RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y build-essential imagemagick
@@ -21,15 +21,6 @@ COPY Gemfile Gemfile.lock Rakefile config.ru ./
 RUN gem install -N bundler && bundle install --jobs 8
 
 # Copy the main application.
-# COPY app app
-# COPY bin bin
-# COPY config config
-# COPY db db
-# COPY lib lib
-# COPY log log
-# COPY public public
-# COPY test test
-# COPY vendor vendor
 COPY . .
 
 # We'll run in production mode by default.

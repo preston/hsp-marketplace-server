@@ -8,26 +8,74 @@ idp = IdentityProvider.create_with(
   client_secret: '233cec68-c4db-4948-9357-5b58b4004d4b',
   scopes: 'openid,email,profile,roles'
 ).find_or_create_by(issuer: 'https://id.logicahealth.org/auth/realms/master')
-idp.reconfigure
+# idp.reconfigure
 idp.save!
 
-mit = License.find_or_create_by!(name: 'MIT', url: 'https://opensource.org/licenses/MIT', expiry: License::EXPIRY_INDEFINITE)
-apache20 = License.find_or_create_by!(name: 'Apache 2.0', url: 'https://opensource.org/licenses/Apache-2.0', expiry: License::EXPIRY_INDEFINITE)
-bsd2 = License.find_or_create_by!(name: 'BSD 2-Clause', url: 'https://opensource.org/licenses/BSD-2-Clause', expiry: License::EXPIRY_INDEFINITE)
-bsd3 = License.find_or_create_by!(name: 'BSD 3-Clause', url: 'https://opensource.org/licenses/BSD-3-Clause', expiry: License::EXPIRY_INDEFINITE)
-cc0 = License.find_or_create_by!(name: 'Creative Commons Zero 1.0 Universal', url: 'https://creativecommons.org/publicdomain/zero/1.0/', expiry: License::EXPIRY_INDEFINITE)
-ccby = License.find_or_create_by!(name: 'Creative Commons Attribution 4.0 International', url: 'https://creativecommons.org/licenses/by/4.0/', expiry: License::EXPIRY_INDEFINITE)
-loinc = License.find_or_create_by!(name: 'LOINC and RELMA', url: 'https://loinc.org/license/', expiry: License::EXPIRY_INDEFINITE)
+mit = License.find_or_create_by!(name: 'MIT', url: 'https://opensource.org/licenses/MIT',
+                                 expiry: License::EXPIRY_INDEFINITE)
+apache20 = License.find_or_create_by!(name: 'Apache 2.0', url: 'https://opensource.org/licenses/Apache-2.0',
+                                      expiry: License::EXPIRY_INDEFINITE)
+bsd2 = License.find_or_create_by!(name: 'BSD 2-Clause', url: 'https://opensource.org/licenses/BSD-2-Clause',
+                                  expiry: License::EXPIRY_INDEFINITE)
+bsd3 = License.find_or_create_by!(name: 'BSD 3-Clause', url: 'https://opensource.org/licenses/BSD-3-Clause',
+                                  expiry: License::EXPIRY_INDEFINITE)
+cc0 = License.find_or_create_by!(name: 'Creative Commons Zero 1.0 Universal',
+                                 url: 'https://creativecommons.org/publicdomain/zero/1.0/', expiry: License::EXPIRY_INDEFINITE)
+ccby = License.find_or_create_by!(name: 'Creative Commons Attribution 4.0 International',
+                                  url: 'https://creativecommons.org/licenses/by/4.0/', expiry: License::EXPIRY_INDEFINITE)
+loinc = License.find_or_create_by!(name: 'LOINC and RELMA', url: 'https://loinc.org/license/',
+                                   expiry: License::EXPIRY_INDEFINITE)
 
-administrator = User.find_or_create_by!(name: 'Administrator')
+# Create roles first so some can be assigned automatically to new users.
+administrator_role = Role.create!(name: 'Administrator',
+                                  description: 'Masters of the known universe, granted completed access to the system.',
+                                  default: false,
+                                  permissions: Role.merge_other_permissions_into_template(
+                                    { 'everything' => { 'manage' => true } }, Role.permissions_template
+                                  ))
+editor_role = Role.create!(name: 'Editor',
+                           description: 'Curator role assigned to product managers.',
+                           default: false,
+                           permissions: Role.merge_other_permissions_into_template({
+                                                                                     'products' => { 'create' => true, 'read' => true, 'update' => true, 'delete' => true }
+                                                                                   }, Role.permissions_template))
+standard_role = Role.create!(name: 'Standard',
+                             description: 'No-frills role assigned to all new users.',
+                             default: true,
+                             permissions: Role.merge_other_permissions_into_template({
+                                                                                       'products' => { 'read' => true }
+                                                                                     }, Role.permissions_template))
+
+administrator = User.find_or_create_by!(name: 'Alice Administrator')
+editor = User.find_or_create_by!(name: 'Ethan Editor')
+standard = User.find_or_create_by!(name: 'Simple User')
+Identity.create!(user: administrator, identity_provider: idp, sub: 'fake_administrator_user')
+Identity.create!(user: editor, identity_provider: idp, sub: 'fake_editor_user')
+Identity.create!(user: standard, identity_provider: idp, sub: 'fake_standard_user')
+
+Appointment.create!(
+  entity: administrator, role: administrator_role
+)
+Appointment.create!(entity: editor, role: editor_role)
+
+users = []
+(0..42).each do |_n|
+  users << u = User.create!(
+    salutation: Faker::Name.prefix,
+    name: Faker::Name.name,
+    first_name: Faker::Name.first_name,
+    middle_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name
+  )
+end
 
 now = Time.now
 
-headshot = File.open(File.join(Rails.root, 'public', 'headshot.jpg'))
-hspc = File.open(File.join(Rails.root, 'public', 'hspc.png'))
-asu = File.open(File.join(Rails.root, 'public', 'asu.jpg'))
-mitre = File.open(File.join(Rails.root, 'public', 'mitre.png'))
-placeholder = File.open(File.join(Rails.root, 'public', 'placeholder_logo.png'))
+# headshot = File.open(File.join(Rails.root, 'public', 'headshot.jpg'))
+# hspc = File.open(File.join(Rails.root, 'public', 'hspc.png'))
+# asu = File.open(File.join(Rails.root, 'public', 'asu.jpg'))
+# mitre = File.open(File.join(Rails.root, 'public', 'mitre.png'))
+# placeholder = File.open(File.join(Rails.root, 'public', 'placeholder_logo.png'))
 
 davinci = [
   { name: 'Patient Data Exchange Formulary Client',
@@ -40,7 +88,7 @@ davinci = [
     visible_at: now },
   { name: 'Coverage Requirements Discovery (CRD) Server',
     description: 'The Coverage Requirements Discovery (CRD) Reference Implementation (RI) is a software project that conforms to the Implementation Guide developed by the Da Vinci Project within the HL7 Standards Organization. The CRD RI project is software that can simulate all of the systems involved in a CRD exchange. The main component in this project is the server, which acts as a healthcare payer information system. This system handles healthcare provider requests to understand what documentation is necessary prior to prescribing a particular treatment. Users are able to formulate a request for durable medical equipment coverage requirements, such as “what are the documentation requirements for prescribing home oxygen therapy (HCPCS E0424) to a 65 year old male living in MA?”. This type of question is not asked in plain English through a user interface, but submitted through CDS Hooks. The CRD RI consults a small, example database and provides a response, such as a PDF with the requirements back to the requesting system. This software lets EHR vendors and payer organizations examine how the proposed standard will work and test their own implementations of the standard.',
-    user: administrator,
+    user: editor,
     uri: 'hspc/davinci-crd',
     support_url: 'https://github.com/HL7-DaVinci/CRD',
     mime_type: 'application/vnd.docker+fhir',
@@ -48,7 +96,7 @@ davinci = [
     visible_at: now },
   { name: 'Documentation Templates and Rules (DTR) - SMART on FHIR Application',
     description: 'This subproject contains a SMART on FHIR app, which provides a standardized way to interact with FHIR servers. This Reference Impementation (RI) supports the Documents Templates and Rules (DTR) IG which specifies how payer rules can be executed in a provider context to ensure that documentation requirements are met. This RI and IG are companions to the Coverage Requirements Discovery (CRD) IG and Coverage Requirements Discovery (CRD) RI.',
-    user: administrator,
+    user: standard,
     uri: 'hspc/davinci-dtr',
     support_url: 'https://github.com/HL7-DaVinci/dtr',
     mime_type: 'application/vnd.docker+smart',
@@ -57,21 +105,21 @@ davinci = [
 ]
 davinci.each do |n|
   s = Product.create!(n)
-  mitre.rewind
-  s.logo.attach(io: mitre, filename: File.basename(mitre.path))
-  mitre.rewind
+  # mitre.rewind
+  # s.logo.attach(io: mitre, filename: File.basename(mitre.path))
+  # mitre.rewind
   s.save!
   ProductLicense.create!(product: s, license: apache20)
- 
-  screenshot = Screenshot.create!(product: s, caption: 'Example screenshot 1')
-  screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
-  placeholder.rewind
-  screenshot.save!
- 
-  screenshot =  Screenshot.create!(product: s, caption: 'Example screenshot 2')
-  screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
-  placeholder.rewind
-  screenshot.save!
+
+  # screenshot = Screenshot.create!(product: s, caption: 'Example screenshot 1')
+  # screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+  # placeholder.rewind
+  # screenshot.save!
+
+  # screenshot =  Screenshot.create!(product: s, caption: 'Example screenshot 2')
+  # screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+  # placeholder.rewind
+  # screenshot.save!
   Build.create!(
     product: s,
     version: '0.0.0',
@@ -83,48 +131,36 @@ davinci.each do |n|
   )
 end
 
-
 marketplace_server = Product.create!(
-    name: 'Marketplace Server',
-    description: 'The Health Product Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published product container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment.',
-    user: administrator,
-    uri: 'https://github.com/preston/marketplace-server',
-    support_url: 'https://github.com/preston/marketplace-server',
-    mime_type: 'application/vnd.docker',
-    published_at: now,
-    visible_at: now
-  )
-marketplace_server.logo.attach(io: asu, filename: File.basename(asu.path))
-asu.rewind
-marketplace_server.save!
+  name: 'Marketplace Server',
+  description: 'The Health Product Platform Marketplace Server is a REST JSON API reference implementation for publication, discovery and management of published product container images. It is assumed to be a relying party to an externally preconfigured OpenID Connect Identity Provider SSO system according to the OAuth 2 specification. The simple API does not contain a UI other than for account management. A post-authentication dashboard URL must instead be injected at runtime. The underlying internal domain model is represented as a normalized relational (PostgeSQL) schema. The Marketplace Server auto-forward-migrates its own schema and includes all the tools you need to establish default data for your deployment.',
+  user: administrator,
+  uri: 'https://github.com/preston/marketplace-server',
+  support_url: 'https://github.com/preston/marketplace-server',
+  mime_type: 'application/vnd.docker',
+  published_at: now,
+  visible_at: now
+)
+# marketplace_server.logo.attach(io: asu, filename: File.basename(asu.path))
+# asu.rewind
+# marketplace_server.save!
 ProductLicense.create!(product: marketplace_server, license: apache20)
 
-
 marketplace_ui = Product.create!(
-    name: 'Marketplace UI',
-    description: 'The Marketplace UI is web-based frontend for Marketplace Server, and requires an instance of the server to be launched.',
-    user: administrator,
-    uri: 'https://github.com/preston/marketplace-ui',
-    support_url: 'https://github.com/preston/marketplace-ui',
-    mime_type: 'application/vnd.docker',
-    published_at: now,
-    visible_at: now
-  )
-marketplace_ui.logo.attach(io: asu, filename: File.basename(asu.path))
-asu.rewind
-marketplace_ui.save!
+  name: 'Marketplace UI',
+  description: 'The Marketplace UI is web-based frontend for Marketplace Server, and requires an instance of the server to be launched.',
+  user: administrator,
+  uri: 'https://github.com/preston/marketplace-ui',
+  support_url: 'https://github.com/preston/marketplace-ui',
+  mime_type: 'application/vnd.docker',
+  published_at: now,
+  visible_at: now
+)
+# marketplace_ui.logo.attach(io: asu, filename: File.basename(asu.path))
+# asu.rewind
+# marketplace_ui.save!
 ProductLicense.create!(product: marketplace_ui, license: apache20)
 
-# knartwork = Product.create!(
-#   name: 'Knartwork2',
-#   description: 'KNARTwork is a multi-purpose web application for authoring, viewing, and transforming knowledge artifacts across popular specifications, with a strong slant towards healthcare-specific formats. By default, this application provides a purely standalone experience that does not use any standard-specific APIs (such as FHIR) or databases (such as RDBMS or NoSQL) systems, and may be used as-is by end users wanting to manage source documents as an out-of-band process using git/subversion, Dropbox, email etc.',
-#   user: administrator,
-#   logo: placeholder,
-#   uri: 'https://marketplace.hspconsortium.org/products/knartwork',
-#   support_url: 'https://github.com/cqframework/knartwork',
-#   published_at: now,
-#   visible_at: now
-# )
 knartwork = Product.create!(
   name: 'Knartwork',
   description: 'KNARTwork is a multi-purpose web application for authoring, viewing, and transforming knowledge artifacts across popular specifications, with a strong slant towards healthcare-specific formats. By default, this application provides a purely standalone experience that does not use any standard-specific APIs (such as FHIR) or databases (such as RDBMS or NoSQL) systems, and may be used as-is by end users wanting to manage source documents as an out-of-band process using git/subversion, Dropbox, email etc.',
@@ -135,33 +171,76 @@ knartwork = Product.create!(
   published_at: now,
   visible_at: now
 )
-knartwork.logo.attach(io: asu, filename: File.basename(asu.path))
-knartwork.logo.analyze
-asu.rewind
-knartwork.save!
+
+unpublished_product = Product.create!(
+  name: 'Unpublished Fake Product',
+  description: 'A fake unpublished product.',
+  user: standard,
+  uri: 'https://example.org',
+  support_url: 'https://github.com/preston',
+  mime_type: 'application/vnd.docker',
+  published_at: nil,
+  visible_at: nil
+)
+
+invisible_product = Product.create!(
+  name: 'Invisible Fake Product',
+  description: 'A fake product that is published but not visible.',
+  user: standard,
+  uri: 'https://example.org',
+  support_url: 'https://github.com/preston',
+  mime_type: 'application/vnd.docker',
+  published_at: now,
+  visible_at: nil
+)
+
+# knartwork.logo.attach(io: asu, filename: File.basename(asu.path))
+# knartwork.logo.analyze
+# asu.rewind
+# knartwork.save!
 ProductLicense.create!(product: knartwork, license: apache20)
 
-screenshot = Screenshot.create!(product: knartwork, caption: 'Create new and update HL7 knowledge documents.')
-screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
-placeholder.rewind
-screenshot.save!
+# screenshot = Screenshot.create!(product: knartwork, caption: 'Create new and update HL7 knowledge documents.')
+# screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+# placeholder.rewind
+# screenshot.save!
 
-screenshot = Screenshot.create!(product: knartwork, caption: 'Manage metadata.')
-screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
-placeholder.rewind
-screenshot.save!
+# screenshot = Screenshot.create!(product: knartwork, caption: 'Manage metadata.')
+# screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+# placeholder.rewind
+# screenshot.save!
 
-screenshot = Screenshot.create!(product: knartwork, caption: 'Create complex flows mapped to stardard terminologies.')
-screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
-placeholder.rewind
-screenshot.save!
+# screenshot = Screenshot.create!(product: knartwork, caption: 'Create complex flows mapped to stardard terminologies.')
+# screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+# placeholder.rewind
+# screenshot.save!
+
+unpublished_build = Build.create!(
+  product: unpublished_product,
+  version: '0.0.1',
+  container_repository: 'p3000/example-unpublished',
+  container_tag: 'v0.0.1',
+  published_at: nil,
+  release_notes: 'fake',
+  permissions: {}
+)
+
+invisible_build = Build.create!(
+  product: invisible_product,
+  version: '0.0.1',
+  container_repository: 'p3000/example-invisible',
+  container_tag: 'v0.0.1',
+  published_at: nil,
+  release_notes: 'fake',
+  permissions: {}
+)
 
 knartwork_build = Build.create!(
   product: knartwork,
   version: '0.5.1',
   container_repository: 'p3000/knartwork',
   container_tag: 'v0.5.1',
-  published_at: now,
+  published_at: nil, # Unpublished
   release_notes: 'From product source of the same release tag.',
   permissions: {}
 )
@@ -176,15 +255,15 @@ cql_translation_service = Product.create!(
   published_at: now,
   visible_at: now
 )
-cql_translation_service.logo.attach(io: placeholder, filename: File.basename(placeholder.path))
-cql_translation_service.save!
-placeholder.rewind
+# cql_translation_service.logo.attach(io: placeholder, filename: File.basename(placeholder.path))
+# cql_translation_service.save!
+# placeholder.rewind
 ProductLicense.create!(product: cql_translation_service, license: apache20)
 
-screenshot = Screenshot.create!(product: cql_translation_service, caption: 'An API for CQL-to-ELM conversion.')
-screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
-placeholder.rewind
-screenshot.save!
+# screenshot = Screenshot.create!(product: cql_translation_service, caption: 'An API for CQL-to-ELM conversion.')
+# screenshot.image.attach(io: placeholder, filename: File.basename(placeholder.path))
+# placeholder.rewind
+# screenshot.save!
 
 cql_translation_service_build = Build.create!(
   product: cql_translation_service,
@@ -196,31 +275,6 @@ cql_translation_service_build = Build.create!(
   permissions: {}
 )
 
-administrator_role = Role.create!(name: 'Administrator',
-                                  description: 'Masters of the known universe, granted completed access to the system.',
-                                  default: false,
-                                  permissions: Role.merge_other_permissions_into_template(
-                                    { 'everything' => { 'manage' => true } }, Role.permissions_template
-                                  ))
-standard_role = Role.create!(name: 'Standard User',
-                             description: 'No-frills role assigned to all new users.',
-                             default: true,
-                             permissions: Role.merge_other_permissions_into_template({
-                                                                                       'products' => { 'read' => true }
-                                                                                     }, Role.permissions_template))
-
-Appointment.create!(entity: administrator, role: administrator_role)
-
-users = []
-(0..42).each do |_n|
-  users << u = User.create!(
-    salutation: Faker::Name.prefix,
-    name: Faker::Name.name,
-    first_name: Faker::Name.first_name,
-    middle_name: Faker::Name.first_name,
-    last_name: Faker::Name.last_name
-  )
-end
-
-logica_badge = Badge.create!(name: 'logica', description: "Endorsed by Logica Health.")
-intermountain_badge = Badge.create!(name: 'intermountain', description: "Endorsed by Intermountain Healthcare to meet their standards of interoperability.")
+logica_badge = Badge.create!(name: 'logica', description: 'Endorsed by Logica Health.')
+intermountain_badge = Badge.create!(name: 'intermountain',
+                                    description: 'Endorsed by Intermountain Healthcare to meet their standards of interoperability.')
